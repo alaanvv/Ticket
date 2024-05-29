@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Ticket {
+  id       String @id @default(uuid())
+  user_id  String
+  event_id String
+  type     String                          // "meia" || "inteira" || ...
+  origin   String                          // "economico" || "website" || ...
+  status   String     @default("not-paid") // "not-paid" "valid" "used"
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String
+  name     String
+  password String
+  type     String @default("customer") // "admin" "lobby" "customer"
+}
+
+model Event {
+  id          String  @id @default(uuid())
+  name        String  @unique              // "Rodeio"
+  description String?
+  banner      String?                      // url
+  local       String?
+  address     String?
+  date        Date?
+  stocks      Stock[]
+}
+
+model Stock {
+  id     String @id @default(uuid())
+  type   String     @default("Inteira") // "meia" || "inteira" || ...
+  price  Float      @default(0)
+  amount Int        @default(0)
+}
+
+model Sale {
+  event  String
+  type   String
+  date   Date   @default(now())
+  price  Float  @default(0)
+  origin String
+}
