@@ -1,3 +1,58 @@
+# Database
+```prisma
+model Ticket {
+  id       String @id @default(uuid())
+  user_id  String
+  event_id String
+  type     String                          // "meia" || "inteira" || ...
+  origin   String                          // "economico" || "website" || ...
+  status   String     @default("not-paid") // "not-paid" "valid" "used"
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String
+  name     String
+  password String
+  type     String @default("customer") // "admin" "lobby" "customer"
+}
+
+model Event {
+  id          String  @id @default(uuid())
+  name        String  @unique              // "Rodeio"
+  description String?
+  banner      String?                      // url
+  local       String?
+  address     String?
+  date        Date?
+  stocks      Stock[]
+}
+
+model Stock {
+  id     String @id @default(uuid())
+  type   String     @default("Inteira") // "meia" || "inteira" || ...
+  price  Float      @default(0)
+  amount Int        @default(0)
+}
+
+model Sale {
+  event  String
+  type   String
+  date   Date   @default(now())
+  price  Float  @default(0)
+  origin String
+}
+```
+
+---
+
+# Todo
+- [ ] Setup ticket database
+- [ ] Create communication with database
+    - [ ] Make it as much verbose as possible
+
+---
+
 - Ver se o comprador precisa de pagina de buscar eventos (caso tenha muitos)
 - Pra comprar no site precisa ter conta (pra pegar dados)
 
@@ -62,42 +117,3 @@ Considerações Adicionais:
 Segurança: Implemente medidas de segurança para proteger o sistema contra fraudes e acessos não autorizados.
 Treinamento da Equipe: Certifique-se de que a equipe da portaria esteja familiarizada com o sistema e saiba como utilizá-lo corretamente.
 Plano de Contingência: Tenha um plano de contingência para lidar com problemas técnicos ou falhas no sistema durante o evento.
-
----
-
-# Database
-## Ticket
-- `id`
-- `user_id`
-- `event_id`
-- `type` - "meia" "inteira"
-- `origin` - "maquininha" "website"
-- `status` - "nao-pago" "valido" "usado"
-
-## User
-- `id`
-- `email`
-- `name`
-- `password`
-- `type` - "admin" "portaria" "comprador"
-
-## Event
-- `id`
-- `name` - "rodeio"
-- `description`
-- `date`
-- `local`
-- `address`
-- `banner` - url
-- `stocks`
-
-## Stock
-- `id`
-- `type` - "meia" "inteira"
-- `price`
-- `amount`
-
-# Todo
-- [ ] Setup ticket database
-- [ ] Create communication with database
-    - [ ] Make it as much verbose as possible
