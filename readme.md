@@ -75,35 +75,26 @@ Plano de Contingência: Tenha um plano de contingência para lidar com problemas
 - `status` - "nao-pago" "valido" "usado"
 
 ## User
-- `user_id`
+- `id`
 - `email`
 - `name`
 - `password`
 - `type` - "admin" "portaria" "comprador"
 
 ## Event
-- `event_id`
-- `type_event_id`
+- `id`
 - `name` - "rodeio"
 - `description`
 - `date`
 - `local`
 - `address`
 - `banner` - url
-- `stock_ids`
-
-## Type Event
-- `id`
-- `name`
-
-## Stock Event
-- `id`
-- `stock_id`
-- `type_event_id`
+- `stocks`
 
 ## Stock
-- `stock_id`
-- `name`
+- `id`
+- `type` - "meia" "inteira"
+- `price`
 - `amount`
 
 # Todo
