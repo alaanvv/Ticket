@@ -68,7 +68,6 @@ const Formulario = () => {
                       field.onChange(floatValue)
                     }
                   }}
-                  thousandSeparator="."
                   decimalSeparator=","
                   prefix="R$ "
                   className="border rounded-md p-2 w-full"
