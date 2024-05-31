@@ -21,19 +21,19 @@ export default function Sidebar() {
       <div className="border-r-2 border-slate-300 h-full px-3">
         <h3 className="mb-3 px-6 font-bold">Admin Tools</h3>
         <ul className="flex flex-col w-full gap-1">
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="">
             <MdDashboard />
             Dashboard
           </ItemMenuSidebar>
-          <ItemMenuSidebar>
-            <IoTicketSharp />
-            Ingressos
-          </ItemMenuSidebar>
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="events">
             <BsCalendarEventFill />
             Eventos
           </ItemMenuSidebar>
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="tickets">
+            <IoTicketSharp />
+            Ingressos
+          </ItemMenuSidebar>
+          <ItemMenuSidebar route="users">
             <FaUserAlt />
             Usuários
           </ItemMenuSidebar>
@@ -41,19 +41,19 @@ export default function Sidebar() {
         <div className="my-3 w-full border-b-2 border-slate-300"></div>
         <h3 className="mb-3 px-6 font-bold">Admin Tools</h3>
         <ul className="flex flex-col w-full gap-1">
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="dashboard">
             <MdDashboard />
             Dashboard
           </ItemMenuSidebar>
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="dashboard">
             <IoTicketSharp />
             Ingressos
           </ItemMenuSidebar>
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="dashboard">
             <BsCalendarEventFill />
             Eventos
           </ItemMenuSidebar>
-          <ItemMenuSidebar>
+          <ItemMenuSidebar route="dashboard">
             <FaUserAlt />
             Usuários
           </ItemMenuSidebar>
