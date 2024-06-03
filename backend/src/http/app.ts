@@ -3,7 +3,6 @@ import { env } from '../env'
 
 import { createEvent } from './routes/create-event'
 import { getEvent } from './routes/get-event-details'
-import { createTicket } from './routes/create-ticket'
 
 import { ZodError } from 'zod'
 import { BadRequestError } from './routes/errors/bad-request-error'
@@ -13,7 +12,6 @@ export const app = fastify()
 
 app.register(createEvent)
 app.register(getEvent)
-app.register(createTicket)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

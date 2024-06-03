@@ -2,7 +2,6 @@ import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '../app'
 import { createEventForTesting } from '../../utils/test/create-event-for-testing'
-import { string } from 'zod'
 
 describe('get event details (e2e)', () => {
   beforeAll(async () => {
