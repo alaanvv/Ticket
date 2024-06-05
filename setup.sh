@@ -1,6 +1,6 @@
-if [ ! -f ./p.env ]; then
-    echo "\"p.env\" not found"
+if [ ! -f ./.env.example ]; then
+    echo "\".env.example\" not found"
     exit 1
 fi
 
-cp p.env .env
+cp .env.example .env

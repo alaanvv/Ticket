@@ -1,8 +1,11 @@
 import fastify from 'fastify'
 import { env } from '../env'
 
+import { createTicketType } from './routes/create-ticket-type'
+import { editTicketType } from './routes/edit-ticket-type'
 import { createEvent } from './routes/create-event'
 import { getEvent } from './routes/get-event-details'
+import { addBatches } from './routes/add-batches'
 
 import { ZodError } from 'zod'
 import { BadRequestError } from './routes/errors/bad-request-error'
@@ -10,14 +13,17 @@ import { NotFoundError } from './routes/errors/not-found-error'
 
 export const app = fastify()
 
+app.register(createTicketType)
+app.register(editTicketType)
 app.register(createEvent)
+app.register(addBatches)
 app.register(getEvent)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
     return reply
-      .status(400)
-      .send({ message: 'Validation error.', issues: error.issues })
+    .status(400)
+    .send({ message: 'Validation error.', issues: error.issues })
   }
 
   if (error instanceof BadRequestError) {

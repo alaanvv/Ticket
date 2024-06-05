@@ -7,45 +7,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Ticket {
-  id       String @id @default(uuid())
-  user_id  String
-  event_id String
-  type     String                          // "meia" || "inteira" || ...
-  origin   String                          // "economico" || "website" || ...
-  status   String     @default("not-paid") // "not-paid" "valid" "used"
-}
-
-model User {
-  id       String @id @default(uuid())
-  email    String
-  name     String
-  password String
-  type     String @default("customer") // "admin" "lobby" "customer"
-}
-
 model Event {
-  id          String  @id @default(uuid())
-  name        String  @unique              // "Rodeio"
+  id          String   @id @default(cuid())
+  name        String
   description String?
-  banner      String?                      // url
-  local       String?
-  address     String?
-  date        Date?
-  stocks      Stock[]
+  local       String
+  address     String
+  latitude    Decimal
+  longitude   Decimal
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("events")
 }
 
-model Stock {
-  id     String @id @default(uuid())
-  type   String     @default("Inteira") // "meia" || "inteira" || ...
-  price  Float      @default(0)
-  amount Int        @default(0)
+model TicketType {
+  id           String   @id @default(cuid())
+  name         String
+  allowHalf    Boolean  @map("allow_half")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  batches Batch[]
+  @@map("ticket_types")
 }
 
-model Sale {
-  event  String
-  type   String
-  date   Date   @default(now())
-  price  Float  @default(0)
-  origin String
+model Batch {
+  id               String     @id @default(cuid())
+  ticketTypeId     String
+  priceInCents     Decimal    @map("price_in_cents")
+  halfPriceInCents Decimal?   @map("half_price_in_cents")
+  amount           Int
+  createdAt        DateTime   @default(now()) @map("created_at")
+
+  ticketType       TicketType @relation(fields: [ticketTypeId], references: [id])
+  @@map("batches")
 }
