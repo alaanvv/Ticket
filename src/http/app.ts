@@ -6,6 +6,7 @@ import { editTicketType } from './routes/edit-ticket-type'
 import { createEvent } from './routes/create-event'
 import { getEvent } from './routes/get-event-details'
 import { addBatches } from './routes/add-batches'
+import { editBatch } from './routes/edit-batch'
 
 import { ZodError } from 'zod'
 import { BadRequestError } from './routes/errors/bad-request-error'
@@ -18,6 +19,7 @@ app.register(editTicketType)
 app.register(createEvent)
 app.register(addBatches)
 app.register(getEvent)
+app.register(editBatch)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

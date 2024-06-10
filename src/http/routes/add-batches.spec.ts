@@ -2,12 +2,12 @@ import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '../app'
 
-async function createTicketType(allowHalf) { // TODO Move to utils
+async function createTicketType(allowHalf: Boolean | Number) { // TODO Move to utils
   return (await request(app.server).post('/ticket-type').send({
     name: 'Pista',
     allowHalf: allowHalf,
     batches: [{ priceInCents: 20e3, halfPriceInCents: 10e3, amount: 200 }]
-  }))._body.id
+  })).body.id
 }
 
 describe('add batches (e2e)', () => {
@@ -20,7 +20,7 @@ describe('add batches (e2e)', () => {
     const res = await request(app.server).post('/add-batches').send({
       ticketTypeId,
       batches: [
-        { priceInCents: 20e3, amount: 200 }, 
+        { priceInCents: 20e3, amount: 200 },
         { priceInCents: 30e3, amount: 100 }
       ]
     })
@@ -35,7 +35,7 @@ describe('add batches (e2e)', () => {
     const res = await request(app.server).post('/add-batches').send({
       ticketTypeId,
       batches: [
-        { priceInCents: 20e3, amount: 200 }, 
+        { priceInCents: 20e3, amount: 200 },
         { priceInCents: 30e3, amount: 100 }
       ]
     })

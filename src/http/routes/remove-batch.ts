@@ -1,0 +1,23 @@
+import { BadRequestError } from './errors/bad-request-error'
+import { FastifyInstance } from 'fastify'
+import { prisma } from '../../lib/prisma'
+import { z } from 'zod'
+
+export async function removeBatch(app: FastifyInstance) {
+  app.post('/remove-batch/:id', async (req, res) => {
+    const paramSchema = z.object({
+      id: z.string().cuid()
+    })
+
+    const { id } = paramSchema.parse(req.params)
+
+    try {
+      prisma.batch.delete({ where: { id: id } })
+    }
+    catch {
+      throw new BadRequestError('This batch doesn\'t exist')
+    }
+
+    return res.status(201).send({ id: id })
+  })
+}

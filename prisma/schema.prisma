@@ -32,7 +32,7 @@ model TicketType {
 
 model Batch {
   id               String     @id @default(cuid())
-  ticketTypeId     String
+  ticketTypeId     String     @map("ticket_type_id")
   priceInCents     Decimal    @map("price_in_cents")
   halfPriceInCents Decimal?   @map("half_price_in_cents")
   amount           Int

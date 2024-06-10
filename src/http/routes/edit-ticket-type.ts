@@ -1,4 +1,4 @@
-import { BadRequestError } from './errors/bad-request-error.ts'
+import { BadRequestError } from './errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -27,21 +27,21 @@ export async function editTicketType(app: FastifyInstance) {
     prisma.ticketType.update({
       where: { id },
       data: {
-        name: name || ticketType.name, 
+        name: name || ticketType.name,
         allowHalf: allowHalf || ticketType.allowHalf
       }
     })
 
     if (!ticketType.allowHalf && allowHalf) {
-      const batchesToUpdate = prisma.batches.findMany({
+      const batchesToUpdate = await prisma.batch.findMany({
         where: { ticketTypeId: id, halfPriceInCents: null }
       })
 
       for (let batch of batchesToUpdate)
-        prisma.batches.update({
+        prisma.batch.update({
           where: { id: batch.id },
           data: {
-            halfPriceInCents: batch.priceInCents * 0.5
+            halfPriceInCents: Number(batch.priceInCents) * 0.5
           }
         })
     }

@@ -1,4 +1,4 @@
-import { BadRequestError } from './errors/bad-request-error.ts'
+import { BadRequestError } from './errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -6,9 +6,9 @@ import { z } from 'zod'
 export async function editBatch(app: FastifyInstance) {
   app.post('/edit-batch/:id', async (req, res) => {
     const bodySchema = z.object({
-      amount:           z.optional(z.coerce.number().positive()),
-      priceInCents:     z.optional(z.coerce.number().positive()),
-      halfPriceInCents: z.optional(z.coerce.number().positive())
+      amount:           z.optional(z.number().positive()),
+      priceInCents:     z.optional(z.number().positive()),
+      halfPriceInCents: z.optional(z.number().positive())
     })
 
     const paramSchema = z.object({
@@ -25,8 +25,8 @@ export async function editBatch(app: FastifyInstance) {
     prisma.batch.update({
       where: { id },
       data: {
-        amount:           amount           || batch.amount, 
-        priceInCents:     priceInCents     || batch.priceInCents, 
+        amount:           amount           || batch.amount,
+        priceInCents:     priceInCents     || batch.priceInCents,
         halfPriceInCents: halfPriceInCents || batch.halfPriceInCents
       }
     })
