@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function editBatch(app: FastifyInstance) {
-  app.post('/edit-batch/:id', async (req, res) => {
+  app.put('/edit-batch/:id', async (req, res) => {
     const bodySchema = z.object({
       amount:           z.optional(z.number().positive()),
       priceInCents:     z.optional(z.number().positive()),
@@ -22,7 +22,7 @@ export async function editBatch(app: FastifyInstance) {
     if (!batch)
       throw new BadRequestError('This batch doesn\'t exist')
 
-    prisma.batch.update({
+    await prisma.batch.update({
       where: { id },
       data: {
         amount:           amount           || batch.amount,
@@ -31,6 +31,6 @@ export async function editBatch(app: FastifyInstance) {
       }
     })
 
-    return res.status(201).send({ id })
+    return res.status(204).send()
   })
 }

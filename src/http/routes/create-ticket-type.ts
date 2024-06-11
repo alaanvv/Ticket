@@ -16,7 +16,6 @@ export async function createTicketType(app: FastifyInstance) {
     })
 
     const { name, allowHalf, batches } = bodySchema.parse(req.body)
-
     for (let batch of batches)
       if (allowHalf && !batch.halfPriceInCents)
         throw new BadRequestError('No price set to half')

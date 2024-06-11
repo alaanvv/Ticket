@@ -12,7 +12,7 @@ export async function removeBatch(app: FastifyInstance) {
     const { id } = paramSchema.parse(req.params)
 
     try {
-      prisma.ticketType.delete({ where: { id: id } })
+      await prisma.ticketType.delete({ where: { id: id } })
     }
     catch {
       throw new BadRequestError('This ticket type doesn\'t exist')
