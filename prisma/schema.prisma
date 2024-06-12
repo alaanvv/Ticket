@@ -15,17 +15,22 @@ model Event {
   address     String
   latitude    Decimal
   longitude   Decimal
+  active      Boolean  @default(true)
   createdAt   DateTime @default(now()) @map("created_at")
 
+  ticketTypes TicketType[]
   @@map("events")
 }
 
 model TicketType {
   id           String   @id @default(cuid())
+  eventId      String   @map("event_id")
   name         String
   allowHalf    Boolean  @map("allow_half")
+  active      Boolean  @default(true)
   createdAt    DateTime @default(now()) @map("created_at")
 
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   batches Batch[]
   @@map("ticket_types")
 }
@@ -36,6 +41,7 @@ model Batch {
   priceInCents     Decimal    @map("price_in_cents")
   halfPriceInCents Decimal?   @map("half_price_in_cents")
   amount           Int
+  active      Boolean  @default(true)
   createdAt        DateTime   @default(now()) @map("created_at")
 
   ticketType       TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)

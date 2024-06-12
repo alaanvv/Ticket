@@ -8,17 +8,22 @@ model Event {
   address     String
   latitude    Decimal
   longitude   Decimal
+  active      Boolean  @default(true)
   createdAt   DateTime @default(now()) @map("created_at")
 
+  ticketTypes TicketType[]
   @@map("events")
 }
 
 model TicketType {
   id           String   @id @default(cuid())
+  eventId      String   @map("event_id")
   name         String
   allowHalf    Boolean  @map("allow_half")
+  active      Boolean  @default(true)
   createdAt    DateTime @default(now()) @map("created_at")
 
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   batches Batch[]
   @@map("ticket_types")
 }
@@ -29,15 +34,27 @@ model Batch {
   priceInCents     Decimal    @map("price_in_cents")
   halfPriceInCents Decimal?   @map("half_price_in_cents")
   amount           Int
+  active      Boolean  @default(true)
   createdAt        DateTime   @default(now()) @map("created_at")
 
-  ticketType       TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketType       TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
   @@map("batches")
 }
 ```
 
 # Routes
-- `/ticket-type` **POST**
+- `/events` **POST**
+```json
+{
+  "name": "Exposição",
+  "local": "Parque de Exposição",
+  "address": "Rua A, Centro, n°57",
+  "latitude": -20.9116472,
+  "longitude": -44.076647
+}
+```
+
+- `/ticket-type/:id` **POST**
 ```json
 {
   "name": "Pista",
@@ -83,12 +100,13 @@ model Batch {
 > halfPriceInCents is required in batches when their events allowHalf
 
 # Todo
-- [ ] Setup database
-    - [ ] Create relation in between an **event** and a **ticketType**
-    - [ ] Add **active** for all tables so data isn't deleted
+- [x] Setup database
+    - [x] Create relation in between an **event** and a **ticketType**
+    - [x] Add **active** for all tables so data isn't deleted
 - [ ] Finish routes
-    - [ ] Not-dashboard operations shouldn't see not active stuff `where { id, active: true}`
     - [ ] Add *edit* and *remove* routes for **event**
+    - [ ] Use the **active** from database tables
+    - [ ] Not-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
 - [ ] Create dashboard
     - [ ] Routes to see **events** and **ticket types**
     - [ ] Filters for date
