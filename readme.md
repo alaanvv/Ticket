@@ -83,10 +83,14 @@ model Batch {
 > halfPriceInCents is required in batches when their events allowHalf
 
 # Todo
-- [ ] Setup ticket database
-- [ ] Create communication with database
-    - [ ] Make it as much verbose as possible
-
-# Quick Todo
-- remove-batch.ts
-- remove-ticket-type.ts
+- [ ] Setup database
+    - [ ] Create relation in between an **event** and a **ticketType**
+    - [ ] Add **active** for all tables so data isn't deleted
+- [ ] Finish routes
+    - [ ] Not-dashboard operations shouldn't see not active stuff `where { id, active: true}`
+    - [ ] Add *edit* and *remove* routes for **event**
+- [ ] Create dashboard
+    - [ ] Routes to see **events** and **ticket types**
+    - [ ] Filters for date
+    - [ ] Sorting options (amount remaining, amount sold, date)
+- [ ] Create tests for every possibility on each route (so future fixes and features don't break)
