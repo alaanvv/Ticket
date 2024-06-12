@@ -74,12 +74,11 @@ model Batch {
   "allowHalf": 1,
 }
 ```
+> If setting allowHalf here, all half prices will be defaulted to 0.5x
 
 - `/remove-batch/:id` **DELETE**
 
 - `/remove-ticket-type/:id` **DELETE**
-
-> If setting allowHalf here, all half prices will be defaulted to 0.5x
 
 > halfPriceInCents is required in batches when their events allowHalf
 
