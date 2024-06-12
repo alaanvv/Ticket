@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function editTicketType(app: FastifyInstance) {
-  app.post('/edit-ticket-type/:id', async (req, res) => {
+  app.put('/edit-ticket-type/:id', async (req, res) => {
     const bodySchema = z.object({
       name:      z.optional(z.string()),
       allowHalf: z.optional(z.coerce.boolean())
@@ -16,7 +16,6 @@ export async function editTicketType(app: FastifyInstance) {
 
     const { name, allowHalf } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
-
     if (name === null && allowHalf === null)
       throw new BadRequestError('Sent no data to edit')
 
@@ -24,7 +23,7 @@ export async function editTicketType(app: FastifyInstance) {
     if (!ticketType)
       throw new BadRequestError('This ticket type doesn\'t exist')
 
-    prisma.ticketType.update({
+    await prisma.ticketType.update({
       where: { id },
       data: {
         name: name || ticketType.name,

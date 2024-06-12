@@ -38,6 +38,6 @@ model Batch {
   amount           Int
   createdAt        DateTime   @default(now()) @map("created_at")
 
-  ticketType       TicketType @relation(fields: [ticketTypeId], references: [id])
+  ticketType       TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
   @@map("batches")
 }

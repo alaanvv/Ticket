@@ -7,6 +7,8 @@ import { createEvent } from './routes/create-event'
 import { getEvent } from './routes/get-event-details'
 import { addBatches } from './routes/add-batches'
 import { editBatch } from './routes/edit-batch'
+import { removeBatch } from './routes/remove-batch'
+import { removeTicketType } from './routes/remove-ticket-type'
 
 import { ZodError } from 'zod'
 import { BadRequestError } from './routes/errors/bad-request-error'
@@ -20,6 +22,8 @@ app.register(createEvent)
 app.register(addBatches)
 app.register(getEvent)
 app.register(editBatch)
+app.register(removeBatch)
+app.register(removeTicketType)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

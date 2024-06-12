@@ -43,7 +43,6 @@ model Batch {
   "name": "Pista",
   "allowHalf": 0,
   "batches": [
-    // 'halfPriceInCents' required when 'allowHalf'
     { "priceInCents": 20e3, "amount": 200 },
     { "priceInCents": 30e3, "amount": 100 }
   ]
@@ -54,12 +53,35 @@ model Batch {
 ```json
 {
   "batches": [
-    // 'halfPriceInCents' required when 'allowHalf'
     { "priceInCents": 20e3, "amount": 200 },
     { "priceInCents": 30e3, "amount": 100 }
   ]
 }
 ```
+
+- `/edit-batch/:id` **PUT**
+```json
+{
+  "priceInCents": 50e3,
+  "amount": 100
+}
+```
+
+- `/edit-ticket-type/:id` **PUT**
+```json
+{
+  "name": "Camarote",
+  "allowHalf": 1,
+}
+```
+
+- `/remove-batch/:id` **DELETE**
+
+- `/remove-ticket-type/:id` **DELETE**
+
+> If setting allowHalf here, all half prices will be defaulted to 0.5x
+
+> halfPriceInCents is required in batches when their events allowHalf
 
 # Todo
 - [ ] Setup ticket database
@@ -67,12 +89,5 @@ model Batch {
     - [ ] Make it as much verbose as possible
 
 # Quick Todo
-- edit-batch.ts
-- edit-ticket-type.ts
-
 - remove-batch.ts
 - remove-ticket-type.ts
-
-# To ask
-- Ver se o comprador precisa de pagina de buscar eventos (caso tenha muitos)
-- Pra comprar no site precisa ter conta (pra pegar dados)
