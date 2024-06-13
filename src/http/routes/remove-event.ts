@@ -3,8 +3,8 @@ import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
-export async function removeTicketType(app: FastifyInstance) {
-  app.delete('/remove-ticket-type/:id', async (req, res) => {
+export async function removeEvent(app: FastifyInstance) {
+  app.delete('/remove-event/:id', async (req, res) => {
     const paramSchema = z.object({
       id: z.string().cuid()
     })
@@ -12,12 +12,12 @@ export async function removeTicketType(app: FastifyInstance) {
     const { id } = paramSchema.parse(req.params)
 
     try {
-      await prisma.ticketType.delete({ where: { id } })
+      await prisma.event.delete({ where: { id } })
     }
     catch {
-      throw new BadRequestError('This ticket type doesn\'t exist')
+      throw new BadRequestError('This event doesn\'t exist')
     }
 
-    return res.status(201).send()
+    return res.status(201).send({ id })
   })
 }

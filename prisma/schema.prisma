@@ -18,11 +18,11 @@ model Event {
   active      Boolean  @default(true)
   createdAt   DateTime @default(now()) @map("created_at")
 
-  ticketTypes TicketType[]
+  tickets Ticket[]
   @@map("events")
 }
 
-model TicketType {
+model Ticket {
   id           String   @id @default(cuid())
   eventId      String   @map("event_id")
   name         String
@@ -32,18 +32,18 @@ model TicketType {
 
   event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   batches Batch[]
-  @@map("ticket_types")
+  @@map("tickets")
 }
 
 model Batch {
   id               String     @id @default(cuid())
-  ticketTypeId     String     @map("ticket_type_id")
+  ticketId     String     @map("ticket_id")
   priceInCents     Decimal    @map("price_in_cents")
   halfPriceInCents Decimal?   @map("half_price_in_cents")
   amount           Int
   active      Boolean  @default(true)
   createdAt        DateTime   @default(now()) @map("created_at")
 
-  ticketType       TicketType @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+  ticket       Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   @@map("batches")
 }

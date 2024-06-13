@@ -3,8 +3,8 @@ import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
-export async function createTicketType(app: FastifyInstance) {
-  app.post('/ticket-type/:id', async (req, res) => {
+export async function createTicket(app: FastifyInstance) {
+  app.post('/ticket/:id', async (req, res) => {
     const bodySchema = z.object({
       name:      z.string(),
       allowHalf: z.coerce.boolean(),
@@ -29,10 +29,10 @@ export async function createTicketType(app: FastifyInstance) {
       if (allowHalf && !batch.halfPriceInCents)
         throw new BadRequestError('No price set to half')
 
-    const ticketType = await prisma.ticketType.create({
+    const ticket = await prisma.ticket.create({
       data: { eventId: id, name, allowHalf, batches: { create: batches } }
     })
 
-    return res.status(201).send({ id: ticketType.id })
+    return res.status(201).send({ id: ticket.id })
   })
 }

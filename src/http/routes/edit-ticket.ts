@@ -3,8 +3,8 @@ import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
-export async function editTicketType(app: FastifyInstance) {
-  app.put('/edit-ticket-type/:id', async (req, res) => {
+export async function editTicket(app: FastifyInstance) {
+  app.put('/edit-ticket/:id', async (req, res) => {
     const bodySchema = z.object({
       name:      z.optional(z.string()),
       allowHalf: z.optional(z.coerce.boolean())
@@ -19,21 +19,21 @@ export async function editTicketType(app: FastifyInstance) {
     if (name === null && allowHalf === null)
       throw new BadRequestError('Sent no data to edit')
 
-    const ticketType = await prisma.ticketType.findUnique({ where: { id } })
-    if (!ticketType)
-      throw new BadRequestError('This ticket type doesn\'t exist')
+    const ticket = await prisma.ticket.findUnique({ where: { id } })
+    if (!ticket)
+      throw new BadRequestError('This ticket doesn\'t exist')
 
-    await prisma.ticketType.update({
+    await prisma.ticket.update({
       where: { id },
       data: {
-        name: name || ticketType.name,
-        allowHalf: allowHalf || ticketType.allowHalf
+        name: name || ticket.name,
+        allowHalf: allowHalf || ticket.allowHalf
       }
     })
 
-    if (!ticketType.allowHalf && allowHalf) {
+    if (!ticket.allowHalf && allowHalf) {
       const batchesToUpdate = await prisma.batch.findMany({
-        where: { ticketTypeId: id, halfPriceInCents: null }
+        where: { ticketId: id, halfPriceInCents: null }
       })
 
       for (let batch of batchesToUpdate)

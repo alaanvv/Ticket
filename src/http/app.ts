@@ -1,14 +1,16 @@
 import fastify from 'fastify'
 import { env } from '../env'
 
-import { createTicketType } from './routes/create-ticket-type'
-import { editTicketType } from './routes/edit-ticket-type'
 import { createEvent } from './routes/create-event'
-import { getEvent } from './routes/get-event-details'
-import { addBatches } from './routes/add-batches'
+import { createTicket } from './routes/create-ticket'
+import { createBatches } from './routes/create-batches'
+import { editEvent } from './routes/edit-event'
+import { editTicket } from './routes/edit-ticket'
 import { editBatch } from './routes/edit-batch'
+import { getEvent } from './routes/get-event'
+import { removeEvent } from './routes/remove-event'
+import { removeTicket } from './routes/remove-ticket'
 import { removeBatch } from './routes/remove-batch'
-import { removeTicketType } from './routes/remove-ticket-type'
 
 import { ZodError } from 'zod'
 import { BadRequestError } from './routes/errors/bad-request-error'
@@ -16,35 +18,29 @@ import { NotFoundError } from './routes/errors/not-found-error'
 
 export const app = fastify()
 
-app.register(createTicketType)
-app.register(editTicketType)
 app.register(createEvent)
-app.register(addBatches)
-app.register(getEvent)
+app.register(createTicket)
+app.register(createBatches)
+app.register(editEvent)
+app.register(editTicket)
 app.register(editBatch)
+app.register(getEvent)
+app.register(removeEvent)
+app.register(removeTicket)
 app.register(removeBatch)
-app.register(removeTicketType)
 
 app.setErrorHandler((error, _, reply) => {
-  if (error instanceof ZodError) {
-    return reply
-    .status(400)
-    .send({ message: 'Validation error.', issues: error.issues })
-  }
+  if (error instanceof ZodError)
+    return reply.status(400).send({ message: 'Validation error.', issues: error.issues })
 
-  if (error instanceof BadRequestError) {
+  if (error instanceof BadRequestError)
     return reply.status(400).send({ message: error.message })
-  }
 
-  if (error instanceof NotFoundError) {
+  if (error instanceof NotFoundError)
     return reply.status(404).send({ message: error.message })
-  }
 
-  if (env.NODE_ENV !== 'production') {
+  if (env.NODE_ENV !== 'production')
     console.log(error)
-  } else {
-    // Here we should log to an external tool like (DataDog, NewRelic, Sentry)
-  }
 
-  return reply.status(500).send({ message: `Internal server error. \n\n${error}` })
+  return reply.status(500).send({ message: 'Internal server error.' })
 })
