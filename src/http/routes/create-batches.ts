@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function createBatches(app: FastifyInstance) {
-  app.post('/add-batches/:id', async (req, res) => {
+  app.post('/create-batches/:id', async (req, res) => {
     const bodySchema = z.object({
       batches:   z.object({
         ticketId:     z.any().default(0), // lsp fucking this up

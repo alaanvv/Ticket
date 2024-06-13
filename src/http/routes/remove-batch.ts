@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function removeBatch(app: FastifyInstance) {
-  app.delete('/remove-batch/:id', async (req, res) => {
+  app.delete('/batch/:id', async (req, res) => {
     const paramSchema = z.object({
       id: z.string().cuid()
     })

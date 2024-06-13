@@ -104,11 +104,17 @@ model Batch {
 ```
 > If setting allowHalf here, all half prices will be defaulted to 0.5x
 
-- `/remove-event/:id` **DELETE**
+- `/events/:id` **GET**
 
-- `/remove-batch/:id` **DELETE**
+- `/ticket/:id` **GET**
 
-- `/remove-ticket/:id` **DELETE**
+- `/batch/:id` **GET**
+
+- `/event/:id` **DELETE**
+
+- `/batch/:id` **DELETE**
+
+- `/ticket/:id` **DELETE**
 
 > halfPriceInCents is required in batches when their events allowHalf
 
@@ -118,7 +124,7 @@ model Batch {
     - [x] Add **active** for all tables so data isn't deleted
 - [ ] Finish routes
     - [x] Add *edit* and *remove* routes for **event**
-    - [ ] Create routes to read
+    - [x] Create routes to read
     - [ ] Use the **active** from database tables
     - [ ] Not-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
 - [ ] Create dashboard

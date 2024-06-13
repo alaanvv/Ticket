@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function removeEvent(app: FastifyInstance) {
-  app.delete('/remove-event/:id', async (req, res) => {
+  app.delete('/event/:id', async (req, res) => {
     const paramSchema = z.object({
       id: z.string().cuid()
     })
