@@ -24,7 +24,7 @@ export async function editEvent(app: FastifyInstance) {
       if (name == null && description == null && local == null && address == null && latitude == null && longitude == null)
         throw new BadRequestError('Sent no data to edit')
 
-      const event = await prisma.event.findUnique({ where: { id } })
+      const event = await prisma.event.findUnique({ where: { id, active: true } })
       if (!event)
         throw new BadRequestError('This event doesn\'t exist')
 

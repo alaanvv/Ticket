@@ -19,7 +19,7 @@ export async function editTicket(app: FastifyInstance) {
     if (name === null && allowHalf === null)
       throw new BadRequestError('Sent no data to edit')
 
-    const ticket = await prisma.ticket.findUnique({ where: { id } })
+    const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
     if (!ticket)
       throw new BadRequestError('This ticket doesn\'t exist')
 

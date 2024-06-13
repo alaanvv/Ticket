@@ -21,7 +21,7 @@ export async function createBatches(app: FastifyInstance) {
     const { batches } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
 
-    const ticket = await prisma.ticket.findUnique({ where: { id: id } })
+    const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
     if (!ticket)
       throw new BadRequestError('This ticket doesn\'t exist')
 

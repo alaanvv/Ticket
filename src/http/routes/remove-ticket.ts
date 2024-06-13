@@ -1,6 +1,6 @@
+import { deleteTicket } from '../../utils/recursive-deletion'
 import { BadRequestError } from './errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
-import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function removeTicket(app: FastifyInstance) {
@@ -12,7 +12,7 @@ export async function removeTicket(app: FastifyInstance) {
     const { id } = paramSchema.parse(req.params)
 
     try {
-      await prisma.ticket.delete({ where: { id } })
+      await deleteTicket(id)
     }
     catch {
       throw new BadRequestError('This ticket doesn\'t exist')

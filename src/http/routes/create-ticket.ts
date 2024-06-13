@@ -22,7 +22,7 @@ export async function createTicket(app: FastifyInstance) {
     const { name, allowHalf, batches } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
 
-    if (!await prisma.event.findUnique({ where: { id } }))
+    if (!await prisma.event.findUnique({ where: { id, active: true } }))
       throw new BadRequestError('This event doesn\'t exist')
 
     for (let batch of batches)

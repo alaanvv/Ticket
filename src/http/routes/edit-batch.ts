@@ -18,7 +18,7 @@ export async function editBatch(app: FastifyInstance) {
     const { amount, priceInCents, halfPriceInCents } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
 
-    const batch = await prisma.batch.findUnique({ where: { id } })
+    const batch = await prisma.batch.findUnique({ where: { id, active: true } })
     if (!batch)
       throw new BadRequestError('This batch doesn\'t exist')
 

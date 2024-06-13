@@ -11,7 +11,7 @@ export async function getBatch(app: FastifyInstance) {
 
     const { id } = paramsSchema.parse(req.params)
 
-    const batch = await prisma.batch.findUnique({ where: { id } })
+    const batch = await prisma.batch.findUnique({ where: { id, active: true } })
 
     if (!batch)
       throw new NotFoundError('Batch not found.')

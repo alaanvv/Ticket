@@ -1,6 +1,6 @@
+import { deleteBatch } from '../../utils/recursive-deletion'
 import { BadRequestError } from './errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
-import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function removeBatch(app: FastifyInstance) {
@@ -12,7 +12,7 @@ export async function removeBatch(app: FastifyInstance) {
     const { id } = paramSchema.parse(req.params)
 
     try {
-      await prisma.batch.delete({ where: { id } })
+      await deleteBatch(id)
     }
     catch {
       throw new BadRequestError('This batch doesn\'t exist')

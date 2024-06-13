@@ -1,6 +1,6 @@
+import { deleteEvent } from '../../utils/recursive-deletion'
 import { BadRequestError } from './errors/bad-request-error'
 import { FastifyInstance } from 'fastify'
-import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function removeEvent(app: FastifyInstance) {
@@ -12,7 +12,7 @@ export async function removeEvent(app: FastifyInstance) {
     const { id } = paramSchema.parse(req.params)
 
     try {
-      await prisma.event.delete({ where: { id } })
+      await deleteEvent(id)
     }
     catch {
       throw new BadRequestError('This event doesn\'t exist')

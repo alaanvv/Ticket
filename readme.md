@@ -122,11 +122,11 @@ model Batch {
 - [x] Setup database
     - [x] Create relation in between an **event** and a **ticket**
     - [x] Add **active** for all tables so data isn't deleted
-- [ ] Finish routes
+- [x] Finish routes
     - [x] Add *edit* and *remove* routes for **event**
     - [x] Create routes to read
-    - [ ] Use the **active** from database tables
-    - [ ] Not-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
+    - [x] Use the **active** from database tables
+    - [x] Not-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
 - [ ] Create dashboard
     - [ ] Routes to see **events** and **ticket**
     - [ ] Filters for date

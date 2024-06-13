@@ -11,7 +11,7 @@ export async function getTicket(app: FastifyInstance) {
 
     const { id } = paramsSchema.parse(req.params)
 
-    const ticket = await prisma.ticket.findUnique({ where: { id } })
+    const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
 
     if (!ticket)
       throw new NotFoundError('Ticket not found.')
