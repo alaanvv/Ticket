@@ -127,6 +127,12 @@ model Batch {
     - [x] Create routes to read
     - [x] Use the **active** from database tables
     - [x] Not-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
+- [ ] Ticket instance
+    - [ ] Create database table (status, price_paid)
+    - [ ] Rewatch Death Note
+    - [ ] Create route to sell it
+        - [ ] Decrease amount on stock (deactive on 0)
+- [ ] Create a route that returns the active batch of an ticket
 - [ ] Create dashboard
     - [ ] Routes to see **events** and **ticket**
     - [ ] Filters for date
