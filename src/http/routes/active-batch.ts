@@ -1,0 +1,25 @@
+import { NotFoundError } from './errors/not-found-error'
+import { FastifyInstance } from 'fastify'
+import { prisma } from '../../lib/prisma'
+import { z } from 'zod'
+
+export async function activeBatch(app: FastifyInstance) {
+  app.get('/active-batch/:id', async (req, res) => {
+    const paramsSchema = z.object({
+      id: z.string().cuid()
+    })
+
+    const { id } = paramsSchema.parse(req.params)
+
+    const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
+
+    if (!ticket)
+      throw new NotFoundError('Ticket not found')
+
+    const batch = await prisma.batch.findFirst({
+      where: { ticketId: id, active: true, amount: { gt: 0 } }
+    })
+
+    return res.status(200).send(batch)
+  })
+}

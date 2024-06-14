@@ -27,7 +27,7 @@ model Ticket {
   eventId      String   @map("event_id")
   name         String
   allowHalf    Boolean  @map("allow_half")
-  active      Boolean  @default(true)
+  active       Boolean  @default(true)
   createdAt    DateTime @default(now()) @map("created_at")
 
   event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -37,11 +37,11 @@ model Ticket {
 
 model Batch {
   id               String     @id @default(cuid())
-  ticketId     String     @map("ticket_id")
+  ticketId         String     @map("ticket_id")
   priceInCents     Decimal    @map("price_in_cents")
   halfPriceInCents Decimal?   @map("half_price_in_cents")
   amount           Int
-  active      Boolean  @default(true)
+  active           Boolean  @default(true)
   createdAt        DateTime   @default(now()) @map("created_at")
 
   ticket       Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)

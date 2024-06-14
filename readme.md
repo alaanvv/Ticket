@@ -20,7 +20,7 @@ model Ticket {
   eventId      String   @map("event_id")
   name         String
   allowHalf    Boolean  @map("allow_half")
-  active      Boolean  @default(true)
+  active       Boolean  @default(true)
   createdAt    DateTime @default(now()) @map("created_at")
 
   event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
@@ -30,11 +30,11 @@ model Ticket {
 
 model Batch {
   id               String     @id @default(cuid())
-  ticketId     String     @map("ticket_id")
+  ticketId         String     @map("ticket_id")
   priceInCents     Decimal    @map("price_in_cents")
   halfPriceInCents Decimal?   @map("half_price_in_cents")
   amount           Int
-  active      Boolean  @default(true)
+  active           Boolean  @default(true)
   createdAt        DateTime   @default(now()) @map("created_at")
 
   ticket       Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
@@ -106,9 +106,15 @@ model Batch {
 
 - `/events/:id` **GET**
 
+- `/event-tickets/:id` **GET**
+
 - `/ticket/:id` **GET**
 
+- `/ticket-batches/:id` **GET**
+
 - `/batch/:id` **GET**
+
+- `/active-batch/:id` **GET**
 
 - `/event/:id` **DELETE**
 
@@ -126,15 +132,20 @@ model Batch {
     - [x] Add *edit* and *remove* routes for **event**
     - [x] Create routes to read
     - [x] Use the **active** from database tables
-    - [x] Not-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
+    - [x] Non-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
+    - [x] Routes to fetch stuff that belongs to other stuff
+        - [x] All tickets within an event
+        - [x] All batches within a ticket
+        - [x] Active batch of a ticket
+- [ ] Create tests for every possibility on each route (so future fixes and features don't break)
 - [ ] Ticket instance
     - [ ] Create database table (status, price_paid)
     - [ ] Rewatch Death Note
     - [ ] Create route to sell it
         - [ ] Decrease amount on stock (deactive on 0)
-- [ ] Create a route that returns the active batch of an ticket
+    - [ ] Tests here
 - [ ] Create dashboard
     - [ ] Routes to see **events** and **ticket**
     - [ ] Filters for date
     - [ ] Sorting options (amount remaining, amount sold, date)
-- [ ] Create tests for every possibility on each route (so future fixes and features don't break)
+    - [ ] Tests here also
