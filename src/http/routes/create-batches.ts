@@ -1,4 +1,4 @@
-import { BadRequestError } from './errors/bad-request-error'
+import { BadRequestError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -7,7 +7,7 @@ export async function createBatches(app: FastifyInstance) {
   app.post('/create-batches/:id', async (req, res) => {
     const bodySchema = z.object({
       batches:   z.object({
-        ticketId:     z.any().default(0), // lsp fucking this up
+        ticketId:         z.any().default(0), // lsp fucking this up
         amount:           z.coerce.number().int().min(1),
         priceInCents:     z.coerce.number().int().min(1),
         halfPriceInCents: z.optional(z.coerce.number().int().min(1))
@@ -18,20 +18,20 @@ export async function createBatches(app: FastifyInstance) {
       id: z.string().cuid()
     })
 
-    const { batches } = bodySchema.parse(req.body)
+    const { batches: batches_data } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
 
     const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
     if (!ticket)
-      throw new BadRequestError('This ticket doesn\'t exist')
+      throw new BadRequestError('Ticket not found')
 
-    for (let batch of batches)
+    for (let batch of batches_data)
       if (ticket.allowHalf && !batch.halfPriceInCents)
-        throw new BadRequestError('No price set to half')
+        throw new BadRequestError('No price set to half.')
 
-    batches.map(batch => { batch.ticketId = id })
-    await prisma.batch.createMany({ data: batches })
+    batches_data.map(batch => { batch.ticketId = id })
+    const batches = await prisma.batch.createManyAndReturn({ data: batches_data })
 
-    return res.status(201).send({ id: id })
+    return res.status(201).send(batches)
   })
 }

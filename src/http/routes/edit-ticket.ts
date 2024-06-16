@@ -1,4 +1,4 @@
-import { BadRequestError } from './errors/bad-request-error'
+import { BadRequestError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -17,11 +17,11 @@ export async function editTicket(app: FastifyInstance) {
     const { name, allowHalf } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
     if (name === null && allowHalf === null)
-      throw new BadRequestError('Sent no data to edit')
+      throw new BadRequestError('Sent no data to edit.')
 
     const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
     if (!ticket)
-      throw new BadRequestError('This ticket doesn\'t exist')
+      throw new BadRequestError('Ticket not found')
 
     await prisma.ticket.update({
       where: { id },
@@ -45,6 +45,6 @@ export async function editTicket(app: FastifyInstance) {
         })
     }
 
-    return res.status(201).send({ id })
+    return res.status(204).send()
   })
 }

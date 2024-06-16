@@ -1,4 +1,4 @@
-import { NotFoundError } from './errors/not-found-error'
+import { NotFoundError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -14,7 +14,7 @@ export async function getEventTickets(app: FastifyInstance) {
     const event = await prisma.event.findUnique({ where: { id, active: true } })
 
     if (!event)
-      throw new NotFoundError('Event not found')
+      throw new NotFoundError('Event not found.')
 
     const tickets = await prisma.ticket.findMany({
       where: { eventId: id, active: true }

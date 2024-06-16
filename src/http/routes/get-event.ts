@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
-import { z } from 'zod'
+import { NotFoundError } from '../errors'
 import { prisma } from '../../lib/prisma'
-import { NotFoundError } from './errors/not-found-error'
+import { z } from 'zod'
 
 export async function getEvent(app: FastifyInstance) {
 

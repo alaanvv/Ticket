@@ -1,6 +1,3 @@
-import fastify from 'fastify'
-import { env } from '../env'
-
 import { createEvent } from './routes/create-event'
 import { createTicket } from './routes/create-ticket'
 import { createBatches } from './routes/create-batches'
@@ -17,9 +14,10 @@ import { removeEvent } from './routes/remove-event'
 import { removeTicket } from './routes/remove-ticket'
 import { removeBatch } from './routes/remove-batch'
 
+import { BadRequestError, NotFoundError } from './errors'
 import { ZodError } from 'zod'
-import { BadRequestError } from './routes/errors/bad-request-error'
-import { NotFoundError } from './routes/errors/not-found-error'
+import { env } from '../env'
+import fastify from 'fastify'
 
 export const app = fastify()
 

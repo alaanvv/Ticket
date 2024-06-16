@@ -1,7 +1,7 @@
-import { BadRequestError } from './errors/bad-request-error'
+import { BadRequestError } from '../errors'
 import { FastifyInstance } from 'fastify'
-import { z } from 'zod'
 import { prisma } from '../../lib/prisma'
+import { z } from 'zod'
 
 export async function editEvent(app: FastifyInstance) {
   app.put('/edit-event/:id', async (req, res) => {
@@ -22,11 +22,11 @@ export async function editEvent(app: FastifyInstance) {
       const { id } = paramSchema.parse(req.params)
 
       if (name == null && description == null && local == null && address == null && latitude == null && longitude == null)
-        throw new BadRequestError('Sent no data to edit')
+        throw new BadRequestError('Sent no data to edit.')
 
       const event = await prisma.event.findUnique({ where: { id, active: true } })
       if (!event)
-        throw new BadRequestError('This event doesn\'t exist')
+        throw new BadRequestError('Event not found.')
 
 
       await prisma.event.update({
@@ -41,6 +41,6 @@ export async function editEvent(app: FastifyInstance) {
         }
       })
 
-      return res.status(201).send()
+      return res.status(204).send()
   })
 }

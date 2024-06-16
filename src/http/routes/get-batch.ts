@@ -1,4 +1,4 @@
-import { NotFoundError } from './errors/not-found-error'
+import { NotFoundError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'

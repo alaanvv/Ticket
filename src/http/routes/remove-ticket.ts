@@ -1,5 +1,5 @@
 import { deleteTicket } from '../../utils/recursive-deletion'
-import { BadRequestError } from './errors/bad-request-error'
+import { BadRequestError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 
@@ -15,9 +15,9 @@ export async function removeTicket(app: FastifyInstance) {
       await deleteTicket(id)
     }
     catch {
-      throw new BadRequestError('This ticket doesn\'t exist')
+      throw new BadRequestError('Ticket not found')
     }
 
-    return res.status(201).send()
+    return res.status(204).send()
   })
 }

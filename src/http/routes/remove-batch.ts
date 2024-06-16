@@ -1,5 +1,5 @@
 import { deleteBatch } from '../../utils/recursive-deletion'
-import { BadRequestError } from './errors/bad-request-error'
+import { BadRequestError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 
@@ -15,9 +15,9 @@ export async function removeBatch(app: FastifyInstance) {
       await deleteBatch(id)
     }
     catch {
-      throw new BadRequestError('This batch doesn\'t exist')
+      throw new BadRequestError('Batch not found')
     }
 
-    return res.status(201).send({ id })
+    return res.status(204).send()
   })
 }
