@@ -137,7 +137,7 @@ model Batch {
         - [x] All tickets within an event
         - [x] All batches within a ticket
         - [x] Active batch of a ticket
-- [ ] Create tests for every possibility on each route (so future fixes and features don't break)
+- [x] Create tests for every possibility on each route (so future fixes and features don't break)
 - [ ] Ticket instance
     - [ ] Create database table (status, price_paid)
     - [ ] Rewatch Death Note
@@ -149,3 +149,8 @@ model Batch {
     - [ ] Filters for date
     - [ ] Sorting options (amount remaining, amount sold, date)
     - [ ] Tests here also
+
+
+> https://www.uniticket.com.br/
+
+> https://q2ingressos.com.br/
