@@ -4,5 +4,4 @@ if [ ! -f ./.env.example ]; then
 fi
 
 cp .env.example .env
-
-$(docker compose up) & clear & $(npm run studio) & clear & npm run dev
+$(docker compose up) & $(npm run studio) & clear & npm run dev

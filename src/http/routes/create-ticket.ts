@@ -1,4 +1,4 @@
-import { BadRequestError } from '../errors'
+import { BadRequestError, NotFoundError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -14,20 +14,17 @@ export async function createTicket(app: FastifyInstance) {
         halfPriceInCents: z.optional(z.coerce.number().int().min(1))
       }).array()
     })
-
-    const paramSchema = z.object({
-      id: z.string().cuid()
-    })
+    const paramSchema = z.object({ id: z.string().cuid() })
 
     const { name, allowHalf, batches } = bodySchema.parse(req.body)
     const { id } = paramSchema.parse(req.params)
 
     if (!await prisma.event.findUnique({ where: { id, active: true } }))
-      throw new BadRequestError('This event doesn\'t exist')
+      throw new NotFoundError('Event not found.')
 
     for (let batch of batches)
       if (allowHalf && !batch.halfPriceInCents)
-        throw new BadRequestError('No price set to half')
+        throw new BadRequestError('No price set to half.')
 
     const ticket = await prisma.ticket.create({
       data: { eventId: id, name, allowHalf, batches: { create: batches } }

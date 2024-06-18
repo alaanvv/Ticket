@@ -1,11 +1,7 @@
 import { env } from '../env'
 import { app } from './app'
 
-app
-  .listen({
-    host: '0.0.0.0',
-    port: env.PORT,
-  })
-  .then(() => {
-    console.log('HTTP server running')
-  })
+app.listen(
+  { host: env.HOST, port: env.PORT },
+  (_, addr) => console.log(`Server running at ${addr}`)
+)

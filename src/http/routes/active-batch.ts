@@ -5,14 +5,10 @@ import { z } from 'zod'
 
 export async function activeBatch(app: FastifyInstance) {
   app.get('/active-batch/:id', async (req, res) => {
-    const paramsSchema = z.object({
-      id: z.string().cuid()
-    })
-
-    const { id } = paramsSchema.parse(req.params)
+    const paramSchema = z.object({ id: z.string().cuid() })
+    const { id } = paramSchema.parse(req.params)
 
     const ticket = await prisma.ticket.findUnique({ where: { id, active: true } })
-
     if (!ticket)
       throw new NotFoundError('Ticket not found.')
 

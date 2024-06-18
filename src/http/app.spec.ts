@@ -19,8 +19,8 @@ describe('Event and Ticket API', _ => {
       })
 
       expect(res.statusCode).toEqual(201)
-      expect(res.body).toEqual(expect.objectContaining({ eventId: expect.any(String) }))
-      eventId = res.body.eventId
+      expect(res.body).toEqual(expect.objectContaining({ id: expect.any(String) }))
+      eventId = res.body.id
     })
 
     it('should return 400 for invalid data', async _ => {
