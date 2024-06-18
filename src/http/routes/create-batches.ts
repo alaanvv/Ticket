@@ -26,8 +26,8 @@ export async function createBatches(app: FastifyInstance) {
         throw new BadRequestError('No price set to half.')
 
     const query = batches.map(b => ({ ...b, ticketId: id }))
-    const created_batches = await prisma.batch.createManyAndReturn({ data: query })
+    const batch_ids = (await prisma.batch.createManyAndReturn({ data: query })).map(b => b.id)
 
-    return res.status(201).send(created_batches)
+    return res.status(201).send({ ids: batch_ids })
   })
 }

@@ -16,6 +16,6 @@ export async function activeBatch(app: FastifyInstance) {
       where: { ticketId: id, active: true, amount: { gt: 1 } }
     })
 
-    return res.status(200).send(batch)
+    return res.status(200).send({ batch })
   })
 }

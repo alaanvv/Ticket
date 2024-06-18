@@ -16,6 +16,6 @@ export async function getEventTickets(app: FastifyInstance) {
       where: { eventId: id, active: true }
     })
 
-    return res.status(200).send(tickets)
+    return res.status(200).send({ tickets })
   })
 }
