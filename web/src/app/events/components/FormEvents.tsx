@@ -26,23 +26,14 @@ import { Textarea } from "@/components/ui/textarea";
 
 // Esquema de validação
 const formSchema = z.object({
-  nome: z
-    .string()
-    .min(2, { message: "Nome deve ter pelo menos 2 caracteres." }),
-  descricao: z
-    .string()
-    .min(10, { message: "Descrição deve ter pelo menos 10 caracteres." }),
+  nome: z.string().min(1, { message: "Nome deve ter pelo menos 1 caractere." }),
+  descricao: z.string().optional(),
   data_inicio: z.date({ message: "Data de início inválida." }),
-  local: z
-    .string()
-    .min(2, { message: "Local deve ter pelo menos 2 caracteres." }),
-  endereco: z
-    .string()
-    .min(5, { message: "Endereço deve ter pelo menos 5 caracteres." }),
+  local: z.string().min(1, { message: "Local deve ter pelo menos 1 caractere." }),
+  endereco: z.string().min(1, { message: "Endereço deve ter pelo menos 1 caracteres." }),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
-  imagem: z.string().url({ message: "URL da imagem inválida." }),
-  categoria_id: z.number().int().min(1, { message: "Categoria inválida." }),
+  imagem: z.optional(z.string().url({ message: "URL da imagem inválida." })),
 });
 
 const FormularioEvento = () => {
@@ -57,7 +48,6 @@ const FormularioEvento = () => {
       latitude: undefined,
       longitude: undefined,
       imagem: "",
-      categoria_id: 1,
     },
   });
 
@@ -71,19 +61,17 @@ const FormularioEvento = () => {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const onPlaceChanged = () => {
-    if (autocompleteRef.current) {
-      const place = autocompleteRef.current.getPlace();
+    if (!autocompleteRef.current) return;
+    const place = autocompleteRef.current.getPlace();
 
-      if (place && place.geometry && place.geometry.location) {
-        setMarkerPosition(place.geometry.location.toJSON());
-        form.setValue("local", place.name || "");
-        form.setValue("endereco", place.formatted_address || "");
-        form.setValue("latitude", place.geometry.location.lat());
-        form.setValue("longitude", place.geometry.location.lng());
-      } else {
-        console.error("Localização não encontrada para este lugar.");
-      }
-    }
+    if (!place || !place.geometry || !place.geometry.location)
+      return console.error("Localização não encontrada para este lugar.");
+
+    setMarkerPosition(place.geometry.location.toJSON());
+    form.setValue("local", place.name || "");
+    form.setValue("endereco", place.formatted_address || "");
+    form.setValue("latitude", place.geometry.location.lat());
+    form.setValue("longitude", place.geometry.location.lng());
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -91,11 +79,11 @@ const FormularioEvento = () => {
   }
 
   const onMapClick = (event: google.maps.MapMouseEvent) => {
-    if (event.latLng) {
-      setMarkerPosition(event.latLng.toJSON());
-      form.setValue("latitude", event.latLng.lat());
-      form.setValue("longitude", event.latLng.lng());
-    }
+    if (!event.latLng)
+      return
+    setMarkerPosition(event.latLng.toJSON());
+    form.setValue("latitude", event.latLng.lat());
+    form.setValue("longitude", event.latLng.lng());
   };
 
   return (
@@ -106,7 +94,7 @@ const FormularioEvento = () => {
           name="nome"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome do Evento</FormLabel>
+              <FormLabel>Nome</FormLabel>
               <FormMessage className="text-red-600" />
               <FormControl>
                 <Input placeholder="Nome do evento" {...field} />
@@ -123,7 +111,7 @@ const FormularioEvento = () => {
               <FormMessage className="text-red-500 m-0" />
               <FormControl>
                 <Textarea
-                  placeholder="Descrição detalhada do evento"
+                  placeholder="Detalhes do evento"
                   {...field}
                 />
               </FormControl>
@@ -135,14 +123,14 @@ const FormularioEvento = () => {
           name="data_inicio"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Data de Início</FormLabel>
+              <FormLabel>Data</FormLabel>
               <FormMessage className="text-red-500 m-0" />
               <FormControl>
                 <DatePicker
                   selected={field.value}
                   onChange={(date) => field.onChange(date)}
                   showTimeSelect
-                  dateFormat="Pp"
+                  dateFormat="dd/MM/yy HH:mm"
                   className="border rounded-md p-2 w-full cursor-default"
                 />
               </FormControl>
@@ -158,19 +146,6 @@ const FormularioEvento = () => {
               <FormMessage className="text-red-500 m-0" />
               <FormControl>
                 <Input placeholder="URL da imagem" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="categoria_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Categoria</FormLabel>
-              <FormMessage className="text-red-500 m-0" />
-              <FormControl>
-                <Input type="number" placeholder="ID da categoria" {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -221,7 +196,9 @@ const FormularioEvento = () => {
                 <FormLabel>Latitude</FormLabel>
                 <FormMessage className="text-red-500 m-0" />
                 <FormControl>
-                  <Input type="number" placeholder="Latitude" {...field} />
+                  <Input type="number"
+                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  placeholder="Latitude" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -234,7 +211,9 @@ const FormularioEvento = () => {
                 <FormLabel>Longitude</FormLabel>
                 <FormMessage className="text-red-500 m-0" />
                 <FormControl>
-                  <Input type="number" placeholder="Longitude" {...field} />
+                  <Input type="number"
+                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  placeholder="Longitude" {...field} />
                 </FormControl>
               </FormItem>
             )}
