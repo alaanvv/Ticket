@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import FormEvents from "./create/components/FormEvents";
+import FormEvents from "./components/FormEvents";
 
 export default function Events() {
   return (

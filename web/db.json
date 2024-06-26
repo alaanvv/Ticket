@@ -1,0 +1,34 @@
+{
+  "events": [
+    {
+      "id": "clwz7ilv30006xjuua1ee117o",
+      "name": "Exposição",
+      "description": null,
+      "local": "Parque de Exposição",
+      "address": "Rua A, Centro, n°57",
+      "latitude": "-20.9116472",
+      "longitude": "-44.076647",
+      "createdAt": "2024-06-03T16:50:22.383Z"
+    },
+    {
+      "id": "clwz7ilv30006xjuua1ee117o",
+      "name": "Zé do Mato",
+      "description": "Festa incrivel zé do mato é top",
+      "local": "Parque de Exposição",
+      "address": "Rua A, Centro, n°57",
+      "latitude": "-20.9116472",
+      "longitude": "-44.076647",
+      "createdAt": "2024-12-03T16:50:22.383Z"
+    },
+    {
+      "id": "clwz7ilv30006xjuua1ee117o",
+      "name": "Festa do rocambole",
+      "description": "Comemoração do aniversário da cidade",
+      "local": "Parque de Exposição",
+      "address": "Rua A, Centro, n°57",
+      "latitude": "-20.9116472",
+      "longitude": "-44.076647",
+      "createdAt": "2024-06-06T16:50:22.383Z"
+    }
+  ]
+}

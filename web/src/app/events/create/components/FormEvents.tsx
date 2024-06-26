@@ -1,5 +1,3 @@
-"use client"; // Adicione esta linha no topo do arquivo
-
 import {
   Form,
   FormControl,
@@ -23,31 +21,33 @@ import {
 import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { FaPlus } from "react-icons/fa";
+import FormTicket from "../../components/FormTicket";
 
 // Esquema de validação
 const formSchema = z.object({
-  nome: z.string().min(1, { message: "Nome deve ter pelo menos 1 caractere." }),
-  descricao: z.string().optional(),
-  data_inicio: z.date({ message: "Data de início inválida." }),
-  local: z.string().min(1, { message: "Local deve ter pelo menos 1 caractere." }),
-  endereco: z.string().min(1, { message: "Endereço deve ter pelo menos 1 caracteres." }),
+  name: z.string().min(1, { message: "Nome deve ter pelo menos 1 caractere." }),
+  description: z.string().optional(),
+  startDate: z.date({ message: "Data de início inválida." }),
+  location: z.string().min(1, { message: "Local deve ter pelo menos 1 caractere." }),
+  address: z.string().min(1, { message: "Endereço deve ter pelo menos 1 caracteres." }),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
-  imagem: z.optional(z.string().url({ message: "URL da imagem inválida." })),
+  image: z.optional(z.string().url({ message: "URL da imagem inválida." })),
 });
 
-const FormularioEvento = () => {
+const EventForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: "",
-      descricao: "",
-      data_inicio: new Date(),
-      local: "",
-      endereco: "",
+      name: "",
+      description: "",
+      startDate: new Date(),
+      location: "",
+      address: "",
       latitude: undefined,
       longitude: undefined,
-      imagem: "",
+      image: "",
     },
   });
 
@@ -60,25 +60,26 @@ const FormularioEvento = () => {
     useState<google.maps.LatLngLiteral | null>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
-  const onPlaceChanged = () => {
-    if (!autocompleteRef.current) return;
-    const place = autocompleteRef.current.getPlace();
+  const handlePlaceChanged = () => {
+    if (!autocompleteRef.current)
+      return
 
+    const place = autocompleteRef.current.getPlace();
     if (!place || !place.geometry || !place.geometry.location)
-      return console.error("Localização não encontrada para este lugar.");
+      return console.error("Location not found for this place.");
 
     setMarkerPosition(place.geometry.location.toJSON());
-    form.setValue("local", place.name || "");
-    form.setValue("endereco", place.formatted_address || "");
+    form.setValue("location", place.name || "");
+    form.setValue("address", place.formatted_address || "");
     form.setValue("latitude", place.geometry.location.lat());
     form.setValue("longitude", place.geometry.location.lng());
   };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
-  }
+  };
 
-  const onMapClick = (event: google.maps.MapMouseEvent) => {
+  const handleMapClick = (event: google.maps.MapMouseEvent) => {
     if (!event.latLng)
       return
     setMarkerPosition(event.latLng.toJSON());
@@ -88,10 +89,10 @@ const FormularioEvento = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="nome"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nome</FormLabel>
@@ -104,7 +105,7 @@ const FormularioEvento = () => {
         />
         <FormField
           control={form.control}
-          name="descricao"
+          name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Descrição</FormLabel>
@@ -120,10 +121,10 @@ const FormularioEvento = () => {
         />
         <FormField
           control={form.control}
-          name="data_inicio"
+          name="startDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Data</FormLabel>
+              <FormLabel>Data de Início</FormLabel>
               <FormMessage className="text-red-500 m-0" />
               <FormControl>
                 <DatePicker
@@ -139,7 +140,7 @@ const FormularioEvento = () => {
         />
         <FormField
           control={form.control}
-          name="imagem"
+          name="image"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Imagem</FormLabel>
@@ -152,7 +153,7 @@ const FormularioEvento = () => {
         />
         <FormField
           control={form.control}
-          name="local"
+          name="location"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Local</FormLabel>
@@ -163,7 +164,7 @@ const FormularioEvento = () => {
                     onLoad={(autocomplete) =>
                       (autocompleteRef.current = autocomplete)
                     }
-                    onPlaceChanged={onPlaceChanged}
+                    onPlaceChanged={handlePlaceChanged}
                   >
                     <Input placeholder="Local do evento" {...field} />
                   </Autocomplete>
@@ -176,7 +177,7 @@ const FormularioEvento = () => {
         />
         <FormField
           control={form.control}
-          name="endereco"
+          name="address"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Endereço</FormLabel>
@@ -196,9 +197,7 @@ const FormularioEvento = () => {
                 <FormLabel>Latitude</FormLabel>
                 <FormMessage className="text-red-500 m-0" />
                 <FormControl>
-                  <Input type="number"
-                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  placeholder="Latitude" {...field} />
+                  <Input type="number" placeholder="Latitude" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -211,9 +210,7 @@ const FormularioEvento = () => {
                 <FormLabel>Longitude</FormLabel>
                 <FormMessage className="text-red-500 m-0" />
                 <FormControl>
-                  <Input type="number"
-                  className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  placeholder="Longitude" {...field} />
+                  <Input type="number" placeholder="Longitude" className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -222,17 +219,21 @@ const FormularioEvento = () => {
         {isLoaded && (
           <GoogleMap
             mapContainerStyle={{ width: "100%", height: "400px" }}
-            center={markerPosition || { lat: -14.235004, lng: -51.92528 }}
+            center={markerPosition || { lat: -14.235004, lng: -51.92528 }} // Centro inicial do mapa (Brasil)
             zoom={4}
-            onClick={onMapClick} // Adiciona o evento de clique no mapa
+            onClick={handleMapClick} // Adiciona o evento de clique no mapa
           >
             {markerPosition && <MarkerF position={markerPosition} />}
           </GoogleMap>
         )}
-        <Button type="submit">Cadastrar</Button>
+        <FormTicket />
+        <Button className="flex items-center gap-1" type="submit">
+          <FaPlus  />
+          Cadastrar
+        </Button>
       </form>
     </Form>
   );
 };
 
-export default FormularioEvento;
+export default EventForm;

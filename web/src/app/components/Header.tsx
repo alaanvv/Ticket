@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import { IoTicketSharp } from "react-icons/io5";
+import { FaOpencart } from "react-icons/fa";
 import SearchInput from "./SearchInput";
 
 export default function Header() {
@@ -7,10 +9,8 @@ export default function Header() {
     <header className="bg-background text-black flex justify-between items-center shadow-sm row-span-1 px-12">
       <div className="flex items-center">
         <div className="flex items-center gap-3">
-          <IoTicketSharp className="w-8 h-8" />
-          <div className="grid items-center justify-center text-center">
-            <h4 className="text-sm">iTicket</h4>
-          </div>
+          <FaOpencart className="w-8 h-8" />
+          <h4 className="text-sm"> iTicket </h4>
         </div>
       </div>
 

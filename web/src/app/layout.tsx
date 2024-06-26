@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.className} bg-[#EEF2F8] h-screen grid grid-rows-12`}>
+      <body className={`${inter.className} bg-[#EEF2F8] h-screen grid grid-rows-12 overflow-hidden`}>
         <Header />
         <main className="w-full grid grid-cols-12 row-span-11 h-full py-2">
           <Sidebar />
