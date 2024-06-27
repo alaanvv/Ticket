@@ -9,6 +9,7 @@ export async function createEvent(app: FastifyInstance) {
       description: z.optional(z.string()),
       local:   z.string(),
       address: z.string(),
+      image:   z.optional(z.string().url()),
       latitude:  z.coerce.number().refine(v => Math.abs(v) <= 90),
       longitude: z.coerce.number().refine(v => Math.abs(v) <= 180)
     })

@@ -5,6 +5,7 @@ CREATE TABLE "events" (
     "description" TEXT,
     "local" TEXT NOT NULL,
     "address" TEXT NOT NULL,
+    "image" TEXT,
     "latitude" DECIMAL(65,30) NOT NULL,
     "longitude" DECIMAL(65,30) NOT NULL,
     "active" BOOLEAN NOT NULL DEFAULT true,

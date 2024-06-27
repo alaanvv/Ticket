@@ -1,0 +1,111 @@
+:root {
+  --bg0_h: #eef2f8;
+
+  --bg0: #ffffff;
+  --fg0: #3c3836;
+
+  --bg1: #ff3f02;
+  --fg1: #ffffff;
+
+  --gray: #928374;
+  --green: #3BB273;
+
+  --primary-color: #ff6f61;
+  --secondary-color: #6b5b95;
+  --accent-color: #88b04b;
+  --text-color: #2f4f4f;
+  --background-color: #f0e68c;
+  --highlight-color: #f7cac9;
+  --border-color: #d3d3d3;
+}
+
+html, body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+  color: var(--fg0) !important;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg0_h) !important;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+	display: block;
+}
+
+h1 {
+  color: #ff3e00;
+  text-transform: uppercase;
+  font-size: 4em;
+  font-weight: 100;
+}
+
+.tabname {
+  margin: 0;
+  text-align: start;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.hr {
+  width: 100%;
+  margin-top: 10px;
+  border-top: 3px solid var(--gray);
+}
+
+.no-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+input, button, select, textarea {
+	font-family: inherit;
+	font-size: inherit;
+	padding: 0.4em;
+	box-sizing: border-box;
+	border-radius: 2px;
+  border: 1px solid #ccc;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--gray);
+}
+
+input:disabled, textarea:disabled {
+	color: #ccc;
+}
+
+button {
+  margin: 0;
+	border: 0;
+  padding: 7px 10px;
+  cursor: pointer;
+
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+	background-color: #ddd !important;
+}
+
+/* Number input */
+
+input[type='number'].hide-arrows {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type='number'].hide-arrows::-webkit-outer-spin-button, input[type='number'].hide-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

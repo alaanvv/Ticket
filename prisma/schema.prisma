@@ -13,6 +13,7 @@ model Event {
   description String?
   local       String
   address     String
+  image       String?
   latitude    Decimal
   longitude   Decimal
   active      Boolean  @default(true)

@@ -21,6 +21,9 @@ import fastify from 'fastify'
 
 export const app = fastify()
 
+import cors from '@fastify/cors'
+app.register(cors, { origin: '*' })
+
 app.register(createEvent)
 app.register(createTicket)
 app.register(createBatches)

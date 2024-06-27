@@ -10,10 +10,11 @@ export async function editEvent(app: FastifyInstance) {
       description: z.optional(z.optional(z.string())),
       local:   z.optional(z.string()),
       address: z.optional(z.string()),
+      image:   z.optional(z.string().url()),
       latitude:  z.optional(z.coerce.number().refine(v => Math.abs(v) <= 90)),
       longitude: z.optional(z.coerce.number().refine(v => Math.abs(v) <= 180))
     })
-    const paramSchema = z.object({ id: z.string().cuid() }) // TODO params <<
+    const paramSchema = z.object({ id: z.string().cuid() })
 
     const data = bodySchema.parse(req.body) as { [key: string]: any }
     const { id } = paramSchema.parse(req.params)
