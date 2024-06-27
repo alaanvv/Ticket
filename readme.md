@@ -6,6 +6,7 @@ model Event {
   description String?
   local       String
   address     String
+  image       String?
   latitude    Decimal
   longitude   Decimal
   active      Boolean  @default(true)
@@ -125,6 +126,7 @@ model Batch {
 > halfPriceInCents is required in batches when their events allowHalf
 
 # Todo
+> Backend event management
 - [x] Setup database
     - [x] Create relation in between an **event** and a **ticket**
     - [x] Add **active** for all tables so data isn't deleted
@@ -138,6 +140,20 @@ model Batch {
         - [x] All batches within a ticket
         - [x] Active batch of a ticket
 - [x] Create tests for every possibility on each route (so future fixes and features don't break)
+
+> Frontend event management
+- [ ] Visualize events
+    - [x] Have them visually
+    - [ ] Have the true events from the database
+    - [x] Be able to search
+    - [ ] Be able to open them in a separated page for more
+- [ ] Modifying events
+    - [x] Create button (it's already there)
+    - [ ] Delete button (easy as fuck)
+    - [ ] Edit it's data
+    - [ ] Add tickets to it (I regret borning)
+
+> Getting back to back
 - [ ] Ticket instance
     - [ ] Create database table (status, price_paid)
     - [ ] Rewatch Death Note
