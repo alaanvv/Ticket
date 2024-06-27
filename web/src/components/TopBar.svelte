@@ -2,22 +2,26 @@
   <h2> iTicket </h2>
 
   <div class='col'>
-    <span class="material-symbols-outlined">person</span>
-    <p>Tom Miller</p>
+    <span class="material-symbols-outlined"> person </span>
+    <p> Alan Vale </p>
   </div>
 </div>
 
 <style>
-  * {
+  .bar {
+    flex-basis: 0;
+
+    padding: 0 20px;
+
+    background: var(--bg0);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+
+    color: var(--fg0);
     user-select: none;
   }
 
-  .bar {
-    padding: 5px 20px;
-    background: var(--bg0);
-    color: var(--fg0);
-    flex-basis: 0;
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  p {
+    margin: 5px;
   }
 
   .col {
@@ -25,10 +29,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-
-  .col p {
-    margin: 5px;
   }
 
   .row {

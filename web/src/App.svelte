@@ -3,12 +3,12 @@
 <div class='page'>
   <SideBar />
   <main>
-    {#if $current_path === '/eventos'}
-      <Events />
-    {:else if $current_path === '/usuarios'}
-      <Users />
-    {:else}
-      <Dashboard />
+    <h1 class='tabname'> {resolve_path_name($current_path)} </h1>
+    <div class='hr'></div>
+
+    {#if      $current_path == '/eventos'}  <Events />
+    {:else if $current_path == '/usuarios'} <Users />
+    {:else}                                 <Dashboard />
     {/if}
   </main>
 </div>
@@ -20,41 +20,37 @@
   import Users     from "./components/Users.svelte"
   import Events    from "./components/Events.svelte"
 
-  import { onMount } from 'svelte'
   import { current_path } from './store.js'
 
-  onMount(_ => {
-    const updatePath = _ => { current_path.set(window.location.pathname) }
-    window.addEventListener('popstate', updatePath)
-    return _ => { window.removeEventListener('popstate', updatePath) }
-  })
+  function resolve_path_name(path) {
+    switch (path) {
+      case '/':         return 'Dashboard'
+      case '/usuarios': return 'Usuários'
+      case '/eventos':  return 'Eventos'
+      default:          return 'Desconhecido'
+    }
+  }
 </script>
 
 <style>
   main {
-    background: var(--bg0);
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-    border-radius: 10px;
     width: 100%;
-    margin: 0 20px;
+    padding: 1em 1.5em;
+    margin: 0 20px 0 0;
+
+    background: var(--bg0);
+    border-radius: 10px;
     overflow:auto;
+
+    text-align: center;
   }
 
   .page {
     display: flex;
     flex-direction: row;
-
-    margin: 15px 0;
     flex-grow: 2;
-    max-height: 88%;
-  }
 
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+    max-height: 88%;
+    margin: 15px 0;
   }
 </style>

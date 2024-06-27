@@ -40,12 +40,14 @@ export default {
 	plugins: [
 		svelte({
 			compilerOptions: {
-				// enable run-time checks when not in production
 				dev: !production
-			}
+			},
+			onwarn: (warning, handler) => {
+                               if (warning.code === 'a11y-autofocus') return
+                        	handler(warning) 
+                        }
 		}),
-		// we'll extract any component CSS out into
-		// a separate file - better for performance
+		
 		css({ output: 'bundle.css' }),
 
 		// If you have external dependencies installed from

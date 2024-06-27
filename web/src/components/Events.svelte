@@ -1,5 +1,21 @@
+<div class='panel'>
+  <input placeholder='Pesquisar' bind:value={search_query}>
+  <button on:click={swap_modal}> <span class="material-symbols-outlined"> add </span> Criar </button>
+</div>
+
+<div class='cards'>
+  {#each filtered_events as event}
+    <EventCard {event} />
+  {/each}
+</div>
+
+{#if show_modal}
+  <Modal on:close={swap_modal} />
+{/if}
+
 <script>
   import EventCard from './EventCard.svelte'
+  import Modal     from './Modal.svelte'
 
   let events = [
     {
@@ -16,37 +32,16 @@
     }
   ]
 
-  let displayed_events = events
-
+  let filtered_events = events
   let search_query = ''
+
   $: {
-    displayed_events = events.filter(e => e.name.toLowerCase().includes(search_query.toLowerCase()))
+    filtered_events = events.filter(e => e.name.toLowerCase().includes(search_query.toLowerCase()))
   }
 
-  import Modal from './Modal.svelte'
-  let showModal = false
-
-  function openModal()  { showModal = true  }
-  function closeModal() { showModal = false }
+  let show_modal = false
+  function swap_modal() { show_modal = !show_modal  }
 </script>
-
-<h1 class='tabname'>Eventos</h1>
-<div class='hr'></div>
-
-<div class='panel'>
-  <input placeholder='Pesquisar' bind:value={search_query}>
-  <button on:click={openModal}> <span class="material-symbols-outlined">add</span> Criar </button>
-</div>
-
-<div class='cards'>
-  {#each displayed_events as event}
-    <EventCard {event} />
-  {/each}
-</div>
-
-{#if showModal}
-  <Modal on:close={closeModal} />
-{/if}
 
 <style>
   .panel {
@@ -65,17 +60,20 @@
     align-items: center;
     gap: 5px;
 
-    background: var(--green);
     color: var(--fg1);
     font-weight: bold;
+
+    background: var(--green);
   }
 
   .cards {
-    overflow: scroll;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 20px;
+
     margin-top: 30px;
+
+    overflow: scroll;
   }
 </style>

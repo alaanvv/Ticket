@@ -9,38 +9,29 @@
 
   --gray: #928374;
   --green: #3BB273;
-
-  --primary-color: #ff6f61;
-  --secondary-color: #6b5b95;
-  --accent-color: #88b04b;
-  --text-color: #2f4f4f;
-  --background-color: #f0e68c;
-  --highlight-color: #f7cac9;
-  --border-color: #d3d3d3;
 }
+
+/* General */
 
 html, body {
 	position: relative;
-	width: 100%;
-	height: 100%;
-}
-
-body {
-  color: var(--fg0) !important;
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  height: 100vh;
-  overflow: hidden;
-  background-color: var(--bg0_h) !important;
   display: flex;
   flex-direction: column;
+
+	box-sizing: border-box;
+	width: 100%;
+  height: 100vh;
+	margin: 0;
+	padding: 0;
+
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  color: var(--fg0) !important;
+
+  background-color: var(--bg0_h) !important;
+  overflow: hidden;
 }
 
-label {
-	display: block;
-}
+/* Headers */
 
 h1 {
   color: #ff3e00;
@@ -49,24 +40,7 @@ h1 {
   font-weight: 100;
 }
 
-.tabname {
-  margin: 0;
-  text-align: start;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.hr {
-  width: 100%;
-  margin-top: 10px;
-  border-top: 3px solid var(--gray);
-}
-
-.no-overflow {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* Inputs */
 
 input, button, select, textarea {
 	font-family: inherit;
@@ -86,6 +60,23 @@ input:disabled, textarea:disabled {
 	color: #ccc;
 }
 
+label {
+	display: block;
+}
+
+/* Number input */
+
+input[type='number'].hide-arrows {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type='number'].hide-arrows::-webkit-outer-spin-button, input[type='number'].hide-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+/* Button */
+
 button {
   margin: 0;
 	border: 0;
@@ -99,13 +90,25 @@ button:active {
 	background-color: #ddd !important;
 }
 
-/* Number input */
+/* Utils */
 
-input[type='number'].hide-arrows {
-  appearance: textfield;
-  -moz-appearance: textfield;
+.hr {
+  width: 100%;
+  margin-top: 10px;
+  border-top: 3px solid var(--gray);
 }
 
-input[type='number'].hide-arrows::-webkit-outer-spin-button, input[type='number'].hide-arrows::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+.no-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Misc */
+
+.tabname {
+  margin: 0;
+  text-align: start;
+  font-size: 24px;
+  font-weight: 700;
 }

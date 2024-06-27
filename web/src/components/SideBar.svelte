@@ -1,3 +1,23 @@
+<div class='col'>
+  <h2> Admin </h2>
+
+  <ul>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <li> <p class:active={$current_path == '/'}         on:click={_ => navigate('/')}>
+      <span class="material-symbols-outlined"> dashboard </span> Dashboard </p>
+    </li>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <li> <p class:active={$current_path == '/usuarios'} on:click={_ => navigate('/usuarios')}>
+      <span class="material-symbols-outlined"> group </span> Usuários </p>
+    </li>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <li> <p class:active={$current_path == '/eventos'}  on:click={_ => navigate('/eventos')}>
+      <span class="material-symbols-outlined"> event </span> Eventos </p>
+    </li>
+  </ul>
+
+</div>
+
 <script>
   import { current_path } from '../store.js'
 
@@ -7,48 +27,29 @@
   }
 </script>
 
-<div class='col'>
-  <h2> Admin </h2>
-
-  <ul>
-    <li> <p class:active={$current_path == '/'} on:click={_ => navigate('/')}> <span class="material-symbols-outlined">dashboard</span> Dashboard </p> </li>
-    <li> <p class:active={$current_path == '/usuarios'} on:click={_ => navigate('/usuarios')}> <span class="material-symbols-outlined">group</span> Usuários </p>  </li>
-    <li> <p class:active={$current_path == '/eventos'} on:click={_ => navigate('/eventos')}> <span class="material-symbols-outlined">event</span> Eventos </p>   </li>
-  </ul>
-
-  <div class='hr'></div>
-</div>
-
 <style>
-  * {
-    user-select: none;
-    color: var(--fg0) !important;
-  }
-
   .col {
     display: flex;
     flex-direction: column;
     align-items: center;
 
     padding: 0 20px;
-    border-right: 3px solid var(--gray);
+
+    user-select: none;
   }
 
   ul {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
 
     padding: 0;
     margin: 0;
     list-style: none;
-    width: 100%;
   }
 
   li {
     width: 100%;
-    text-align:center;
   }
 
   p {
@@ -56,13 +57,11 @@
     align-items: center;
     gap: 10px;
 
-    box-sizing:border-box;
-    width: 100%;
+    box-sizing: border-box;
     padding: 10px 20px;
     border-radius: 5px;
     margin: 3px 0;
 
-    text-decoration: none;
     cursor: pointer;
   }
 
