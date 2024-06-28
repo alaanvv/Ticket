@@ -3,7 +3,7 @@ import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
 
 export async function createEvent(app: FastifyInstance) {
-  app.post('/events', async (request, reply) => {
+  app.post('/events', async (req, res) => {
     const bodySchema = z.object({
       name: z.string(),
       description: z.optional(z.string()),
@@ -13,10 +13,10 @@ export async function createEvent(app: FastifyInstance) {
       latitude:  z.coerce.number().refine(v => Math.abs(v) <= 90),
       longitude: z.coerce.number().refine(v => Math.abs(v) <= 180)
     })
-    const data = bodySchema.parse(request.body)
+    const data = bodySchema.parse(req.body)
 
     const event = await prisma.event.create({ data })
 
-    return reply.status(201).send({ id: event.id })
+    return res.status(201).send({ id: event.id })
   })
 }

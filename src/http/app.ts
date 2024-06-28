@@ -5,6 +5,7 @@ import { editEvent } from './routes/edit-event'
 import { editTicket } from './routes/edit-ticket'
 import { editBatch } from './routes/edit-batch'
 import { getEvent } from './routes/get-event'
+import { getAllEvents } from './routes/get-all-events'
 import { getEventTickets } from './routes/get-event-tickets'
 import { getTicket } from './routes/get-ticket'
 import { getTicketBatches } from './routes/get-ticket-batches'
@@ -31,6 +32,7 @@ app.register(editEvent)
 app.register(editTicket)
 app.register(editBatch)
 app.register(getEvent)
+app.register(getAllEvents)
 app.register(getEventTickets)
 app.register(getTicket)
 app.register(getTicketBatches)
