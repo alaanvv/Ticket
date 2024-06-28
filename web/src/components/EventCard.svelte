@@ -1,14 +1,27 @@
-<div class='card'>
-  <img src={event.image} alt='Banner do evento'>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class='card' on:click={_ => navigate(`/evento/${event.id}`)} >
+  <div class='img-div'> <img src={event.image} alt='Sem imagem'> </div>
 
   <div class='info'>
     <h3 class='no-overflow'> {event.name} </h3>
-    <p  class='no-overflow'> {event.description} </p>
+    <p  class='no-overflow'>
+      {#if event.description} {event.description}
+      {:else}                 Sem descrição.
+      {/if}
+    </p>
   </div>
 </div>
 
 <script>
+  import { current_path } from '../store.js'
+
   export let event
+
+  const navigate = path => {
+    window.history.pushState({}, '', path)
+    current_path.set(path)
+  }
+
 </script>
 
 <style>
@@ -16,7 +29,7 @@
     display: flex;
     flex-direction: column;
 
-    max-width: 300px;
+    width: 300px;
     border: 5px solid var(--bg0_h);
     border-radius: 10px;
 
@@ -31,8 +44,19 @@
     text-align: start;
   }
 
+  .img-div {
+    width: 100%;
+
+    aspect-ratio: 1.9;
+    overflow: hidden;
+
+    background: black;
+    color: white;
+  }
+
   img {
     object-fit: cover;
-    aspect-ratio: 3;
+    width: 100%;
+    height: 100%;
   }
 </style>
