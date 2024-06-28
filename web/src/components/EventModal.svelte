@@ -101,7 +101,8 @@
       window.history.pushState({}, '', path)
       current_path.set(path)
     } else {
-      await fetch(`http://localhost:3333/edit-event/${$current_path.split('/').pop()}`, {
+      const id = $current_path.split('/').pop()
+      await fetch(`http://localhost:3333/edit-event/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(validated_data)

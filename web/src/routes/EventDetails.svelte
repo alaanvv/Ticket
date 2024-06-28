@@ -28,18 +28,15 @@
 
 <script>
   import EventModal from '../components/EventModal.svelte'
+  import { navigate } from '../utils/navigation.js'
   import { current_path } from '../store.js'
   import { onMount } from 'svelte'
 
-  const navigate = path => {
-    window.history.pushState({}, '', path)
-    current_path.set(path)
-  }
-
   let event
+  const id = $current_path.split('/').pop()
 
   async function _fetch() {
-    let res = await fetch(`http://localhost:3333/events/${$current_path.split('/').pop()}`)
+    let res = await fetch(`http://localhost:3333/events/${id}`)
     event = (await res.json()).event
   }
   onMount(_fetch)
@@ -47,8 +44,7 @@
   async function delete_event() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    console.log($current_path.split('/').pop())
-    await fetch(`http://localhost:3333/event/${$current_path.split('/').pop()}`, {
+    await fetch(`http://localhost:3333/event/${id}`, {
       method: 'DELETE'
     })
 

@@ -4,24 +4,14 @@
 
   <div class='info'>
     <h3 class='no-overflow'> {event.name} </h3>
-    <p  class='no-overflow'>
-      {#if event.description} {event.description}
-      {:else}                 Sem descrição.
-      {/if}
-    </p>
+    <p  class='no-overflow'> {event.description ? event.description : 'Sem descrição.'} </p>
   </div>
 </div>
 
 <script>
-  import { current_path } from '../store.js'
+  import { navigate } from '../utils/navigation.js'
 
   export let event
-
-  const navigate = path => {
-    window.history.pushState({}, '', path)
-    current_path.set(path)
-  }
-
 </script>
 
 <style>
