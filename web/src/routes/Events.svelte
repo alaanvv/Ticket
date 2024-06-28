@@ -1,6 +1,6 @@
 <div class='panel'>
   <input placeholder='Pesquisar' bind:value={search_query}>
-  <button on:click={swap_modal}> <span class="material-symbols-outlined"> add </span> Criar </button>
+  <button on:click={swap_modal}> <span class="material-symbols-outlined"> add </span> Novo Evento </button>
 </div>
 
 <div class='cards'>

@@ -1,6 +1,4 @@
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="modal" on:click={background_click}>
-  <div class="modal-content">
+<Modal on:close={_ => dispatch('close')}>
     <h2> {editing ? 'Editando' : 'Criando'} um Evento </h2>
 
     <form on:submit={submitForm}>
@@ -28,14 +26,14 @@
       </label>
 
       <label> <p> Latitude: </p>
-        <input class='hide-arrows' type="number" bind:value={latitude} required />
+        <input step="1e-20" class='hide-arrows' type="number" bind:value={latitude} required />
         {#if validation_errors.latitude}
           <p class='error'> {validation_errors.latitude} </p>
         {/if}
       </label>
 
       <label> <p> Longitude: </p>
-        <input class='hide-arrows' type="number" bind:value={longitude} required />
+        <input step="1e-20" class='hide-arrows' type="number" bind:value={longitude} required />
         {#if validation_errors.longitude}
           <p class='error'> {validation_errors.longitude} </p>
         {/if}
@@ -43,10 +41,10 @@
 
       <button type="submit"> Enviar </button>
     </form>
-  </div>
-</div>
+</Modal>
 
 <script>
+  import Modal from './Modal.svelte'
   import { createEventDispatcher } from 'svelte'
   import { current_path } from '../store.js'
   import z from 'zod'
@@ -111,42 +109,9 @@
       dispatch('update')
     }
   }
-
-  function background_click(e) {
-    if (e.target.classList.contains('modal'))
-      dispatch('close')
-  }
 </script>
 
 <style>
-  .modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 1;
-
-    width: 100%;
-    height: 100%;
-
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-
-  .modal-content {
-    display: flex;
-    flex-direction: column;
-
-    width: 400px;
-    max-width: 80%;
-    padding: 20px;
-    border-radius: 5px;
-
-    background-color: var(--bg0);
-  }
-
   form {
     display: flex;
     flex-direction: column;

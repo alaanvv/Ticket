@@ -106,6 +106,7 @@
   }
 
   .img-div {
+    width: 100%;
     border: 2px solid var(--gray);
 
     overflow: hidden;
