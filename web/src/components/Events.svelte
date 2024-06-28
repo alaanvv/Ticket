@@ -10,33 +10,27 @@
 </div>
 
 {#if show_modal}
-  <Modal on:close={swap_modal} />
+  <EventModal on:close={swap_modal} />
 {/if}
 
 <script>
-  import EventCard from './EventCard.svelte'
-  import Modal     from './Modal.svelte'
+  import EventCard  from './EventCard.svelte'
+  import EventModal from './EventModal.svelte'
+  import { onMount } from 'svelte'
 
-  let events = [
-    {
-      name: 'Festa do peão',
-      description: 'O evento mais esperado do anooooooooooo!',
-      local: 'Parque de Exposições',
-      image: './festa.jpg'
-    },
-    {
-      name: 'Ilha da macacada',
-      description: 'i want neuron activation!',
-      local: 'Parque de Exposições',
-      image: 'https://www.meme-arsenal.com/memes/92ce88b0d694ca7b28b12b4b30cd237f.jpg'
-    }
-  ]
+  let events = []
+
+  onMount(async _ => {
+    let res = await fetch('http://localhost:3333/all-events')
+    events = (await res.json()).events
+  })
 
   let filtered_events = events
   let search_query = ''
 
   $: {
-    filtered_events = events.filter(e => e.name.toLowerCase().includes(search_query.toLowerCase()))
+    if (events)
+      filtered_events = events.filter(e => e.name.toLowerCase().includes(search_query.toLowerCase()))
   }
 
   let show_modal = false

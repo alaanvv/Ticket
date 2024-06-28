@@ -142,11 +142,11 @@ model Batch {
 - [x] Create tests for every possibility on each route (so future fixes and features don't break)
 
 > Frontend event management
-- [ ] Visualize events
+- [x] Visualize events
     - [x] Have them visually
-    - [ ] Have the true events from the database
+    - [x] Have the true events from the database
     - [x] Be able to search
-    - [ ] Be able to open them in a separated page for more
+    - [x] Be able to open them in a separated page for more
 - [ ] Modifying events
     - [x] Create button (it's already there)
     - [ ] Delete button (easy as fuck)
@@ -165,7 +165,6 @@ model Batch {
     - [ ] Filters for date
     - [ ] Sorting options (amount remaining, amount sold, date)
     - [ ] Tests here also
-
 
 > https://www.uniticket.com.br/
 
