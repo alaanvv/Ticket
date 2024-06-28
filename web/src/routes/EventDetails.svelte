@@ -27,7 +27,7 @@
 {/if}
 
 <script>
-  import EventModal from './EventModal.svelte'
+  import EventModal from '../components/EventModal.svelte'
   import { current_path } from '../store.js'
   import { onMount } from 'svelte'
 

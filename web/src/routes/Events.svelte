@@ -14,8 +14,8 @@
 {/if}
 
 <script>
-  import EventCard  from './EventCard.svelte'
-  import EventModal from './EventModal.svelte'
+  import EventCard  from '../components/EventCard.svelte'
+  import EventModal from '../components/EventModal.svelte'
   import { onMount } from 'svelte'
 
   let events = []

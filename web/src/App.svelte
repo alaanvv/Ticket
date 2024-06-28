@@ -17,10 +17,10 @@
 <script>
   import TopBar       from "./components/TopBar.svelte"
   import SideBar      from "./components/SideBar.svelte"
-  import Dashboard    from "./components/Dashboard.svelte"
-  import Users        from "./components/Users.svelte"
-  import Events       from "./components/Events.svelte"
-  import EventDetails from "./components/EventDetails.svelte"
+  import Dashboard    from "./routes/Dashboard.svelte"
+  import Users        from "./routes/Users.svelte"
+  import Events       from "./routes/Events.svelte"
+  import EventDetails from "./routes/EventDetails.svelte"
 
   import { current_path } from './store.js'
 
