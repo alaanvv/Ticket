@@ -38,6 +38,7 @@
   }
 
   .info {
+    margin-top: 10px;
     padding: 0 20px;
     border-radius: 0 0 20px 20px;
 

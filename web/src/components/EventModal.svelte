@@ -1,7 +1,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="modal" on:click={background_click}>
   <div class="modal-content">
-    <h2> Criando um Evento </h2>
+    <h2> {editing ? 'Editando' : 'Criando'} um Evento </h2>
 
     <form on:submit={submitForm}>
       <label> <p> Nome: </p>
@@ -48,11 +48,20 @@
 
 <script>
   import { createEventDispatcher } from 'svelte'
+  import { current_path } from '../store.js'
   import z from 'zod'
 
   const dispatch = createEventDispatcher()
 
-  let name, description, local, address, image, latitude, longitude
+  export let editing, data
+  let name = data?.name
+  let description = data?.description
+  let local = data?.local
+  let address = data?.address
+  let image = data?.image
+  let latitude = Number(data?.latitude)
+  let longitude = Number(data?.longitude)
+
   let validation_errors = {}
 
   const schema = z.object({
@@ -80,13 +89,26 @@
       return
     }
 
-    await fetch('http://localhost:3333/events', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(validated_data)
-    })
+    if (!editing) {
+      const res = await fetch('http://localhost:3333/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validated_data)
+      })
+      const id = (await res.json()).id
 
-    dispatch('close')
+      const path = `/evento/${id}`
+      window.history.pushState({}, '', path)
+      current_path.set(path)
+    } else {
+      await fetch(`http://localhost:3333/edit-event/${$current_path.split('/').pop()}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(validated_data)
+      })
+
+      dispatch('update')
+    }
   }
 
   function background_click(e) {

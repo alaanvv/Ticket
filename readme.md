@@ -107,6 +107,8 @@ model Batch {
 
 - `/events/:id` **GET**
 
+- `/all-events` **GET**
+
 - `/event-tickets/:id` **GET**
 
 - `/ticket/:id` **GET**
@@ -140,6 +142,7 @@ model Batch {
         - [x] All batches within a ticket
         - [x] Active batch of a ticket
 - [x] Create tests for every possibility on each route (so future fixes and features don't break)
+- [ ] Add a starting date field for events
 
 > Frontend event management
 - [x] Visualize events
@@ -149,9 +152,15 @@ model Batch {
     - [x] Be able to open them in a separated page for more
 - [ ] Modifying events
     - [x] Create button (it's already there)
-    - [ ] Delete button (easy as fuck)
-    - [ ] Edit it's data
+    - [x] Delete button (easy as fuck)
+    - [x] Edit it's data
     - [ ] Add tickets to it (I regret borning)
+- [ ] Refactor all this shit
+- [ ] Modifying tickets
+    - [ ] Create a page to view a ticket details
+    - [ ] Edit button
+    - [ ] Delete button
+    - [ ] Add batches to it (holy fuck)
 
 > Getting back to back
 - [ ] Ticket instance
