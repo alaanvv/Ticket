@@ -6,18 +6,18 @@
 
 {#if event}
   <div class='info'>
-    <div class='img-div'> <img src={event.image} alt='Sem imagem'> </div>
+    <img src={event.image} alt='Sem imagem'>
 
-    <div>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class='cachorro I-fucking-hate-naming-stuff' on:click={_ => { show_details_modal = true }}>
       <h2> {event.name} </h2>
       <p> {event.description || 'Sem descrição.'} </p>
     </div>
 
     <div class='local'>
-      <p> Local: {event.local} </p>
-      <p> Endereço: {event.address} </p>
-      <!-- svelte-ignore a11y-missing-attribute -->
-      <a href='https://www.google.com/maps?q={event.latitude},{event.longitude}'> Veja no maps </a>
+      <p> <b>Local:</b> <br>    {event.local} </p>
+      <p> <b>Endereço:</b> <br> {event.address} </p>
+      <a href='https://www.google.com/maps?q={event.latitude},{event.longitude}'> Localização no maps </a>
     </div>
   </div>
 {/if}
@@ -26,7 +26,15 @@
   <EventModal editing=true data={event} on:close={swap_modal} on:update={update} />
 {/if}
 
+{#if show_details_modal}
+  <Modal on:close={_ => show_details_modal = false}>
+    <h2> {event.name} </h2>
+    <p> {event.description} </p>
+  </Modal>
+{/if}
+
 <script>
+  import Modal      from '../components/Modal.svelte'
   import EventModal from '../components/EventModal.svelte'
   import { navigate } from '../utils/navigation.js'
   import { current_path } from '../store.js'
@@ -58,7 +66,9 @@
   }
 
   let show_modal = false
+  let show_details_modal = false
   function swap_modal() { show_modal = !show_modal  }
+
 </script>
 
 <style>
@@ -82,6 +92,12 @@
     color: white;
   }
 
+  .cachorro {
+    overflow: hidden;
+
+    cursor: pointer;
+  }
+
   .delete {
     background: var(--red);
     color: white;
@@ -91,6 +107,7 @@
     display: flex;
     gap: 20px;
 
+    max-height: 250px;
     margin-top: 20px;
 
     text-align: start;
@@ -101,22 +118,25 @@
   }
 
   .local {
+    display: flex;
+    flex-direction: column;
+
+    padding: 30px;
     margin-left: auto;
+
     text-align: start;
-  }
 
-  .img-div {
-    width: 100%;
-    border: 2px solid var(--gray);
-
-    overflow: hidden;
-    background: black;
-    color: white;
+    background: var(--bg0_h);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+    overflow: auto;
   }
 
   img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+    max-height: 250px;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+
+    background: black;
+
+    color: white;
   }
 </style>

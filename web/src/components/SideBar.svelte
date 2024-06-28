@@ -29,7 +29,7 @@
     flex-direction: column;
     align-items: center;
 
-    padding: 0 20px;
+    padding: 10px 40px;
 
     user-select: none;
   }
@@ -40,7 +40,6 @@
     align-items: center;
 
     padding: 0;
-    margin: 0;
     list-style: none;
   }
 
