@@ -63,8 +63,8 @@ describe('Event and Ticket API', _ => {
       })
 
       expect(res.statusCode).toEqual(201)
-      expect(res.body[0].id).toEqual(expect.any(String))
-      batchId = res.body[0].id
+      expect(res.body.ids[0]).toEqual(expect.any(String))
+      batchId = res.body.ids[0]
     })
   })
 
@@ -119,12 +119,27 @@ describe('Event and Ticket API', _ => {
     })
   })
 
+  describe('GET /all-events', _ => {
+    it('should get all events', async _ => {
+      const res = await request(app.server).get('/all-events')
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.body.events).toEqual(expect.any(Array))
+    })
+
+    it('should return 404 for non-existing event', async _ => {
+      const res = await request(app.server).get('/events/cjc21k4oq000001qri7hnn5ng')
+
+      expect(res.statusCode).toEqual(404)
+    })
+  })
+
   describe('GET /event-tickets/:id', _ => {
     it('should get tickets for an event by id', async _ => {
       const res = await request(app.server).get(`/event-tickets/${eventId}`)
 
       expect(res.statusCode).toEqual(200)
-      expect(res.body).toEqual(expect.any(Array))
+      expect(res.body.tickets).toEqual(expect.any(Array))
     })
   })
 
@@ -142,7 +157,7 @@ describe('Event and Ticket API', _ => {
       const res = await request(app.server).get(`/ticket-batches/${ticketId}`)
 
       expect(res.statusCode).toEqual(200)
-      expect(res.body).toEqual(expect.any(Array))
+      expect(res.body.batches).toEqual(expect.any(Array))
     })
   })
 
