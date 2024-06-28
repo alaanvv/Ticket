@@ -38,7 +38,7 @@
   .img-div {
     width: 100%;
 
-    aspect-ratio: 1.9;
+    aspect-ratio: 1;
     overflow: hidden;
 
     background: black;
