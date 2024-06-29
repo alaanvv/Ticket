@@ -39,7 +39,7 @@
         {/if}
       </label>
 
-      <label> <p> Data: </p> <!-- TODO Fix this autofill and also the format -->
+      <label> <p> Data: </p>
         <input type="date" bind:value={date} required />
       </label>
 
@@ -63,7 +63,7 @@
   let image = data?.image
   let latitude = Number(data?.latitude)
   let longitude = Number(data?.longitude)
-  let date = new Date(data?.date)
+  let date = new Date(data?.date).toISOString().split('T')[0]
 
   let validation_errors = {}
 
@@ -81,7 +81,7 @@
   async function submitForm(e) {
     e.preventDefault()
 
-    const form_data = { name, description, local, address, image, latitude, longitude }
+    const form_data = { name, description, local, address, image, latitude, longitude, date }
 
     let validated_data
     try { validated_data = schema.parse(form_data) }
