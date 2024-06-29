@@ -1,6 +1,6 @@
 <div class='panel'>
   <input placeholder='Pesquisar' bind:value={search_query}>
-  <button on:click={swap_modal}> <span class="material-symbols-outlined"> add </span> Novo Evento </button>
+  <button on:click={_ => show_modal = true}> <span class="material-symbols-outlined"> add </span> Novo Evento </button>
 </div>
 
 <div class='cards'>
@@ -10,7 +10,7 @@
 </div>
 
 {#if show_modal}
-  <EventModal on:close={swap_modal} />
+  <EventModal on:close={_ => show_modal = false} />
 {/if}
 
 <script>
@@ -34,7 +34,6 @@
   }
 
   let show_modal = false
-  function swap_modal() { show_modal = !show_modal  }
 </script>
 
 <style>

@@ -1,7 +1,7 @@
 <div class='panel'>
   <button class='back'   on:click={_ => navigate('/eventos')}> <span class="material-symbols-outlined"> arrow_back </span> Voltar  </button>
-  <button class='edit'   on:click={swap_modal}> <span class="material-symbols-outlined"> edit       </span> Editar  </button>
-  <button class='delete' on:click={delete_event}> <span class="material-symbols-outlined"> delete     </span> Exlcuir </button>
+  <button class='edit'   on:click={_ => show_modal = true}> <span class="material-symbols-outlined"> edit       </span> Editar  </button>
+  <button class='delete' on:click={delete_event}> <span class="material-symbols-outlined"> delete     </span> Excluir </button>
 </div>
 
 {#if event}
@@ -10,20 +10,20 @@
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class='cachorro I-fucking-hate-naming-stuff' on:click={_ => { show_details_modal = true }}>
-      <h2> {event.name} <span class='date'> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span>  </h2>
+      <h2 class='text-w-icon'> {event.name} <span class='date'> <span class="material-symbols-outlined"> calendar_month </span>{(new Date(event.date)).toLocaleDateString('pt-BR')} </span>  </h2>
       <p> {event.description || 'Sem descrição.'} </p>
     </div>
 
     <div class='local'>
-      <p> <b>Local:</b> <br>    {event.local} </p>
-      <p> <b>Endereço:</b> <br> {event.address} </p>
-      <a href='https://www.google.com/maps?q={event.latitude},{event.longitude}'> Localização no maps </a>
+      <p> <b class='text-w-icon'> <span class="material-symbols-outlined"> map </span> Local:</b> </p> <p> {event.local} </p>
+      <p> <b class='text-w-icon'> <span class="material-symbols-outlined"> location_on </span> Endereço:</b> </p> <p> {event.address} </p>
+      <p class='text-w-icon'> <span class="material-symbols-outlined"> public </span> <a href='https://www.google.com/maps?q={event.latitude},{event.longitude}' class='text-w-icon'> Localização no maps </a> </p>
     </div>
   </div>
 {/if}
 
 {#if show_modal}
-  <EventModal editing=true data={event} on:close={swap_modal} on:update={update} />
+  <EventModal editing=true data={event} on:close={_ => show_modal = false} on:update={update} />
 {/if}
 
 {#if show_details_modal}
@@ -56,18 +56,16 @@
       method: 'DELETE'
     })
 
-
     navigate('/eventos')
   }
 
   async function update() {
-    swap_modal()
+    show_modal = false
     _fetch()
   }
 
   let show_modal = false
   let show_details_modal = false
-  function swap_modal() { show_modal = !show_modal  }
 
 </script>
 
@@ -93,9 +91,22 @@
   }
 
   .cachorro {
+    padding: 5px;
     overflow: hidden;
 
     cursor: pointer;
+  }
+
+  .text-w-icon {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .cachorro h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .delete {
@@ -107,7 +118,7 @@
     display: flex;
     gap: 20px;
 
-    max-height: 250px;
+    max-height: 300px;
     margin-top: 20px;
 
     text-align: start;
@@ -118,7 +129,11 @@
   }
 
   .date {
-    padding: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 10px;
     border-radius: 20px;
 
     background: var(--bg0_h);
@@ -130,6 +145,8 @@
   .local {
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
 
     padding: 30px;
     margin-left: auto;
@@ -141,8 +158,12 @@
     overflow: auto;
   }
 
+  .local p {
+    margin: 0;
+  }
+
   img {
-    max-height: 250px;
+    max-height: 300px;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
 
     background: black;

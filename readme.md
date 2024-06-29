@@ -156,7 +156,7 @@ model Batch {
     - [x] Edit it's data
     - [ ] Refactor and stylize all this shit
     - [ ] Add tickets to it (I regret borning)
-    - [ ] Add icons do everything I can
+    - [x] Add icons do everything I can
 - [ ] Modifying tickets
     - [ ] Create a page to view a ticket details
     - [ ] Edit button
