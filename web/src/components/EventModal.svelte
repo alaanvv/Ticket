@@ -39,6 +39,10 @@
         {/if}
       </label>
 
+      <label> <p> Data: </p> <!-- TODO Fix this autofill and also the format -->
+        <input type="date" bind:value={date} required />
+      </label>
+
       <button type="submit"> Enviar </button>
     </form>
 </Modal>
@@ -59,6 +63,7 @@
   let image = data?.image
   let latitude = Number(data?.latitude)
   let longitude = Number(data?.longitude)
+  let date = new Date(data?.date)
 
   let validation_errors = {}
 
@@ -69,7 +74,8 @@
     address:     z.string(),
     image:       z.optional(z.string().url('A imagem deve ser um URL')),
     latitude:    z.number().refine(v => Math.abs(v) <= 90, { message: 'Latitude deve estar entre -90 e 90' }),
-    longitude:   z.number().refine(v => Math.abs(v) <= 180, { message: 'Longitude deve estar entre -180 e 180' })
+    longitude:   z.number().refine(v => Math.abs(v) <= 180, { message: 'Longitude deve estar entre -180 e 180' }),
+    date:        z.coerce.date().min(new Date())
   })
 
   async function submitForm(e) {

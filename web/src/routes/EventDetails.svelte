@@ -10,7 +10,7 @@
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class='cachorro I-fucking-hate-naming-stuff' on:click={_ => { show_details_modal = true }}>
-      <h2> {event.name} </h2>
+      <h2> {event.name} <span class='date'> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span>  </h2>
       <p> {event.description || 'Sem descrição.'} </p>
     </div>
 
@@ -115,6 +115,16 @@
 
   .info > * {
     max-width: 33%;
+  }
+
+  .date {
+    padding: 5px;
+    border-radius: 20px;
+
+    background: var(--bg0_h);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+
+    font-size: 0.7em;
   }
 
   .local {
