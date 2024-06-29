@@ -15,7 +15,8 @@ describe('Event and Ticket API', _ => {
         local: 'Parque de Exposição',
         address: 'Rua A, Centro, n°57',
         latitude: -20.9116472,
-        longitude: -44.076647
+        longitude: -44.076647,
+        date: new Date(Number(new Date()) + 1e3)
       })
 
       expect(res.statusCode).toEqual(201)

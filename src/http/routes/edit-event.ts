@@ -12,7 +12,8 @@ export async function editEvent(app: FastifyInstance) {
       address: z.optional(z.string()),
       image:   z.optional(z.string().url()),
       latitude:  z.optional(z.coerce.number().refine(v => Math.abs(v) <= 90)),
-      longitude: z.optional(z.coerce.number().refine(v => Math.abs(v) <= 180))
+      longitude: z.optional(z.coerce.number().refine(v => Math.abs(v) <= 180)),
+      date:      z.optional(z.coerce.date().min(new Date()))
     })
     const paramSchema = z.object({ id: z.string().cuid() })
 

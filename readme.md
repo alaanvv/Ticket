@@ -142,7 +142,7 @@ model Batch {
         - [x] All batches within a ticket
         - [x] Active batch of a ticket
 - [x] Create tests for every possibility on each route (so future fixes and features don't break)
-- [ ] Add a starting date field for events
+- [x] Add a starting date field for events
 
 > Frontend event management
 - [x] Visualize events

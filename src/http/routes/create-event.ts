@@ -11,7 +11,8 @@ export async function createEvent(app: FastifyInstance) {
       address: z.string(),
       image:   z.optional(z.string().url()),
       latitude:  z.coerce.number().refine(v => Math.abs(v) <= 90),
-      longitude: z.coerce.number().refine(v => Math.abs(v) <= 180)
+      longitude: z.coerce.number().refine(v => Math.abs(v) <= 180),
+      date:      z.coerce.date().min(new Date())
     })
     const data = bodySchema.parse(req.body)
 
