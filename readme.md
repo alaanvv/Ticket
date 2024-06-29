@@ -154,7 +154,7 @@ model Batch {
     - [x] Create button (it's already there)
     - [x] Delete button (easy as fuck)
     - [x] Edit it's data
-    - [ ] Refactor and stylize all this shit
+    - [x] Refactor and stylize all this shit
     - [ ] Add tickets to it (I regret borning)
     - [x] Add icons do everything I can
 - [ ] Modifying tickets

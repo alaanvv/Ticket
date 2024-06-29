@@ -3,7 +3,7 @@
   <SideBar />
   <main>
     <h1 class='tabname'>   {routes[curr_route][0]} </h1>
-    <div class='hr'></div>
+    <div class='hr' />
     <svelte:component this={routes[curr_route][1]} />
   </main>
 </div>

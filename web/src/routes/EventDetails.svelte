@@ -27,6 +27,17 @@
       <p class='t-w-icon'> <Icon i='public' /> <a href={maps_link}> Localização no maps </a> </p>
     </div>
   </div>
+
+  <div class='hr' />
+  <div class='panel'>
+    <button class='new' on:click={console.log}> <Icon i='add' /> Criar Ingresso </button>
+  </div>
+
+  <div class='tickets'>
+    {#each tickets as ticket}
+      <TicketCard {ticket} />
+    {/each}
+  </div>
 {/if}
 
 {#if edit_modal}
@@ -44,6 +55,7 @@
   import Icon       from '../components/Icon.svelte'
   import Modal      from '../components/Modal.svelte'
   import EventModal from '../components/EventModal.svelte'
+  import TicketCard from '../components/TicketCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
   import { curr_path } from '../store.js'
@@ -54,6 +66,13 @@
 
   let edit_modal = false
   let details_modal = false
+
+  let tickets = [
+    {name: 'Pista', id: 'olar'},
+    {name: 'Pista', id: 'olar'},
+    {name: 'Pista', id: 'olar'},
+    {name: 'Pista', id: 'olar'},
+  ]
 
   $: {
     if (event) {
@@ -83,6 +102,17 @@
 </script>
 
 <style>
+  .tickets {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+
+    margin-top: 20px;
+
+    overflow: scroll;
+  }
+
   .panel {
     display: flex;
     align-items: center;
@@ -103,6 +133,16 @@
     color: white;
   }
 
+  .del {
+    background: var(--red);
+    color: white;
+  }
+
+  .new {
+    background: var(--green);
+    color: white;
+  }
+
   .cachorro {
     padding: 5px;
     overflow: hidden;
@@ -114,11 +154,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-  }
-
-  .del {
-    background: var(--red);
-    color: white;
   }
 
   .info {
@@ -174,6 +209,7 @@
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
 
     background: black;
+    object-fit: cover;
 
     color: white;
   }
