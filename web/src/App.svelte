@@ -1,38 +1,35 @@
 <TopBar />
-
 <div class='page'>
   <SideBar />
   <main>
-    <h1 class='tabname'> {resolve_path_name($current_path)} </h1>
+    <h1 class='tabname'>   {routes[curr_route][0]} </h1>
     <div class='hr'></div>
-
-    {#if      $current_path == '/eventos'}          <Events />
-    {:else if $current_path == '/usuarios'}         <Users />
-    {:else if $current_path.startsWith('/evento/')} <EventDetails />
-    {:else}                                         <Dashboard />
-    {/if}
+    <svelte:component this={routes[curr_route][1]} />
   </main>
 </div>
 
 <script>
-  import TopBar       from "./components/TopBar.svelte"
-  import SideBar      from "./components/SideBar.svelte"
-  import Dashboard    from "./routes/Dashboard.svelte"
-  import Users        from "./routes/Users.svelte"
-  import Events       from "./routes/Events.svelte"
-  import EventDetails from "./routes/EventDetails.svelte"
+  import TopBar       from './components/TopBar.svelte'
+  import SideBar      from './components/SideBar.svelte'
+  import Dashboard    from './routes/Dashboard.svelte'
+  import Users        from './routes/Users.svelte'
+  import Events       from './routes/Events.svelte'
+  import EventDetails from './routes/EventDetails.svelte'
 
-  import { current_path } from './store.js'
+  import { curr_path } from './store.js'
 
-  function resolve_path_name(path) {
-    if (path.startsWith('/evento/')) return 'Evento'
+  let curr_route
+  const routes = {
+    '':        ['Dashboard', Dashboard],
+    usuarios:  ['Usuários',  Users],
+    eventos:   ['Eventos',   Events],
+    evento:    ['Evento',    EventDetails],
+    not_found: ['404',       undefined]
+  }
 
-    switch (path) {
-      case '/':         return 'Dashboard'
-      case '/usuarios': return 'Usuários'
-      case '/eventos':  return 'Eventos'
-      default:          return 'Desconhecido'
-    }
+  $: {
+    curr_route = $curr_path.split('/')[1]
+    if (!routes[curr_route]) curr_route = 'not_found'
   }
 </script>
 

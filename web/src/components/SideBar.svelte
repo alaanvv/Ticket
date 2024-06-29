@@ -3,23 +3,18 @@
 
   <ul>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <li> <p class:active={$current_path == '/'}         on:click={_ => navigate('/')}>
-      <span class="material-symbols-outlined"> dashboard </span> Dashboard </p>
-    </li>
+    <li> <p class:active={$curr_path == '/'}         on:click={_ => navigate('/')}>         <Icon i='dashboard' /> Dashboard </p> </li>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <li> <p class:active={$current_path == '/usuarios'} on:click={_ => navigate('/usuarios')}>
-      <span class="material-symbols-outlined"> group </span> Usuários </p>
-    </li>
+    <li> <p class:active={$curr_path == '/usuarios'} on:click={_ => navigate('/usuarios')}> <Icon i='group' />     Usuários  </p> </li>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <li> <p class:active={$current_path == '/eventos'}  on:click={_ => navigate('/eventos')}>
-      <span class="material-symbols-outlined"> event </span> Eventos </p>
-    </li>
+    <li> <p class:active={$curr_path == '/eventos'}  on:click={_ => navigate('/eventos')}>  <Icon i='event' />     Eventos   </p> </li>
   </ul>
-
 </div>
 
 <script>
-  import { current_path } from '../store.js'
+  import Icon from '../components/Icon.svelte'
+
+  import { curr_path } from '../store.js'
   import { navigate } from '../utils/navigation.js'
 </script>
 
@@ -64,7 +59,7 @@
     background: var(--bg0);
   }
 
-  p.active, p.active span {
+  p.active {
     background: var(--bg1);
     color: var(--fg1) !important;
   }

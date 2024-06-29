@@ -2,10 +2,14 @@
   <h2> iTicket </h2>
 
   <div class='col'>
-    <span class="material-symbols-outlined"> person </span>
+    <Icon i='person' />
     <p> Alan Vale </p>
   </div>
 </div>
+
+<script>
+  import Icon from '../components/Icon.svelte'
+</script>
 
 <style>
   .bar {

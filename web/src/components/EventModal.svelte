@@ -3,46 +3,46 @@
 
     <form on:submit={submitForm}>
       <label> <p> Nome: </p>
-        <input placeholder= 'Nome do evento' bind:value={name} required />
+        <input placeholder= 'Nome do evento' bind:value={event.name} required />
       </label>
 
       <label> <p> Descrição: </p>
-        <textarea placeholder='Detalhes do evento' rows=5 bind:value={description} />
+        <textarea placeholder='Detalhes do evento' rows=5 bind:value={event.description} />
       </label>
 
       <label> <p> Local: </p>
-        <input bind:value={local} required />
+        <input bind:value={event.local} required />
       </label>
 
       <label> <p> Endereço: </p>
-        <input bind:value={address} required />
+        <input bind:value={event.address} required />
       </label>
 
       <label> <p> Imagem: </p>
-        <input bind:value={image} />
-        {#if validation_errors.image}
-          <p class='error'> {validation_errors.image} </p>
+        <input bind:value={event.image} />
+        {#if errors.image}
+          <p class='error'> {errors.image} </p>
         {/if}
       </label>
 
       <label> <p> Latitude: </p>
-        <input step="1e-20" class='hide-arrows' type="number" bind:value={latitude} required />
-        {#if validation_errors.latitude}
-          <p class='error'> {validation_errors.latitude} </p>
+        <input step="1e-20" class='hide-arrows' type="number" bind:value={event.latitude} required />
+        {#if errors.latitude}
+          <p class='error'> {errors.latitude} </p>
         {/if}
       </label>
 
       <label> <p> Longitude: </p>
-        <input step="1e-20" class='hide-arrows' type="number" bind:value={longitude} required />
-        {#if validation_errors.longitude}
-          <p class='error'> {validation_errors.longitude} </p>
+        <input step="1e-20" class='hide-arrows' type="number" bind:value={event.longitude} required />
+        {#if errors.longitude}
+          <p class='error'> {errors.longitude} </p>
         {/if}
       </label>
 
       <label> <p> Data: </p>
-        <input type="date" bind:value={date} required />
-        {#if validation_errors.date}
-          <p class='error'> {validation_errors.date} </p>
+        <input type="date" bind:value={event.date} required />
+        {#if errors.date}
+          <p class='error'> {errors.date} </p>
         {/if}
       </label>
 
@@ -52,25 +52,26 @@
 
 <script>
   import Modal from './Modal.svelte'
+
   import { createEventDispatcher } from 'svelte'
-  import { current_path } from '../store.js'
+  import { navigate } from '../utils/navigation.js'
   import z from 'zod'
 
   const dispatch = createEventDispatcher()
 
   export let data = undefined
-  let name = data?.name
-  let description = data?.description
-  let local = data?.local
-  let address = data?.address
-  let image = data?.image
-  let latitude = Number(data?.latitude)
-  let longitude = Number(data?.longitude)
-  let date = (data?.date ? new Date(data.date) : new Date()).toISOString().split('T')[0]
 
-  let validation_errors = {}
+  let event = {
+    name: data?.name,
+    description: data?.description,
+    local: data?.local,
+    address: data?.address,
+    image: data?.image,
+    latitude: Number(data?.latitude),
+    longitude: Number(data?.longitude),
+    date: (data?.date ? new Date(data.date) : new Date()).toISOString().split('T')[0]
+  }
 
-  const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1e3))
   const schema = z.object({
     name:        z.string(),
     description: z.optional(z.string()),
@@ -79,18 +80,18 @@
     image:       z.optional(z.string().url('A imagem deve ser um URL')),
     latitude:    z.number().refine(v => Math.abs(v) <= 90, { message: 'Latitude deve estar entre -90 e 90' }),
     longitude:   z.number().refine(v => Math.abs(v) <= 180, { message: 'Longitude deve estar entre -180 e 180' }),
-    date:        z.coerce.date().min(yesterday, { message: 'A data não pode ser anterior a hoje' })
+    date:        z.coerce.date().min(new Date(new Date().getTime() - (24 * 60 * 60 * 1e3)), { message: 'A data não pode ser anterior a hoje' })
   })
+
+  let errors = {}
 
   async function submitForm(e) {
     e.preventDefault()
 
-    const form_data = { name, description, local, address, image, latitude, longitude, date }
-
     let validated_data
-    try { validated_data = schema.parse(form_data) }
+    try { validated_data = schema.parse(event) }
     catch (error) {
-      validation_errors = error.errors.reduce((acc, err) => {
+      errors = error.errors.reduce((acc, err) => {
         acc[err.path[0]] = err.message
         return acc
       }, {})
@@ -103,13 +104,11 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(validated_data)
       })
-      const id = (await res.json()).id
 
-      const path = `/evento/${id}`
-      window.history.pushState({}, '', path)
-      current_path.set(path)
-    } else {
-      const id = $current_path.split('/').pop()
+      navigate(`/evento/${(await res.json()).id}`)
+    }
+    else {
+      const id = data.id
       await fetch(`http://localhost:3333/edit-event/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

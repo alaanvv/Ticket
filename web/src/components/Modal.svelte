@@ -1,16 +1,22 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="modal" on:click={background_click}>
-  <div class="modal-content"> <slot></slot> </div>
+  <div class="modal-content"> <slot /> </div>
 </div>
 
 <script>
-  import { createEventDispatcher } from 'svelte'
+  import { onMount, createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
 
   function background_click(e) {
     if (e.target.classList.contains('modal'))
       dispatch('close')
   }
+
+  onMount(_ => {
+    function on_keydown(e) { if (e.key == 'Escape') dispatch('close') }
+    window.addEventListener('keydown', on_keydown)
+    return _ => { window.removeEventListener('keydown', on_keydown) }
+  })
 </script>
 
 <style>

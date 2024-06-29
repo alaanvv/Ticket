@@ -1,8 +1,8 @@
-import { current_path } from '../store.js'
+import { curr_path } from '../store.js'
 
 const navigate = path => {
   window.history.pushState({}, '', path)
-  current_path.set(path)
+  curr_path.set(path)
 }
 
 export { navigate }

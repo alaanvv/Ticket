@@ -1,6 +1,6 @@
 <div class='panel'>
-  <input placeholder='Pesquisar' bind:value={search_query}>
-  <button on:click={_ => show_modal = true}> <span class="material-symbols-outlined"> add </span> Novo Evento </button>
+  <input placeholder='Pesquisar' bind:value={query}>
+  <button on:click={_ => edit_modal = true}> <span class='material-symbols-outlined'> add </span> Novo Evento </button>
 </div>
 
 <div class='cards'>
@@ -9,31 +9,28 @@
   {/each}
 </div>
 
-{#if show_modal}
-  <EventModal on:close={_ => show_modal = false} />
+{#if edit_modal}
+  <EventModal on:close={_ => edit_modal = false} />
 {/if}
 
 <script>
   import EventCard  from '../components/EventCard.svelte'
   import EventModal from '../components/EventModal.svelte'
+
   import { onMount } from 'svelte'
 
+  let query = ''
   let events = []
+  let filtered_events, edit_modal
+
+  $: {
+    filtered_events = events?.filter(e => e.name.toLowerCase().includes(query.toLowerCase()))
+  }
 
   onMount(async _ => {
     let res = await fetch('http://localhost:3333/all-events')
     events = (await res.json()).events
   })
-
-  let filtered_events = events
-  let search_query = ''
-
-  $: {
-    if (events)
-      filtered_events = events.filter(e => e.name.toLowerCase().includes(search_query.toLowerCase()))
-  }
-
-  let show_modal = false
 </script>
 
 <style>

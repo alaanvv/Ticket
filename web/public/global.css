@@ -118,3 +118,9 @@ button:active {
   font-size: 24px;
   font-weight: 700;
 }
+
+.t-w-icon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
