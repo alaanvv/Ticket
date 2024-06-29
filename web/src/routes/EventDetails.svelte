@@ -36,7 +36,7 @@
 {#if details_modal}
   <Modal on:close={_ => details_modal = false}>
     <h2> {event.name} </h2>
-    <p> {event.description} </p>
+    <p class='wrappable'> {event.description} </p>
   </Modal>
 {/if}
 

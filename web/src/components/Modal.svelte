@@ -46,5 +46,6 @@
     border-radius: 5px;
 
     background-color: var(--bg0);
+    overflow: auto;
   }
 </style>

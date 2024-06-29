@@ -124,3 +124,7 @@ button:active {
   align-items: center;
   gap: 5px;
 }
+
+.wrappable {
+  word-wrap: break-word;
+}
