@@ -1,5 +1,5 @@
 <Modal on:close={_ => dispatch('close')}>
-    <h2> {editing ? 'Editando' : 'Criando'} um Evento </h2>
+    <h2> {data ? 'Editando' : 'Criando'} um Evento </h2>
 
     <form on:submit={submitForm}>
       <label> <p> Nome: </p>
@@ -41,6 +41,9 @@
 
       <label> <p> Data: </p>
         <input type="date" bind:value={date} required />
+        {#if validation_errors.date}
+          <p class='error'> {validation_errors.date} </p>
+        {/if}
       </label>
 
       <button type="submit"> Enviar </button>
@@ -55,7 +58,7 @@
 
   const dispatch = createEventDispatcher()
 
-  export let editing, data
+  export let data = undefined
   let name = data?.name
   let description = data?.description
   let local = data?.local
@@ -67,6 +70,7 @@
 
   let validation_errors = {}
 
+  const yesterday = new Date(new Date().getTime() - (24 * 60 * 60 * 1e3))
   const schema = z.object({
     name:        z.string(),
     description: z.optional(z.string()),
@@ -75,7 +79,7 @@
     image:       z.optional(z.string().url('A imagem deve ser um URL')),
     latitude:    z.number().refine(v => Math.abs(v) <= 90, { message: 'Latitude deve estar entre -90 e 90' }),
     longitude:   z.number().refine(v => Math.abs(v) <= 180, { message: 'Longitude deve estar entre -180 e 180' }),
-    date:        z.coerce.date().min(new Date())
+    date:        z.coerce.date().min(yesterday, { message: 'A data não pode ser anterior a hoje' })
   })
 
   async function submitForm(e) {
@@ -93,7 +97,7 @@
       return
     }
 
-    if (!editing) {
+    if (!data) {
       const res = await fetch('http://localhost:3333/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
