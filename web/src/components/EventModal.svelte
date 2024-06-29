@@ -63,7 +63,7 @@
   let image = data?.image
   let latitude = Number(data?.latitude)
   let longitude = Number(data?.longitude)
-  let date = new Date(data?.date).toISOString().split('T')[0]
+  let date = (data?.date ? new Date(data.date) : new Date()).toISOString().split('T')[0]
 
   let validation_errors = {}
 
