@@ -28,18 +28,6 @@ export async function editTicket(app: FastifyInstance) {
 
     await prisma.ticket.update({ where: { id }, data })
 
-    if (!ticket.allowHalf && data.allowHalf) {
-      const batchesToUpdate = await prisma.batch.findMany({
-        where: { ticketId: id, halfPriceInCents: null }
-      })
-
-      for (let batch of batchesToUpdate)
-        prisma.batch.update({
-          where: { id: batch.id },
-          data: { halfPriceInCents: Number(batch.priceInCents) * 0.5 }
-        })
-    }
-
     return res.status(204).send()
   })
 }
