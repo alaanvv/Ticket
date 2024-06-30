@@ -1,13 +1,20 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class='card' on:click={_ => navigate(`/ingresso/${ticket.id}`)} >
-  <div class='led' />
+  <div class='led' active={is_active} />
   <h3 class='no-overflow'> {ticket.name} </h3>
 </div>
 
 <script>
   import { navigate } from '../utils/navigation.js'
+  import { onMount } from 'svelte'
 
   export let ticket
+  let is_active
+
+  onMount(async _ => {
+    let res = await fetch(`http://localhost:3333/active-batch/${ticket.id}`)
+    is_active = Boolean((await res.json()).batch)
+  })
 </script>
 
 <style>
@@ -31,5 +38,9 @@
     border-radius: 50%;
 
     background-color: var(--green);
+  }
+
+  .led[active] {
+    background-color: var(--red);
   }
 </style>
