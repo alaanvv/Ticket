@@ -17,7 +17,7 @@
 
   <div class='hr' />
   <div class='panel'>
-    <button class='new' on:click={_ => batch_modal = true}> <Icon i='add' /> Criar Lote </button>
+    <button class='new' on:click={_ => batch_modal = true}> <Icon i='add' /> Criar Lote {batches.length + 1} </button>
   </div>
 
   <div class='batches'>
@@ -63,9 +63,11 @@
     res = await fetch(`http://localhost:3333/events/${ticket.eventId}`)
     event_name = (await res.json()).event.name
 
+    is_active = false
     for (let i in batches) {
       if (!batches[i].amount) continue
       batches[i].is_active = true
+      is_active = true
       break
     }
   }

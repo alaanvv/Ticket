@@ -63,7 +63,6 @@
 
     width: 200px;
     padding: 10px;
-    margin-left: 20px;
     border: 5px solid var(--bg0_h);
     border-radius: 10px;
   }
