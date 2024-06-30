@@ -9,6 +9,7 @@ model Event {
   image       String?
   latitude    Decimal
   longitude   Decimal
+  date        DateTime
   active      Boolean  @default(true)
   createdAt   DateTime @default(now()) @map("created_at")
 
@@ -150,12 +151,12 @@ model Batch {
     - [x] Have the true events from the database
     - [x] Be able to search
     - [x] Be able to open them in a separated page for more
-- [ ] Modifying events
+- [x] Modifying events
     - [x] Create button (it's already there)
     - [x] Delete button (easy as fuck)
     - [x] Edit it's data
     - [x] Refactor and stylize all this shit
-    - [ ] Add tickets to it (I regret borning)
+    - [x] Add tickets to it (I regret borning)
     - [x] Add icons do everything I can
 - [ ] Modifying tickets
     - [ ] Create a page to view a ticket details

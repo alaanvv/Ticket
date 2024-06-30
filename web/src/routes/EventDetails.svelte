@@ -30,7 +30,7 @@
 
   <div class='hr' />
   <div class='panel'>
-    <button class='new' on:click={console.log}> <Icon i='add' /> Criar Ingresso </button>
+    <button class='new' on:click={_ => ticket_modal = true}> <Icon i='add' /> Criar Ingresso </button>
   </div>
 
   <div class='tickets'>
@@ -44,6 +44,10 @@
   <EventModal data={event} on:close={_ => edit_modal = false} on:update={finish_editing} />
 {/if}
 
+{#if ticket_modal}
+  <TicketModal on:close={_ => ticket_modal = false} event_id={event.id} />
+{/if}
+
 {#if details_modal}
   <Modal on:close={_ => details_modal = false}>
     <h2> {event.name} </h2>
@@ -52,10 +56,11 @@
 {/if}
 
 <script>
-  import Icon       from '../components/Icon.svelte'
-  import Modal      from '../components/Modal.svelte'
-  import EventModal from '../components/EventModal.svelte'
-  import TicketCard from '../components/TicketCard.svelte'
+  import Icon        from '../components/Icon.svelte'
+  import Modal       from '../components/Modal.svelte'
+  import EventModal  from '../components/EventModal.svelte'
+  import TicketModal from '../components/TicketModal.svelte'
+  import TicketCard  from '../components/TicketCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
   import { curr_path } from '../store.js'
@@ -65,14 +70,10 @@
   const id = $curr_path.split('/').pop()
 
   let edit_modal = false
+  let ticket_modal = false
   let details_modal = false
 
-  let tickets = [
-    {name: 'Pista', id: 'olar'},
-    {name: 'Pista', id: 'olar'},
-    {name: 'Pista', id: 'olar'},
-    {name: 'Pista', id: 'olar'},
-  ]
+  let tickets = []
 
   $: {
     if (event) {
@@ -84,6 +85,9 @@
   async function load_event() {
     let res = await fetch(`http://localhost:3333/events/${id}`)
     event = (await res.json()).event
+
+    res = await fetch(`http://localhost:3333/event-tickets/${id}`)
+    tickets = (await res.json()).tickets
   }
 
   async function delete_event() {
