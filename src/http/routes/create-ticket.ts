@@ -8,11 +8,11 @@ export async function createTicket(app: FastifyInstance) {
     const bodySchema = z.object({
       name:      z.string(),
       allowHalf: z.coerce.boolean(),
-      batches:   z.object({
+      batches:   z.optional(z.object({
         amount:           z.coerce.number().int().min(1),
         priceInCents:     z.coerce.number().int().min(1),
         halfPriceInCents: z.optional(z.coerce.number().int().min(1))
-      }).array()
+      }).array())
     })
     const paramSchema = z.object({ id: z.string().cuid() })
 
@@ -22,9 +22,10 @@ export async function createTicket(app: FastifyInstance) {
     if (!await prisma.event.findUnique({ where: { id, active: true } }))
       throw new NotFoundError('Event not found.')
 
-    for (let batch of batches)
-      if (allowHalf && !batch.halfPriceInCents)
-        throw new BadRequestError('No price set to half.')
+    if (batches)
+      for (let batch of batches)
+        if (allowHalf && !batch.halfPriceInCents)
+          throw new BadRequestError('No price set to half.')
 
     const ticket = await prisma.ticket.create({
       data: { eventId: id, name, allowHalf, batches: { create: batches } }
