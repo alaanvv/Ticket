@@ -13,7 +13,8 @@ export async function getTicketBatches(app: FastifyInstance) {
       throw new NotFoundError('Ticket not found.')
 
     const batches = await prisma.batch.findMany({
-      where: { ticketId: id, active: true }
+      where: { ticketId: id, active: true },
+      orderBy: { createdAt: 'asc' }
     })
 
     return res.status(200).send({ batches })
