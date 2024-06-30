@@ -15,6 +15,7 @@
   import Users        from './routes/Users.svelte'
   import Events       from './routes/Events.svelte'
   import EventDetails from './routes/EventDetails.svelte'
+  import TicketDetails from './routes/TicketDetails.svelte'
 
   import { curr_path } from './store.js'
 
@@ -24,6 +25,7 @@
     usuarios:  ['Usuários',  Users],
     eventos:   ['Eventos',   Events],
     evento:    ['Evento',    EventDetails],
+    ingresso:  ['Ingresso',  TicketDetails],
     not_found: ['404',       undefined]
   }
 

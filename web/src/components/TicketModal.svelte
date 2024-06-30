@@ -7,7 +7,7 @@
     </label>
 
     <label class='inline cp'> <p> Permitir meia: </p>
-      <input type='checkbox' bind:value={ticket.allowHalf} />
+      <input type='checkbox' bind:checked={ticket.allowHalf} />
     </label>
 
     <button type="submit"> Enviar </button>
@@ -32,8 +32,6 @@
 
   async function submitForm(e) {
     e.preventDefault()
-
-    ticket.allowHalf = ticket.allowHalf == ''
 
     if (!data) {
       const res = await fetch(`http://localhost:3333/ticket/${event_id}`, {

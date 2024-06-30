@@ -1,6 +1,6 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class='card' on:click={_ => navigate(`/ingresso/${ticket.id}`)} >
-  <div class='led' active={is_active} />
+  <div class='led' class:active={is_active} />
   <h3 class='no-overflow'> {ticket.name} </h3>
 </div>
 
@@ -37,10 +37,10 @@
     aspect-ratio: 1;
     border-radius: 50%;
 
-    background-color: var(--green);
+    background-color: var(--red);
   }
 
-  .led[active] {
-    background-color: var(--red);
+  .led.active {
+    background-color: var(--green);
   }
 </style>

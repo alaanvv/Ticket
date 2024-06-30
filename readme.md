@@ -158,11 +158,15 @@ model Batch {
     - [x] Refactor and stylize all this shit
     - [x] Add tickets to it (I regret borning)
     - [x] Add icons do everything I can
-- [ ] Modifying tickets
-    - [ ] Create a page to view a ticket details
+- [x] Modifying tickets
+    - [x] Create a page to view a ticket details
+    - [x] Edit button
+    - [x] Delete button
+    - [x] Add batches to it (holy fuck)
+- [ ] Modifying batches
+    - [ ] Create button
     - [ ] Edit button
     - [ ] Delete button
-    - [ ] Add batches to it (holy fuck)
 
 > Getting back to back
 - [ ] Ticket instance
