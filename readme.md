@@ -126,8 +126,6 @@ model Batch {
 
 - `/ticket/:id` **DELETE**
 
-> halfPriceInCents is required in batches when their events allowHalf
-
 # Todo
 > Backend event management
 - [x] Setup database
@@ -163,10 +161,11 @@ model Batch {
     - [x] Edit button
     - [x] Delete button
     - [x] Add batches to it (holy fuck)
-- [ ] Modifying batches
-    - [ ] Create button
-    - [ ] Edit button
-    - [ ] Delete button
+- [x] Modifying batches
+    - [x] Create button
+    - [x] Edit button
+    - [x] Delete button
+- [ ] Refactor
 
 > Getting back to back
 - [ ] Ticket instance

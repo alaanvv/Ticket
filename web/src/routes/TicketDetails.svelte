@@ -1,7 +1,7 @@
 <div class='panel'>
   <button class='back' on:click={_ => navigate(`/evento/${ticket.eventId}`)}> <Icon i='arrow_back' /> Voltar  </button>
   <button class='edit' on:click={_ => edit_modal = true}>               <Icon i='edit' />       Editar  </button>
-  <button class='del'  on:click={delete_batch}>                         <Icon i='delete' />     Excluir </button>
+  <button class='del'  on:click={delete_ticket}>                         <Icon i='delete' />     Excluir </button>
 </div>
 
 {#if ticket}
@@ -21,8 +21,8 @@
   </div>
 
   <div class='batches'>
-    {#each batches as batch}
-      <!-- <BatchCard {batch} /> -->
+    {#each batches as batch, i}
+      <BatchCard {batch} {i} allow_half={ticket.allowHalf} on:update={load_ticket} />
     {/each}
   </div>
 {/if}
@@ -32,14 +32,14 @@
 {/if}
 
 {#if batch_modal}
-  <!-- <BatchModal on:close={_ => batch_modal = false} ticket_id={ticket.id} /> -->
+  <BatchModal on:close={_ => batch_modal = false} on:update={finish_batch_creation} ticket_id={ticket.id} allow_half={ticket.allowHalf} />
 {/if}
 
 <script>
   import Icon        from '../components/Icon.svelte'
   import TicketModal from '../components/TicketModal.svelte'
-  // import BatchModal  from '../components/BatchModal.svelte'
-  // import BatchCard  from '../components/BatchCard.svelte'
+  import BatchModal  from '../components/BatchModal.svelte'
+  import BatchCard  from '../components/BatchCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
   import { curr_path } from '../store.js'
@@ -63,10 +63,14 @@
     res = await fetch(`http://localhost:3333/events/${ticket.eventId}`)
     event_name = (await res.json()).event.name
 
-    batches.map(b => { if (b.amount) is_active = true })
+    for (let i in batches) {
+      if (!batches[i].amount) continue
+      batches[i].is_active = true
+      break
+    }
   }
 
-  async function delete_batch() {
+  async function delete_ticket() {
     if (!confirm('Certeza que deseja excluir?')) return
 
     await fetch(`http://localhost:3333/ticket/${id}`, { method: 'DELETE' })
@@ -75,6 +79,11 @@
 
   function finish_editing() {
     edit_modal = false
+    load_ticket()
+  }
+
+  function finish_batch_creation() {
+    batch_modal = false
     load_ticket()
   }
 
