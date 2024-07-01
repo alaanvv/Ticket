@@ -10,7 +10,7 @@ describe('Event and Ticket API', _ => {
 
   describe('POST /events', _ => {
     it('should be able to create an event', async _ => {
-      const res = await request(app.server).post('/events').send({
+      const res = await request(app.server).post('/events').set('Authorization', 'Bearer test').send({
         name: 'Exposição',
         local: 'Parque de Exposição',
         address: 'Rua A, Centro, n°57',
@@ -25,7 +25,7 @@ describe('Event and Ticket API', _ => {
     })
 
     it('should return 400 for invalid data', async _ => {
-      const res = await request(app.server).post('/events').send({
+      const res = await request(app.server).post('/events').set('Authorization', 'Bearer test').send({
         name: '',
         local: '',
         address: '',
@@ -35,11 +35,24 @@ describe('Event and Ticket API', _ => {
 
       expect(res.statusCode).toEqual(400)
     })
+
+    it('should return 403 for invalid session', async _ => {
+      const res = await request(app.server).post('/events').set('Authorization', 'Bearer invalid').send({
+        name: 'Exposição',
+        local: 'Parque de Exposição',
+        address: 'Rua A, Centro, n°57',
+        latitude: -20.9116472,
+        longitude: -44.076647,
+        date: new Date(Number(new Date()) + 1e3)
+      })
+
+      expect(res.statusCode).toEqual(403)
+    })
   })
 
   describe('POST /ticket/:id', _ => {
     it('should be able to create a ticket', async _ => {
-      const res = await request(app.server).post(`/ticket/${event_id}`).send({
+      const res = await request(app.server).post(`/ticket/${event_id}`).set('Authorization', 'Bearer test').send({
         name: 'Pista',
         allow_half: 0,
         batches: [
@@ -56,7 +69,7 @@ describe('Event and Ticket API', _ => {
 
   describe('POST /create-batches/:id', _ => {
     it('should be able to create batches', async _ => {
-      const res = await request(app.server).post(`/create-batches/${ticket_id}`).send({
+      const res = await request(app.server).post(`/create-batches/${ticket_id}`).set('Authorization', 'Bearer test').send({
         batches: [
           { price_in_cents: 20000, amount: 200 },
           { price_in_cents: 30000, amount: 100 }
@@ -71,7 +84,7 @@ describe('Event and Ticket API', _ => {
 
   describe('PUT /edit-event/:id', _ => {
     it('should be able to edit an event', async _ => {
-      const res = await request(app.server).put(`/edit-event/${event_id}`).send({
+      const res = await request(app.server).put(`/edit-event/${event_id}`).set('Authorization', 'Bearer test').send({
         name: 'Exposição',
         local: 'Parque de Exposição',
         address: 'Rua A, Centro, n°57',
@@ -85,7 +98,7 @@ describe('Event and Ticket API', _ => {
 
   describe('PUT /edit-batch/:id', _ => {
     it('should be able to edit a batch', async _ => {
-      const res = await request(app.server).put(`/edit-batch/${batch_id}`).send({
+      const res = await request(app.server).put(`/edit-batch/${batch_id}`).set('Authorization', 'Bearer test').send({
         price_in_cents: 50000,
         amount: 100
       })
@@ -96,7 +109,7 @@ describe('Event and Ticket API', _ => {
 
   describe('PUT /edit-ticket/:id', _ => {
     it('should be able to edit a ticket', async _ => {
-      const res = await request(app.server).put(`/edit-ticket/${ticket_id}`).send({
+      const res = await request(app.server).put(`/edit-ticket/${ticket_id}`).set('Authorization', 'Bearer test').send({
         name: 'Camarote',
         allow_half: 1
       })
@@ -176,7 +189,7 @@ describe('Event and Ticket API', _ => {
 
   describe('DELETE /batch/:id', _ => {
     it('should delete a batch by id', async _ => {
-      const res = await request(app.server).delete(`/batch/${batch_id}`)
+      const res = await request(app.server).delete(`/batch/${batch_id}`).set('Authorization', 'Bearer test')
 
       expect(res.statusCode).toEqual(204)
     })
@@ -184,7 +197,7 @@ describe('Event and Ticket API', _ => {
 
   describe('DELETE /ticket/:id', _ => {
     it('should delete a ticket by id', async _ => {
-      const res = await request(app.server).delete(`/ticket/${ticket_id}`)
+      const res = await request(app.server).delete(`/ticket/${ticket_id}`).set('Authorization', 'Bearer test')
 
       expect(res.statusCode).toEqual(204)
     })
@@ -192,7 +205,7 @@ describe('Event and Ticket API', _ => {
 
   describe('DELETE /event/:id', _ => {
     it('should delete an event by id', async _ => {
-      const res = await request(app.server).delete(`/event/${event_id}`)
+      const res = await request(app.server).delete(`/event/${event_id}`).set('Authorization', 'Bearer test')
 
       expect(res.statusCode).toEqual(204)
     })

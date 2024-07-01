@@ -10,7 +10,7 @@ describe('Event and Ticket API', _ => {
 
   describe('POST /user', _ => {
     it('should be able to create an user', async _ => {
-      const res = await request(app.server).post('/user').send({
+      const res = await request(app.server).post('/user').set('Authorization', 'Bearer test').send({
         name: 'alaanvv',
         password: 'admin123',
         role: 'admin'
@@ -45,7 +45,7 @@ describe('Event and Ticket API', _ => {
 
   describe('PUT /edit-user/:id', _ => {
     it('should be able to edit an user', async _ => {
-      const res = await request(app.server).put(`/edit-user/${user_id}`).send({
+      const res = await request(app.server).put(`/edit-user/${user_id}`).set('Authorization', 'Bearer test').send({
         name: 'alan vale',
         password: 'portaria123',
         role: 'portaria'
@@ -57,7 +57,7 @@ describe('Event and Ticket API', _ => {
 
   describe('GET /all-users', _ => {
     it('should get all users', async _ => {
-      const res = await request(app.server).get('/all-users')
+      const res = await request(app.server).get('/all-users').set('Authorization', 'Bearer test')
 
       expect(res.statusCode).toEqual(200)
       expect(res.body.users).toEqual(expect.any(Array))
@@ -66,7 +66,7 @@ describe('Event and Ticket API', _ => {
 
   describe('DELETE /user/:id', _ => {
     it('should delete an user by id', async _ => {
-      const res = await request(app.server).delete(`/user/${user_id}`)
+      const res = await request(app.server).delete(`/user/${user_id}`).set('Authorization', 'Bearer test')
 
       expect(res.statusCode).toEqual(204)
     })

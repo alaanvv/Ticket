@@ -22,7 +22,7 @@ import { removeUser } from './routes/remove-user'
 import { login } from './routes/login'
 import { sessionLogin } from './routes/session-login'
 
-import { BadRequestError, NotFoundError } from './errors'
+import { BadRequestError, NotFoundError, ForbiddenError } from './errors'
 import { ZodError } from 'zod'
 import { env } from '../env'
 import fastify from 'fastify'
@@ -64,6 +64,9 @@ app.setErrorHandler((error, _, reply) => {
 
   if (error instanceof NotFoundError)
     return reply.status(404).send({ message: error.message })
+
+  if (error instanceof ForbiddenError)
+    return reply.status(403).send({ message: error.message })
 
   if (env.NODE_ENV !== 'production')
     console.log(error)

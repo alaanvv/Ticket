@@ -1,10 +1,13 @@
-import { BadRequestError, NotFoundError } from '../errors'
+import { BadRequestError, NotFoundError, ForbiddenError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
+import { get_auth } from '../utils/auth'
 import { z } from 'zod'
 
 export async function createBatches(app: FastifyInstance) {
   app.post('/create-batches/:id', async (req, res) => {
+    if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
+
     const bodySchema = z.object({
       batches:   z.object({
         amount:           z.coerce.number().int().min(0),

@@ -1,10 +1,13 @@
-import { BadRequestError, NotFoundError } from '../errors'
+import { BadRequestError, NotFoundError, ForbiddenError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
+import { get_auth } from '../utils/auth'
 import { z } from 'zod'
 
 export async function editTicket(app: FastifyInstance) {
   app.put('/edit-ticket/:id', async (req, res) => {
+    if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
+
     const bodySchema = z.object({
       name:      z.optional(z.string()),
       allow_half: z.optional(z.coerce.boolean())

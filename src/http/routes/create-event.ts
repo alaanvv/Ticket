@@ -1,9 +1,13 @@
+import { ForbiddenError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
+import { get_auth } from '../utils/auth'
 import { z } from 'zod'
 
 export async function createEvent(app: FastifyInstance) {
   app.post('/events', async (req, res) => {
+    if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
+
     const bodySchema = z.object({
       name: z.string(),
       description: z.optional(z.string()),

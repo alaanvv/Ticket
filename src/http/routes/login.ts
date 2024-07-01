@@ -9,7 +9,6 @@ export async function login(app: FastifyInstance) {
       name:     z.string(),
       password: z.string()
     })
-
     const data = bodySchema.parse(req.body)
 
     const user = await prisma.user.findFirst({ where: { name: data.name, password: data.password } })
