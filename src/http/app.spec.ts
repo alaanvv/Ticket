@@ -212,6 +212,28 @@ describe('Event and Ticket API', _ => {
     })
   })
 
+  describe('POST /login', _ => {
+    it('should be able to login', async _ => {
+      const res = await request(app.server).post('/login').send({
+        name: 'alaanvv',
+        password: 'admin123',
+      })
+      console.log(res)
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.body).toEqual(expect.objectContaining({ role: expect.any(String) }))
+    })
+
+    it('shouldn\'t be able to login with invalid password', async _ => {
+      const res = await request(app.server).post('/login').send({
+        name: 'alaanvv',
+        password: 'admin321',
+      })
+
+      expect(res.statusCode).toEqual(400)
+    })
+  })
+
   describe('PUT /edit-user/:id', _ => {
     it('should be able to edit an user', async _ => {
       const res = await request(app.server).put(`/edit-user/${user_id}`).send({

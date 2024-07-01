@@ -19,6 +19,7 @@ import { createUser } from './routes/create-user'
 import { editUser } from './routes/edit-user'
 import { getAllUsers } from './routes/get-all-users'
 import { removeUser } from './routes/remove-user'
+import { login } from './routes/login'
 
 import { BadRequestError, NotFoundError } from './errors'
 import { ZodError } from 'zod'
@@ -50,6 +51,7 @@ app.register(createUser)
 app.register(editUser)
 app.register(getAllUsers)
 app.register(removeUser)
+app.register(login)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError)

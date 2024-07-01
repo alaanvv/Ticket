@@ -63,6 +63,14 @@ model User {
 }
 ```
 
+- `/login` **POST**
+```json
+{
+  "name": "alaanvv",
+  "password": "123",
+}
+```
+
 - `/events` **POST**
 ```json
 {
