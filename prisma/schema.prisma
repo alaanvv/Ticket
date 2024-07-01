@@ -57,5 +57,16 @@ model User {
   role       String
   editable   Boolean  @default(true)
   created_at DateTime @default(now())
+
+  sessions Session[]
   @@map("users")
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  user_id    String
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@map("sessions")
 }

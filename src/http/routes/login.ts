@@ -16,6 +16,8 @@ export async function login(app: FastifyInstance) {
     if (!user)
       throw new BadRequestError('Invalid credentials.')
 
-    return res.status(200).send({ name: user.name, role: user.role })
+    const session = await prisma.session.create({ data: { user_id: user.id } })
+
+    return res.status(200).send({ session_id: session.id, name: user.name, role: user.role })
   })
 }

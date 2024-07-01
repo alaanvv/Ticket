@@ -1,14 +1,24 @@
 <div class='bar row'>
   <h2> iTicket </h2>
 
-  <div class='col'>
-    <Icon i='person' />
-    <p> Alan Vale </p>
-  </div>
+  {#if $logged_user}
+    <div class='row'>
+      <p> {$logged_user.name} </p>
+      <Icon on:click={logout} i='logout' />
+    </div>
+  {/if}
 </div>
 
 <script>
   import Icon from '../components/Icon.svelte'
+
+  import { logged_user } from '../store.js'
+
+  function logout() {
+    // TODO Delete the session itself
+    localStorage.removeItem('session_id')
+    logged_user.set(undefined)
+  }
 </script>
 
 <style>
@@ -16,7 +26,7 @@
     flex-basis: 0;
 
     margin: 0 0 10px  0;
-    padding: 0 20px;
+    padding: 10px 20px;
 
     background: var(--bg0);
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
@@ -29,17 +39,14 @@
     margin: 5px;
   }
 
-  .col {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
   .row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+
+  :global(.row span) {
+    cursor: pointer;
   }
 </style>

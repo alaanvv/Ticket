@@ -17,10 +17,27 @@
 
 <script>
   import Icon from  '../components/Icon.svelte'
+
   import { logged_user } from '../store.js'
+  import { onMount } from 'svelte'
 
   let user = { name: '', password: '' }
   let error
+
+  onMount(async _ => {
+    const session_id = localStorage.getItem('session_id')
+    if (!session_id) return
+
+    const _res = await fetch(`http://localhost:3333/session-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: session_id })
+    })
+    const res = await _res.json()
+
+    if (_res.ok)
+      logged_user.set(res)
+  })
 
   let showPassword = false
   function togglePasswordVisibility() {
@@ -37,8 +54,10 @@
     })
     const res = await _res.json()
 
-    if (_res.ok)
+    if (_res.ok) {
+      localStorage.setItem('session_id', res.session_id)
       return logged_user.set(res)
+    }
 
     error = 'Credenciais inválidas'
     console.log(res)
