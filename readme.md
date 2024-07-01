@@ -216,7 +216,6 @@ model User {
     - [x] Create button
     - [x] Edit button
     - [x] Delete button
-- [ ] Refactor
 
 > Getting back to back
 - [x] User table
@@ -233,18 +232,28 @@ model User {
 - [x] Edit (not the main)
 - [x] Delete
 
-> Hard part on backend
+> Backend ticket instance
 - [ ] Ticket instance
-    - [ ] Create database table (status, price_paid)
-    - [ ] Rewatch Death Note
-    - [ ] Create route to sell it
-        - [ ] Decrease amount on stock (deactive on 0)
-    - [ ] Tests here
+    - [ ] Create database table (status, price_paid, validated_at)
+    - [ ] Create route to create it
+        - [ ] Decrease amount on stock
+    - [ ] Write tests here
+    - [ ] Route to validate it
+
+> Frontend ticket validation
+- [ ] Be able to validate through text
+- [ ] Validate through QR
+- [ ] Download to validate offline
+     - [ ] Be able to sync it
+         - [ ] Create action list
+
+> C L8R
 - [ ] Create dashboard
     - [ ] Routes to see **events** and **ticket**
     - [ ] Filters for date
     - [ ] Sorting options (amount remaining, amount sold, date)
     - [ ] Tests here also
+    - [ ] Rewatch Death Note (I'll forward this)
 
 > https://www.uniticket.com.br/
 
