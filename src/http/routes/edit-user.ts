@@ -25,6 +25,8 @@ export async function editUser(app: FastifyInstance) {
     const user = await prisma.user.findUnique({ where: { id } })
     if (!user)
       throw new NotFoundError('User not found.')
+    if (!user.editable)
+      throw new BadRequestError('No privileges.')
 
     await prisma.user.update({ where: { id }, data })
 

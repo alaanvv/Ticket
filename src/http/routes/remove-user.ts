@@ -1,4 +1,4 @@
-import { BadRequestError } from '../errors'
+import { BadRequestError, NotFoundError } from '../errors'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { z } from 'zod'
@@ -8,8 +8,13 @@ export async function removeUser(app: FastifyInstance) {
     const paramSchema = z.object({ id: z.string().cuid() })
     const { id } = paramSchema.parse(req.params)
 
-    try { await prisma.user.delete({ where: { id } }) }
-    catch { throw new BadRequestError('Event not found.') }
+    const user = await prisma.user.findUnique({ where: { id } })
+    if (!user)
+      throw new NotFoundError('User not found.')
+    if (!user.editable)
+      throw new BadRequestError('No privileges.')
+
+    await prisma.user.delete({ where: { id } })
 
     return res.status(204).send({ id })
   })
