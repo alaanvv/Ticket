@@ -226,10 +226,10 @@ model User {
     - [x] DELETE
 
 > Frontend user management
-- [ ] Display users
-- [ ] Create new ones
-- [ ] Edit (not the main)
-- [ ] Delete
+- [x] Display users
+- [x] Create new ones
+- [x] Edit (not the main)
+- [x] Delete
 
 > Hard part on backend
 - [ ] Ticket instance
