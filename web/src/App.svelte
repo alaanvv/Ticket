@@ -42,6 +42,13 @@
 
     if (allowed_role == 'admin' && $logged_user.role != 'admin')
       curr_route = 'not_found'
+
+    if ($logged_user?.role == 'admin' && curr_route == '')
+      curr_route = 'dashboard'
+    if ($logged_user?.role == 'portaria' && curr_route == '')
+      curr_route = 'verificacao'
+
+    if (!routes[curr_route]) curr_route = 'not_found'
   }
 </script>
 

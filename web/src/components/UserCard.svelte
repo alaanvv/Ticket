@@ -20,6 +20,7 @@
   import UserModal  from '../components/UserModal.svelte'
 
   import { createEventDispatcher } from 'svelte'
+  import { logged_user } from '../store.js'
 
   const dispatch = createEventDispatcher()
 
@@ -45,7 +46,10 @@
   async function delete_user() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://localhost:3333/user/${user.id}`, { method: 'DELETE' })
+    await fetch(`http://localhost:3333/user/${user.id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
+    })
     dispatch('update')
   }
 

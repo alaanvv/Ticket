@@ -8,7 +8,7 @@
     <div class='password-container'>
       <input type='password' bind:value={user.password} style='display: {showPassword ? 'none' : 'block'};' />
       <input type='text' bind:value={user.password} style='display: {showPassword ? 'block' : 'none'};' />
-      <Icon class='toggle-btn' on:click={togglePasswordVisibility} i={showPassword ? 'visibility_off' : 'visibility'}  />
+      <Icon on:click={togglePasswordVisibility} i={showPassword ? 'visibility_off' : 'visibility'}  />
     </div>
   </label>
 
@@ -36,7 +36,7 @@
     const res = await _res.json()
 
     if (_res.ok)
-      logged_user.set(res)
+      logged_user.set({ ...res, session_id })
   })
 
   let showPassword = false

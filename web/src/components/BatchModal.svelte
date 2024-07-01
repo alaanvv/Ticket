@@ -21,6 +21,7 @@
   import Modal from './Modal.svelte'
 
   import { createEventDispatcher } from 'svelte'
+  import { logged_user } from '../store.js'
 
   const dispatch = createEventDispatcher()
 
@@ -52,7 +53,7 @@
     if (!data) {
       await fetch(`http://localhost:3333/create-batches/${ticket_id}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify({ batches: [batch] })
       })
 
@@ -64,7 +65,7 @@
 
       await fetch(`http://localhost:3333/edit-batch/${data.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(batch)
       })
 

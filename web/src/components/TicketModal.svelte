@@ -19,6 +19,7 @@
 
   import { createEventDispatcher } from 'svelte'
   import { navigate } from '../utils/navigation.js'
+  import { logged_user } from '../store.js'
 
   const dispatch = createEventDispatcher()
 
@@ -36,7 +37,7 @@
     if (!data) {
       const res = await fetch(`http://localhost:3333/ticket/${event_id}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(ticket)
       })
 
@@ -46,7 +47,7 @@
       const id = data.id
       await fetch(`http://localhost:3333/edit-ticket/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(ticket)
       })
 

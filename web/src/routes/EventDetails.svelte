@@ -63,7 +63,7 @@
   import TicketCard  from '../components/TicketCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
-  import { curr_path } from '../store.js'
+  import { curr_path, logged_user } from '../store.js'
   import { onMount } from 'svelte'
 
   let event, formatted_date, maps_link
@@ -93,7 +93,10 @@
   async function delete_event() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://localhost:3333/event/${id}`, { method: 'DELETE' })
+    await fetch(`http://localhost:3333/event/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
+    })
     navigate('/eventos')
   }
 

@@ -55,6 +55,7 @@
 
   import { createEventDispatcher } from 'svelte'
   import { navigate } from '../utils/navigation.js'
+  import { logged_user } from '../store.js'
   import z from 'zod'
 
   const dispatch = createEventDispatcher()
@@ -101,7 +102,8 @@
     if (!data) {
       const res = await fetch('http://localhost:3333/events', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(validated_data)
       })
 
@@ -111,7 +113,7 @@
       const id = data.id
       await fetch(`http://localhost:3333/edit-event/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(validated_data)
       })
 

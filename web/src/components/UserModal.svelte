@@ -10,7 +10,7 @@
       <div class='password-container'>
         <input type='password' bind:value={user.password} style='display: {showPassword ? 'none' : 'block'};' />
         <input type='text' bind:value={user.password} style='display: {showPassword ? 'block' : 'none'};' />
-        <Icon class='toggle-btn' on:click={togglePasswordVisibility} i={showPassword ? 'visibility_off' : 'visibility'}  />
+        <Icon on:click={togglePasswordVisibility} i={showPassword ? 'visibility_off' : 'visibility'}  />
       </div>
     </label>
     <label> <p> Cargo: </p>
@@ -28,6 +28,7 @@
   import Modal from './Modal.svelte'
   import Icon from  './Icon.svelte'
 
+  import { logged_user } from '../store.js'
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
 
@@ -38,7 +39,6 @@
     password: data?.password,
     role:     data?.role
   }
-
 
   let showPassword = false
   function togglePasswordVisibility() {
@@ -51,7 +51,7 @@
     if (!data) {
       await fetch(`http://localhost:3333/user`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(user)
       })
 
@@ -60,7 +60,7 @@
     else {
       await fetch(`http://localhost:3333/edit-user/${data.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(user)
       })
 

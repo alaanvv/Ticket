@@ -224,6 +224,8 @@ model User {
     - [x] POST
     - [x] PUT
     - [x] DELETE
+- [x] Session system
+    - [x] Require session for modification requests
 
 > Frontend user management
 - [x] Display users
