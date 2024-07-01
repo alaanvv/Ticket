@@ -42,9 +42,27 @@ model Batch {
   ticket              Ticket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
   @@map("batches")
 }
+
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  password   String
+  role       String
+  created_at DateTime @default(now())
+  @@map("users")
+}
 ```
 
 # Routes
+- `/user` **POST**
+```json
+{
+  "name": "alaanvv",
+  "password": "123",
+  "role": "admin"
+}
+```
+
 - `/events` **POST**
 ```json
 {
@@ -78,6 +96,15 @@ model Batch {
 }
 ```
 
+- `/edit-user/:id` **PUT**
+```json
+{
+  "name": "alaanvv",
+  "password": "123",
+  "role": "admin"
+}
+```
+
 - `/edit-event/:id` **PUT**
 ```json
 {
@@ -106,6 +133,8 @@ model Batch {
 ```
 > If setting allow_half here, all half prices will be defaulted to 0.5x
 
+- `/all-users` **GET**
+
 - `/events/:id` **GET**
 
 - `/all-events` **GET**
@@ -119,6 +148,8 @@ model Batch {
 - `/batch/:id` **GET**
 
 - `/active-batch/:id` **GET**
+
+- `/user/:id` **DELETE**
 
 - `/event/:id` **DELETE**
 
@@ -168,6 +199,19 @@ model Batch {
 - [ ] Refactor
 
 > Getting back to back
+- [x] User table
+    - [x] GET
+    - [x] POST
+    - [x] PUT
+    - [x] DELETE
+
+> Frontend user management
+- [ ] Display users
+- [ ] Create new ones
+- [ ] Edit (not the main)
+- [ ] Delete
+
+> Hard part on backend
 - [ ] Ticket instance
     - [ ] Create database table (status, price_paid)
     - [ ] Rewatch Death Note

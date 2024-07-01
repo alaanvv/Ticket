@@ -15,6 +15,11 @@ import { removeEvent } from './routes/remove-event'
 import { removeTicket } from './routes/remove-ticket'
 import { removeBatch } from './routes/remove-batch'
 
+import { createUser } from './routes/create-user'
+import { editUser } from './routes/edit-user'
+import { getAllUsers } from './routes/get-all-users'
+import { removeUser } from './routes/remove-user'
+
 import { BadRequestError, NotFoundError } from './errors'
 import { ZodError } from 'zod'
 import { env } from '../env'
@@ -41,6 +46,10 @@ app.register(getBatch)
 app.register(removeEvent)
 app.register(removeTicket)
 app.register(removeBatch)
+app.register(createUser)
+app.register(editUser)
+app.register(getAllUsers)
+app.register(removeUser)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError)
