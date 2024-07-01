@@ -9,19 +9,21 @@
 </div>
 
 <script>
-  import TopBar       from './components/TopBar.svelte'
-  import SideBar      from './components/SideBar.svelte'
-  import Dashboard    from './routes/Dashboard.svelte'
-  import Users        from './routes/Users.svelte'
-  import Events       from './routes/Events.svelte'
-  import EventDetails from './routes/EventDetails.svelte'
+  import TopBar        from './components/TopBar.svelte'
+  import SideBar       from './components/SideBar.svelte'
+  import Dashboard     from './routes/Dashboard.svelte'
+  import Users         from './routes/Users.svelte'
+  import Events        from './routes/Events.svelte'
+  import EventDetails  from './routes/EventDetails.svelte'
   import TicketDetails from './routes/TicketDetails.svelte'
+  import Login         from './routes/Login.svelte'
 
-  import { curr_path } from './store.js'
+  import { curr_path, logged_user } from './store.js'
 
   let curr_route
   const routes = {
-    '':        ['Dashboard', Dashboard],
+    '':        ['Login',     Login],
+    dashboard: ['Dashboard', Dashboard],
     usuarios:  ['Usuários',  Users],
     eventos:   ['Eventos',   Events],
     evento:    ['Evento',    EventDetails],
@@ -32,6 +34,9 @@
   $: {
     curr_route = $curr_path.split('/')[1]
     if (!routes[curr_route]) curr_route = 'not_found'
+
+    if (curr_route != '' && !$logged_user)
+      curr_route = ''
   }
 </script>
 
@@ -40,7 +45,7 @@
     width: 100%;
     padding: 1em 1.5em;
 
-    margin: 0 20px 0 0;
+    margin: 0 20px;
     background: var(--bg0);
     border-radius: 10px;
     overflow:auto;
