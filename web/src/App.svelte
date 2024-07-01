@@ -22,13 +22,13 @@
 
   let curr_route
   const routes = {
-    '':        ['Login',     Login],
-    dashboard: ['Dashboard', Dashboard],
-    usuarios:  ['Usuários',  Users],
-    eventos:   ['Eventos',   Events],
-    evento:    ['Evento',    EventDetails],
-    ingresso:  ['Ingresso',  TicketDetails],
-    not_found: ['404',       undefined]
+    '':        ['Login',     Login,         'any'  ],
+    dashboard: ['Dashboard', Dashboard,     'admin'],
+    usuarios:  ['Usuários',  Users,         'admin'],
+    eventos:   ['Eventos',   Events,        'admin'],
+    evento:    ['Evento',    EventDetails,  'admin'],
+    ingresso:  ['Ingresso',  TicketDetails, 'admin'],
+    not_found: ['404',       undefined,     'any'  ]
   }
 
   $: {
@@ -37,6 +37,11 @@
 
     if (curr_route != '' && !$logged_user)
       curr_route = ''
+
+    let allowed_role = routes[curr_route][2]
+
+    if (allowed_role == 'admin' && $logged_user.role != 'admin')
+      curr_route = 'not_found'
   }
 </script>
 

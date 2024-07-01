@@ -6,10 +6,17 @@
       <ul>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li> <p class:active={$curr_path == '/dashboard'} on:click={_ => navigate('/dashboard')}>         <Icon i='dashboard' /> Dashboard </p> </li>
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <li> <p class:active={$curr_path == '/usuarios'}  on:click={_ => navigate('/usuarios')}>  <Icon i='group' />     Usuários  </p> </li>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <li> <p class:active={$curr_path == '/eventos'}   on:click={_ => navigate('/eventos')}>   <Icon i='event' />     Eventos   </p> </li>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li> <p class:active={$curr_path == '/usuarios'}  on:click={_ => navigate('/usuarios')}>  <Icon i='group' />     Usuários  </p> </li>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li> <p class:active={$curr_path == '/eventos'}   on:click={_ => navigate('/eventos')}>   <Icon i='event' />     Eventos   </p> </li>
+      </ul>
+    {/if}
+    {#if $logged_user.role == 'admin' || $logged_user.role == 'portaria'}
+      <h2> Portaria </h2>
+      <ul>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li> <p class:active={$curr_path == '/verificacao'} on:click={_ => navigate('/verificacao')}> <Icon i='qr_code' /> Verificação </p> </li>
       </ul>
     {/if}
   </div>
@@ -28,7 +35,7 @@
     flex-direction: column;
     align-items: center;
 
-    padding: 10px 40px;
+    padding: 10px 30px;
 
     user-select: none;
   }
