@@ -1,5 +1,5 @@
 <div class='panel'>
-  <button class='back' on:click={_ => navigate(`/evento/${ticket.eventId}`)}> <Icon i='arrow_back' /> Voltar  </button>
+  <button class='back' on:click={_ => navigate(`/evento/${ticket.event_id}`)}> <Icon i='arrow_back' /> Voltar  </button>
   <button class='edit' on:click={_ => edit_modal = true}>               <Icon i='edit' />       Editar  </button>
   <button class='del'  on:click={delete_ticket}>                         <Icon i='delete' />     Excluir </button>
 </div>
@@ -11,7 +11,7 @@
       {#if event_name} <span class='detail'> {event_name} </span> {/if}
     </h2>
 
-    <p> <span class='active-indicator' class:active={ticket.allowHalf}> {ticket.allowHalf ? 'Permite' : 'Não permite'} </span> meia <p>
+    <p> <span class='active-indicator' class:active={ticket.allow_half}> {ticket.allow_half ? 'Permite' : 'Não permite'} </span> meia <p>
     <p> Este ingresso está <span class='active-indicator' class:active={is_active}> {is_active ? 'ativo' : 'inativo'} </span> <p>
   </div>
 
@@ -22,7 +22,7 @@
 
   <div class='batches'>
     {#each batches as batch, i}
-      <BatchCard {batch} {i} allow_half={ticket.allowHalf} on:update={load_ticket} />
+      <BatchCard {batch} {i} allow_half={ticket.allow_half} on:update={load_ticket} />
     {/each}
   </div>
 {/if}
@@ -32,7 +32,7 @@
 {/if}
 
 {#if batch_modal}
-  <BatchModal on:close={_ => batch_modal = false} on:update={finish_batch_creation} ticket_id={ticket.id} allow_half={ticket.allowHalf} />
+  <BatchModal on:close={_ => batch_modal = false} on:update={finish_batch_creation} ticket_id={ticket.id} allow_half={ticket.allow_half} />
 {/if}
 
 <script>
@@ -60,7 +60,7 @@
     res = await fetch(`http://localhost:3333/ticket-batches/${id}`)
     batches = (await res.json()).batches
 
-    res = await fetch(`http://localhost:3333/events/${ticket.eventId}`)
+    res = await fetch(`http://localhost:3333/events/${ticket.event_id}`)
     event_name = (await res.json()).event.name
 
     is_active = false
@@ -76,7 +76,7 @@
     if (!confirm('Certeza que deseja excluir?')) return
 
     await fetch(`http://localhost:3333/ticket/${id}`, { method: 'DELETE' })
-    navigate(`/evento/${ticket.eventId}`)
+    navigate(`/evento/${ticket.event_id}`)
   }
 
   function finish_editing() {

@@ -7,7 +7,7 @@
     </label>
 
     <label class='inline cp'> <p> Permitir meia: </p>
-      <input type='checkbox' bind:checked={ticket.allowHalf} />
+      <input type='checkbox' bind:checked={ticket.allow_half} />
     </label>
 
     <button type="submit"> Enviar </button>
@@ -27,7 +27,7 @@
 
   let ticket = {
     name:      data?.name,
-    allowHalf: data?.allowHalf
+    allow_half: data?.allow_half
   }
 
   async function submitForm(e) {

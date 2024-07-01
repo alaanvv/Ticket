@@ -30,8 +30,8 @@
   const started_with_amount = data?.amount
 
   let batch = {
-    price:      data ? (data.priceInCents     / 100) : undefined,
-    half_price: data ? (data.halfPriceInCents / 100) : undefined,
+    price:      data ? (data.price_in_cents     / 100) : undefined,
+    half_price: data ? (data.half_price_in_cents / 100) : undefined,
     amount:     data?.amount,
   }
 
@@ -44,10 +44,10 @@
 
   async function submitForm(e) {
     e.preventDefault()
-    batch.priceInCents     = batch.price      * 100
-    batch.halfPriceInCents = batch.half_price * 100
-    if (isNaN(batch.halfPriceInCents))
-      delete batch.halfPriceInCents
+    batch.price_in_cents     = batch.price      * 100
+    batch.half_price_in_cents = batch.half_price * 100
+    if (isNaN(batch.half_price_in_cents))
+      delete batch.half_price_in_cents
 
     if (!data) {
       await fetch(`http://localhost:3333/create-batches/${ticket_id}`, {

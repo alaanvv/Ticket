@@ -7,8 +7,8 @@ export async function editBatch(app: FastifyInstance) {
   app.put('/edit-batch/:id', async (req, res) => {
     const bodySchema = z.object({
       amount:           z.optional(z.number().min(0)),
-      priceInCents:     z.optional(z.number().min(1)),
-      halfPriceInCents: z.optional(z.number().min(1))
+      price_in_cents:     z.optional(z.number().min(1)),
+      half_price_in_cents: z.optional(z.number().min(1))
     })
     const paramSchema = z.object({ id: z.string().cuid() })
 
@@ -26,8 +26,8 @@ export async function editBatch(app: FastifyInstance) {
     if (!batch)
       throw new NotFoundError('Batch not found.')
 
-    if (!batch.halfPriceInCents && !data.halfPriceInCents)
-      data.halfPriceInCents = data.priceInCents * 0.5
+    if (!batch.half_price_in_cents && !data.half_price_in_cents)
+      data.half_price_in_cents = data.price_in_cents * 0.5
 
     await prisma.batch.update({ where: { id }, data })
 

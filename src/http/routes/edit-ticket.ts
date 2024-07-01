@@ -7,7 +7,7 @@ export async function editTicket(app: FastifyInstance) {
   app.put('/edit-ticket/:id', async (req, res) => {
     const bodySchema = z.object({
       name:      z.optional(z.string()),
-      allowHalf: z.optional(z.coerce.boolean())
+      allow_half: z.optional(z.coerce.boolean())
     })
     const paramSchema = z.object({ id: z.string().cuid() })
 

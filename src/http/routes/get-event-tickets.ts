@@ -13,7 +13,7 @@ export async function getEventTickets(app: FastifyInstance) {
       throw new NotFoundError('Event not found.')
 
     const tickets = await prisma.ticket.findMany({
-      where: { eventId: id, active: true }
+      where: { event_id: id, active: true }
     })
 
     return res.status(200).send({ tickets })

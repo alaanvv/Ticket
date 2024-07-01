@@ -3,7 +3,7 @@ import request from 'supertest'
 import { app } from './app'
 
 describe('Event and Ticket API', _ => {
-  let eventId: string, ticketId: string, batchId: string
+  let event_id: string, ticket_id: string, batchId: string
 
   beforeAll(async _ => await app.ready())
   afterAll(async  _ => await app.close())
@@ -21,7 +21,7 @@ describe('Event and Ticket API', _ => {
 
       expect(res.statusCode).toEqual(201)
       expect(res.body).toEqual(expect.objectContaining({ id: expect.any(String) }))
-      eventId = res.body.id
+      event_id = res.body.id
     })
 
     it('should return 400 for invalid data', async _ => {
@@ -39,27 +39,27 @@ describe('Event and Ticket API', _ => {
 
   describe('POST /ticket/:id', _ => {
     it('should be able to create a ticket', async _ => {
-      const res = await request(app.server).post(`/ticket/${eventId}`).send({
+      const res = await request(app.server).post(`/ticket/${event_id}`).send({
         name: 'Pista',
-        allowHalf: 0,
+        allow_half: 0,
         batches: [
-          { priceInCents: 20000, amount: 200 },
-          { priceInCents: 30000, amount: 100 }
+          { price_in_cents: 20000, amount: 200 },
+          { price_in_cents: 30000, amount: 100 }
         ]
       })
 
       expect(res.statusCode).toEqual(201)
       expect(res.body).toEqual(expect.objectContaining({ id: expect.any(String) }))
-      ticketId = res.body.id
+      ticket_id = res.body.id
     })
   })
 
   describe('POST /create-batches/:id', _ => {
     it('should be able to create batches', async _ => {
-      const res = await request(app.server).post(`/create-batches/${ticketId}`).send({
+      const res = await request(app.server).post(`/create-batches/${ticket_id}`).send({
         batches: [
-          { priceInCents: 20000, amount: 200 },
-          { priceInCents: 30000, amount: 100 }
+          { price_in_cents: 20000, amount: 200 },
+          { price_in_cents: 30000, amount: 100 }
         ]
       })
 
@@ -71,7 +71,7 @@ describe('Event and Ticket API', _ => {
 
   describe('PUT /edit-event/:id', _ => {
     it('should be able to edit an event', async _ => {
-      const res = await request(app.server).put(`/edit-event/${eventId}`).send({
+      const res = await request(app.server).put(`/edit-event/${event_id}`).send({
         name: 'Exposição',
         local: 'Parque de Exposição',
         address: 'Rua A, Centro, n°57',
@@ -86,7 +86,7 @@ describe('Event and Ticket API', _ => {
   describe('PUT /edit-batch/:id', _ => {
     it('should be able to edit a batch', async _ => {
       const res = await request(app.server).put(`/edit-batch/${batchId}`).send({
-        priceInCents: 50000,
+        price_in_cents: 50000,
         amount: 100
       })
 
@@ -96,9 +96,9 @@ describe('Event and Ticket API', _ => {
 
   describe('PUT /edit-ticket/:id', _ => {
     it('should be able to edit a ticket', async _ => {
-      const res = await request(app.server).put(`/edit-ticket/${ticketId}`).send({
+      const res = await request(app.server).put(`/edit-ticket/${ticket_id}`).send({
         name: 'Camarote',
-        allowHalf: 1
+        allow_half: 1
       })
 
       expect(res.statusCode).toEqual(204)
@@ -107,7 +107,7 @@ describe('Event and Ticket API', _ => {
 
   describe('GET /events/:id', _ => {
     it('should get an event by id', async _ => {
-      const res = await request(app.server).get(`/events/${eventId}`)
+      const res = await request(app.server).get(`/events/${event_id}`)
 
       expect(res.statusCode).toEqual(200)
       expect(res.body).toEqual(expect.objectContaining({ event: expect.any(Object) }))
@@ -137,7 +137,7 @@ describe('Event and Ticket API', _ => {
 
   describe('GET /event-tickets/:id', _ => {
     it('should get tickets for an event by id', async _ => {
-      const res = await request(app.server).get(`/event-tickets/${eventId}`)
+      const res = await request(app.server).get(`/event-tickets/${event_id}`)
 
       expect(res.statusCode).toEqual(200)
       expect(res.body.tickets).toEqual(expect.any(Array))
@@ -146,7 +146,7 @@ describe('Event and Ticket API', _ => {
 
   describe('GET /ticket/:id', _ => {
     it('should get a ticket by id', async _ => {
-      const res = await request(app.server).get(`/ticket/${ticketId}`)
+      const res = await request(app.server).get(`/ticket/${ticket_id}`)
 
       expect(res.statusCode).toEqual(200)
       expect(res.body).toEqual(expect.any(Object))
@@ -155,7 +155,7 @@ describe('Event and Ticket API', _ => {
 
   describe('GET /ticket-batches/:id', _ => {
     it('should get batches for a ticket by id', async _ => {
-      const res = await request(app.server).get(`/ticket-batches/${ticketId}`)
+      const res = await request(app.server).get(`/ticket-batches/${ticket_id}`)
 
       expect(res.statusCode).toEqual(200)
       expect(res.body.batches).toEqual(expect.any(Array))
@@ -173,7 +173,7 @@ describe('Event and Ticket API', _ => {
 
   describe('GET /active-batch/:id', _ => {
     it('should get the active batch for a ticket by id', async _ => {
-      const res = await request(app.server).get(`/active-batch/${ticketId}`)
+      const res = await request(app.server).get(`/active-batch/${ticket_id}`)
 
       expect(res.statusCode).toEqual(200)
       expect(res.body).toEqual(expect.any(Object))
@@ -190,7 +190,7 @@ describe('Event and Ticket API', _ => {
 
   describe('DELETE /ticket/:id', _ => {
     it('should delete a ticket by id', async _ => {
-      const res = await request(app.server).delete(`/ticket/${ticketId}`)
+      const res = await request(app.server).delete(`/ticket/${ticket_id}`)
 
       expect(res.statusCode).toEqual(204)
     })
@@ -198,7 +198,7 @@ describe('Event and Ticket API', _ => {
 
   describe('DELETE /event/:id', _ => {
     it('should delete an event by id', async _ => {
-      const res = await request(app.server).delete(`/event/${eventId}`)
+      const res = await request(app.server).delete(`/event/${event_id}`)
 
       expect(res.statusCode).toEqual(204)
     })

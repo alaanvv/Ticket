@@ -16,7 +16,7 @@ async function deleteTicket(id: string) {
   })
 
   const batches = await prisma.batch.findMany({
-    where: { ticketId: id, active: true }
+    where: { ticket_id: id, active: true }
   })
 
   for (let batch of batches)
@@ -30,7 +30,7 @@ async function deleteEvent(id: string) {
   })
 
   const tickets = await prisma.ticket.findMany({
-    where: { eventId: id, active: true }
+    where: { event_id: id, active: true }
   })
 
   for (let ticket of tickets)

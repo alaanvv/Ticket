@@ -2,9 +2,9 @@
   <h3 class='no-overflow' class:active={batch.is_active}> Lote {i + 1} </h3>
 
   <p> Quantidade: <b> {batch.amount} </b> </p>
-  <p> Preço: <b> R${format_price(batch.priceInCents / 100)} </b> </p>
+  <p> Preço: <b> R${format_price(batch.price_in_cents / 100)} </b> </p>
   {#if allow_half}
-    <p> Preço meia: <b> R${format_price(batch.halfPriceInCents / 100)} </b> </p>
+    <p> Preço meia: <b> R${format_price(batch.half_price_in_cents / 100)} </b> </p>
   {/if}
 
   <div class='row'>
@@ -14,7 +14,7 @@
 </div>
 
 {#if batch_modal}
-  <BatchModal on:close={_ => batch_modal = false} on:update={on_update} ticket_id={batch.ticketId} allow_half={allow_half} data={batch} />
+  <BatchModal on:close={_ => batch_modal = false} on:update={on_update} ticket_id={batch.ticket_id} allow_half={allow_half} data={batch} />
 {/if}
 
 <script>

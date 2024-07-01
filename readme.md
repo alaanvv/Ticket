@@ -11,35 +11,35 @@ model Event {
   longitude   Decimal
   date        DateTime
   active      Boolean  @default(true)
-  createdAt   DateTime @default(now()) @map("created_at")
+  created_at  DateTime @default(now())
 
   tickets Ticket[]
   @@map("events")
 }
 
 model Ticket {
-  id           String   @id @default(cuid())
-  eventId      String   @map("event_id")
-  name         String
-  allowHalf    Boolean  @map("allow_half")
-  active       Boolean  @default(true)
-  createdAt    DateTime @default(now()) @map("created_at")
+  id         String   @id @default(cuid())
+  event_id   String
+  name       String
+  allow_half Boolean
+  active     Boolean  @default(true)
+  created_at DateTime @default(now())
 
-  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
   batches Batch[]
   @@map("tickets")
 }
 
 model Batch {
-  id               String     @id @default(cuid())
-  ticketId         String     @map("ticket_id")
-  priceInCents     Decimal    @map("price_in_cents")
-  halfPriceInCents Decimal?   @map("half_price_in_cents")
-  amount           Int
-  active           Boolean  @default(true)
-  createdAt        DateTime   @default(now()) @map("created_at")
+  id                  String     @id @default(cuid())
+  ticket_id           String
+  price_in_cents      Decimal
+  half_price_in_cents Decimal?
+  amount              Int
+  active              Boolean  @default(true)
+  created_at          DateTime   @default(now())
 
-  ticket       Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticket              Ticket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
   @@map("batches")
 }
 ```
@@ -60,10 +60,10 @@ model Batch {
 ```json
 {
   "name": "Pista",
-  "allowHalf": 0,
+  "allow_half": 0,
   "batches": [
-    { "priceInCents": 20e3, "amount": 200 },
-    { "priceInCents": 30e3, "amount": 100 }
+    { "price_in_cents": 20e3, "amount": 200 },
+    { "price_in_cents": 30e3, "amount": 100 }
   ]
 }
 ```
@@ -72,8 +72,8 @@ model Batch {
 ```json
 {
   "batches": [
-    { "priceInCents": 20e3, "amount": 200 },
-    { "priceInCents": 30e3, "amount": 100 }
+    { "price_in_cents": 20e3, "amount": 200 },
+    { "price_in_cents": 30e3, "amount": 100 }
   ]
 }
 ```
@@ -92,7 +92,7 @@ model Batch {
 - `/edit-batch/:id` **PUT**
 ```json
 {
-  "priceInCents": 50e3,
+  "price_in_cents": 50e3,
   "amount": 100
 }
 ```
@@ -101,10 +101,10 @@ model Batch {
 ```json
 {
   "name": "Camarote",
-  "allowHalf": 1,
+  "allow_half": 1,
 }
 ```
-> If setting allowHalf here, all half prices will be defaulted to 0.5x
+> If setting allow_half here, all half prices will be defaulted to 0.5x
 
 - `/events/:id` **GET**
 
