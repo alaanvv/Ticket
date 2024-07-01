@@ -46,6 +46,7 @@
 
   async function submitForm(e) {
     e.preventDefault()
+    error = ''
 
     const _res = await fetch(`http://localhost:3333/login`, {
       method: 'POST',
@@ -62,7 +63,6 @@
     error = 'Credenciais inválidas'
     console.log(res)
 
-    error = ''
     user.name = ''
     user.password = ''
   }

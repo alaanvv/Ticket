@@ -54,22 +54,8 @@ model User {
 ```
 
 # Routes
-- `/user` **POST**
-```json
-{
-  "name": "alaanvv",
-  "password": "123",
-  "role": "admin"
-}
-```
 
-- `/login` **POST**
-```json
-{
-  "name": "alaanvv",
-  "password": "123",
-}
-```
+> Event-related
 
 - `/events` **POST**
 ```json
@@ -104,15 +90,6 @@ model User {
 }
 ```
 
-- `/edit-user/:id` **PUT**
-```json
-{
-  "name": "alaanvv",
-  "password": "123",
-  "role": "admin"
-}
-```
-
 - `/edit-event/:id` **PUT**
 ```json
 {
@@ -139,9 +116,6 @@ model User {
   "allow_half": 1,
 }
 ```
-> If setting allow_half here, all half prices will be defaulted to 0.5x
-
-- `/all-users` **GET**
 
 - `/events/:id` **GET**
 
@@ -157,13 +131,51 @@ model User {
 
 - `/active-batch/:id` **GET**
 
-- `/user/:id` **DELETE**
-
 - `/event/:id` **DELETE**
 
 - `/batch/:id` **DELETE**
 
 - `/ticket/:id` **DELETE**
+
+> User management
+
+- `/user` **POST**
+```json
+{
+  "name": "alaanvv",
+  "password": "123",
+  "role": "admin"
+}
+```
+
+- `/session-login` **POST**
+```json
+{
+  "id": "session id goes here"
+}
+
+```
+
+- `/login` **POST**
+```json
+{
+  "name": "alaanvv",
+  "password": "123",
+}
+```
+
+- `/edit-user/:id` **PUT**
+```json
+{
+  "name": "alaanvv",
+  "password": "123",
+  "role": "admin"
+}
+```
+
+- `/all-users` **GET**
+
+- `/user/:id` **DELETE**
 
 # Todo
 > Backend event management

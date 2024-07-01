@@ -1,3 +1,4 @@
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <span on:click={_ => dispatch('click')} class='material-symbols-outlined'> {i} </span>
 
 <script>

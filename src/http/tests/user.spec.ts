@@ -1,0 +1,74 @@
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import request from 'supertest'
+import { app } from '../app'
+
+describe('Event and Ticket API', _ => {
+  let user_id: string
+
+  beforeAll(async _ => await app.ready())
+  afterAll(async  _ => await app.close())
+
+  describe('POST /user', _ => {
+    it('should be able to create an user', async _ => {
+      const res = await request(app.server).post('/user').send({
+        name: 'alaanvv',
+        password: 'admin123',
+        role: 'admin'
+      })
+
+      expect(res.statusCode).toEqual(201)
+      expect(res.body).toEqual(expect.objectContaining({ id: expect.any(String) }))
+      user_id = res.body.id
+    })
+  })
+
+  describe('POST /login', _ => {
+    it('should be able to login', async _ => {
+      const res = await request(app.server).post('/login').send({
+        name: 'alaanvv',
+        password: 'admin123',
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.body).toEqual(expect.objectContaining({ role: expect.any(String) }))
+    })
+
+    it('shouldn\'t be able to login with invalid password', async _ => {
+      const res = await request(app.server).post('/login').send({
+        name: 'alaanvv',
+        password: 'admin321',
+      })
+
+      expect(res.statusCode).toEqual(400)
+    })
+  })
+
+  describe('PUT /edit-user/:id', _ => {
+    it('should be able to edit an user', async _ => {
+      const res = await request(app.server).put(`/edit-user/${user_id}`).send({
+        name: 'alan vale',
+        password: 'portaria123',
+        role: 'portaria'
+      })
+
+      expect(res.statusCode).toEqual(204)
+    })
+  })
+
+  describe('GET /all-users', _ => {
+    it('should get all users', async _ => {
+      const res = await request(app.server).get('/all-users')
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.body.users).toEqual(expect.any(Array))
+    })
+  })
+
+  describe('DELETE /user/:id', _ => {
+    it('should delete an user by id', async _ => {
+      const res = await request(app.server).delete(`/user/${user_id}`)
+
+      expect(res.statusCode).toEqual(204)
+    })
+  })
+})
