@@ -76,7 +76,8 @@ model TicketInstance {
 
   ticket         Ticket   @relation(fields: [ticket_id], references: [id])
   @@map("ticket_instances")
-}```
+}
+```
 
 # Routes
 
@@ -258,10 +259,10 @@ model TicketInstance {
 - [x] Delete
 
 > Backend ticket instance
-- [ ] Ticket instance
+- [x] Ticket instance
     - [x] Create database table (price_paid, validated_at)
     - [x] Create route to create it
-        - [ ] Decrease amount on stock
+        - [x] Decrease amount on stock
     - [x] Write tests here
     - [x] Route to validate it
 
