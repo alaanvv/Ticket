@@ -22,13 +22,22 @@
   <button type='submit' disabled={!ticket_id}> Criar Ingresso Teste </button>
 </form>
 
+{#if ticket_instance.id}
+  <div class='hr' />
+  <img src={ticket_instance.qr} alt='QR Code' />
+  <p class='code t-w-icon'> {ticket_instance.id} <Icon on:click={copy_to_clipboard} i='content_copy' /> </p>
+{/if}
+
 <script>
+  import Icon from '../components/Icon.svelte'
   import { logged_user } from '../store.js'
   import { onMount } from 'svelte'
+  import QRCode from 'qrcode'
 
   let events = []
   let tickets = []
   let event_id, ticket_id, is_half
+  let ticket_instance = {}
 
   onMount(async _ => {
     const res = await fetch('http://localhost:3333/all-events')
@@ -64,7 +73,12 @@
     })
     const { id } = await res.json()
 
-    console.log(id)
+    ticket_instance.qr = await QRCode.toDataURL(id)
+    ticket_instance.id = id
+  }
+
+  function copy_to_clipboard() {
+    navigator.clipboard.writeText(ticket_instance.id)
   }
 </script>
 
@@ -116,5 +130,30 @@
   button {
     background: var(--green);
     color: var(--bg0)
+  }
+
+  img {
+    display: block;
+
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .code {
+    display: inline-flex;
+    gap: 10px;
+
+    padding: 10px;
+
+    background: var(--bg0_h);
+    border-radius: 10px;
+  }
+
+  :global(.code span) {
+    cursor: pointer;
+  }
+
+  :global(.code span) {
+    cursor: pointer;
   }
 </style>

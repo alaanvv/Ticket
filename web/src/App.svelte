@@ -17,20 +17,22 @@
   import EventDetails  from './routes/EventDetails.svelte'
   import TicketDetails from './routes/TicketDetails.svelte'
   import Login         from './routes/Login.svelte'
+  import Verification  from './routes/Verification.svelte'
   import Test          from './routes/Test.svelte'
 
   import { curr_path, logged_user } from './store.js'
 
   let curr_route
   const routes = {
-    '':        ['Login',     Login,         0],
-    dashboard: ['Dashboard', Dashboard,     2],
-    usuarios:  ['Usuários',  Users,         2],
-    eventos:   ['Eventos',   Events,        2],
-    evento:    ['Evento',    EventDetails,  2],
-    ingresso:  ['Ingresso',  TicketDetails, 2],
-    teste:     ['Teste',     Test,          1],
-    not_found: ['404',       undefined,     1]
+    '':          ['Login',       Login,         0],
+    dashboard:   ['Dashboard',   Dashboard,     2],
+    usuarios:    ['Usuários',    Users,         2],
+    eventos:     ['Eventos',     Events,        2],
+    evento:      ['Evento',      EventDetails,  2],
+    ingresso:    ['Ingresso',    TicketDetails, 2],
+    verificacao: ['Verificação', Verification,  1],
+    teste:       ['Teste',       Test,          1],
+    not_found:   ['404',         undefined,     1]
   }
 
   $: {

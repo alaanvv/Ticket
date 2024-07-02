@@ -30,6 +30,7 @@ html, body {
   color: var(--fg0) !important;
 
   background-color: var(--bg0_h) !important;
+  image-rendering: pixelated;
   overflow: hidden;
 }
 
