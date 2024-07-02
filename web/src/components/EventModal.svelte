@@ -100,7 +100,7 @@
     }
 
     if (!data) {
-      const res = await fetch('http://localhost:3333/events', {
+      const res = await fetch('http://192.168.1.106:3333/events', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
@@ -111,7 +111,7 @@
     }
     else {
       const id = data.id
-      await fetch(`http://localhost:3333/edit-event/${id}`, {
+      await fetch(`http://192.168.1.106:3333/edit-event/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(validated_data)

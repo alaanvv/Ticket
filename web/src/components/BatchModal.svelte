@@ -51,7 +51,7 @@
       delete batch.half_price_in_cents
 
     if (!data) {
-      await fetch(`http://localhost:3333/create-batches/${ticket_id}`, {
+      await fetch(`http://192.168.1.106:3333/create-batches/${ticket_id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify({ batches: [batch] })
@@ -63,7 +63,7 @@
       if (batch.amount == started_with_amount)
         delete batch.amount
 
-      await fetch(`http://localhost:3333/edit-batch/${data.id}`, {
+      await fetch(`http://192.168.1.106:3333/edit-batch/${data.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(batch)

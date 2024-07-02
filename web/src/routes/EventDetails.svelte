@@ -83,17 +83,17 @@
   }
 
   async function load_event() {
-    let res = await fetch(`http://localhost:3333/events/${id}`)
+    let res = await fetch(`http://192.168.1.106:3333/events/${id}`)
     event = (await res.json()).event
 
-    res = await fetch(`http://localhost:3333/event-tickets/${id}`)
+    res = await fetch(`http://192.168.1.106:3333/event-tickets/${id}`)
     tickets = (await res.json()).tickets
   }
 
   async function delete_event() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://localhost:3333/event/${id}`, {
+    await fetch(`http://192.168.1.106:3333/event/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
     })

@@ -35,7 +35,7 @@
     e.preventDefault()
 
     if (!data) {
-      const res = await fetch(`http://localhost:3333/ticket/${event_id}`, {
+      const res = await fetch(`http://192.168.1.106:3333/ticket/${event_id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(ticket)
@@ -45,7 +45,7 @@
     }
     else {
       const id = data.id
-      await fetch(`http://localhost:3333/edit-ticket/${id}`, {
+      await fetch(`http://192.168.1.106:3333/edit-ticket/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(ticket)

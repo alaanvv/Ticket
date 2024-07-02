@@ -12,7 +12,7 @@
   let is_active
 
   onMount(async _ => {
-    let res = await fetch(`http://localhost:3333/active-batch/${ticket.id}`)
+    let res = await fetch(`http://192.168.1.106:3333/active-batch/${ticket.id}`)
     is_active = Boolean((await res.json()).batch)
   })
 </script>

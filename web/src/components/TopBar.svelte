@@ -49,4 +49,10 @@
   :global(.row span) {
     cursor: pointer;
   }
+
+  @media screen and (max-width: 768px) {
+    .bar {
+      margin: 0;
+    }
+  }
 </style>

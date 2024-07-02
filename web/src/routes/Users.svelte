@@ -22,7 +22,7 @@
   let user_modal
 
   async function load_users() {
-    let res = await fetch('http://localhost:3333/all-users')
+    let res = await fetch('http://192.168.1.106:3333/all-users')
     users = (await res.json()).users
   }
 

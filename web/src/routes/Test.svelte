@@ -40,17 +40,17 @@
   let ticket_instance = {}
 
   onMount(async _ => {
-    const res = await fetch('http://localhost:3333/all-events')
+    const res = await fetch('http://192.168.1.106:3333/all-events')
     events = (await res.json()).events
   })
 
   async function load_tickets() {
-    let res = await fetch(`http://localhost:3333/event-tickets/${event_id}`)
+    let res = await fetch(`http://192.168.1.106:3333/event-tickets/${event_id}`)
     let all_tickets = (await res.json()).tickets
 
     tickets = (await Promise.all(
       all_tickets.map(async t => {
-        const res = await fetch(`http://localhost:3333/ticket-batches/${t.id}`)
+        const res = await fetch(`http://192.168.1.106:3333/ticket-batches/${t.id}`)
         const data  = await res.json()
         return { ...t, has_batch: data.batches.length }
       })
@@ -63,10 +63,10 @@
   async function submitForm(e) {
     e.preventDefault()
 
-    let res = await fetch(`http://localhost:3333/ticket-batches/${ticket_id}`)
+    let res = await fetch(`http://192.168.1.106:3333/ticket-batches/${ticket_id}`)
     const batch_id = (await res.json()).batches[0].id
 
-    res = await fetch(`http://localhost:3333/ticket-instance/${batch_id}`, {
+    res = await fetch(`http://192.168.1.106:3333/ticket-instance/${batch_id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${logged_user.session_id}` },
       body: JSON.stringify({ price_in_cents: 0, is_half, is_test: true })

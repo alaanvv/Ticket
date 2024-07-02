@@ -6,7 +6,7 @@
     <div class='hr' />
     <svelte:component this={routes[curr_route][1]} />
   </main>
-</div>
+    </div>
 
 <script>
   import TopBar        from './components/TopBar.svelte'
@@ -69,5 +69,17 @@
 
     max-height: 88%;
     margin: 15px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .page {
+      flex-direction: column;
+    }
+
+    main {
+      width: auto;
+      margin: 0;
+      padding-bottom: 50px;
+    }
   }
 </style>

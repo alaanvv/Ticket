@@ -1,5 +1,5 @@
 {#if $logged_user}
-  <div class='col'>
+  <div class='col sidebar'>
     {#if $logged_user.role == 'admin'}
       <h2> Admin </h2>
 
@@ -76,5 +76,34 @@
   p.active {
     background: var(--bg1);
     color: var(--fg1) !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    .sidebar {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      padding: 0;
+
+      overflow-x: scroll;
+    }
+
+    .sidebar h2 {
+      display: none;
+    }
+
+    .sidebar ul {
+      display: flex;
+      flex-direction: row;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar li {
+      margin-right: 10px;
+    }
   }
 </style>

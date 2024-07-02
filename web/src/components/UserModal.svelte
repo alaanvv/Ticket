@@ -49,7 +49,7 @@
     e.preventDefault()
 
     if (!data) {
-      await fetch(`http://localhost:3333/user`, {
+      await fetch(`http://192.168.1.106:3333/user`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(user)
@@ -58,7 +58,7 @@
       dispatch('update')
     }
     else {
-      await fetch(`http://localhost:3333/edit-user/${data.id}`, {
+      await fetch(`http://192.168.1.106:3333/edit-user/${data.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(user)

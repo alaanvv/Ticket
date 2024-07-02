@@ -28,7 +28,7 @@
     const session_id = localStorage.getItem('session_id')
     if (!session_id) return
 
-    const res = await fetch(`http://localhost:3333/session-login`, {
+    const res = await fetch(`http://192.168.1.106:3333/session-login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: session_id })
@@ -48,7 +48,7 @@
     e.preventDefault()
     error = ''
 
-    const res = await fetch(`http://localhost:3333/login`, {
+    const res = await fetch(`http://192.168.1.106:3333/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user)

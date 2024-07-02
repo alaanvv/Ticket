@@ -46,7 +46,7 @@
   async function delete_user() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://localhost:3333/user/${user.id}`, {
+    await fetch(`http://192.168.1.106:3333/user/${user.id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
     })

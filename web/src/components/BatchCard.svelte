@@ -36,7 +36,7 @@
   async function delete_batch() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://localhost:3333/batch/${batch.id}`, {
+    await fetch(`http://192.168.1.106:3333/batch/${batch.id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
     })

@@ -54,13 +54,13 @@
   let batches = []
 
   async function load_ticket() {
-    let res = await fetch(`http://localhost:3333/ticket/${id}`)
+    let res = await fetch(`http://192.168.1.106:3333/ticket/${id}`)
     ticket = (await res.json()).ticket
 
-    res = await fetch(`http://localhost:3333/ticket-batches/${id}`)
+    res = await fetch(`http://192.168.1.106:3333/ticket-batches/${id}`)
     batches = (await res.json()).batches
 
-    res = await fetch(`http://localhost:3333/events/${ticket.event_id}`)
+    res = await fetch(`http://192.168.1.106:3333/events/${ticket.event_id}`)
     event_name = (await res.json()).event.name
 
     is_active = false
@@ -75,7 +75,7 @@
   async function delete_ticket() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://localhost:3333/ticket/${id}`, { method: 'DELETE' })
+    await fetch(`http://192.168.1.106:3333/ticket/${id}`, { method: 'DELETE' })
     navigate(`/evento/${ticket.event_id}`)
   }
 
