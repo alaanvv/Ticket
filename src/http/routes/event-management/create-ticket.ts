@@ -12,7 +12,7 @@ export default async function(app: FastifyInstance) {
       name:      z.string(),
       allow_half: z.coerce.boolean(),
       batches:   z.optional(z.object({
-        amount:           z.coerce.number().int().min(1),
+        amount:           z.coerce.number().int().min(0),
         price_in_cents:     z.coerce.number().int().min(1),
         half_price_in_cents: z.optional(z.coerce.number().int().min(1))
       }).array())
