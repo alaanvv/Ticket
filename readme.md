@@ -26,18 +26,19 @@ model Ticket {
   created_at DateTime @default(now())
 
   event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
-  batches Batch[]
+  batches    Batch[]
+  instances  TicketInstance[]
   @@map("tickets")
 }
 
 model Batch {
-  id                  String     @id @default(cuid())
+  id                  String   @id @default(cuid())
   ticket_id           String
   price_in_cents      Decimal
   half_price_in_cents Decimal?
   amount              Int
   active              Boolean  @default(true)
-  created_at          DateTime   @default(now())
+  created_at          DateTime @default(now())
 
   ticket              Ticket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
   @@map("batches")
@@ -48,10 +49,34 @@ model User {
   name       String
   password   String
   role       String
+  editable   Boolean  @default(true)
   created_at DateTime @default(now())
+
+  sessions Session[]
   @@map("users")
 }
-```
+
+model Session {
+  id         String   @id @default(cuid())
+  user_id    String
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@map("sessions")
+}
+
+model TicketInstance {
+  id             String   @id @default(cuid())
+  ticket_id      String
+  price_in_cents Decimal
+  is_half        Boolean
+  is_test        Boolean?
+  validated_at   DateTime?
+  created_at     DateTime @default(now())
+
+  ticket         Ticket   @relation(fields: [ticket_id], references: [id])
+  @@map("ticket_instances")
+}```
 
 # Routes
 
@@ -235,10 +260,10 @@ model User {
 > Backend ticket instance
 - [ ] Ticket instance
     - [x] Create database table (price_paid, validated_at)
-    - [ ] Create route to create it
+    - [x] Create route to create it
         - [ ] Decrease amount on stock
-    - [ ] Write tests here
-    - [ ] Route to validate it
+    - [x] Write tests here
+    - [x] Route to validate it
 
 > Frontend ticket validation
 - [ ] Be able to validate through text

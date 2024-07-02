@@ -3,7 +3,7 @@ import { app, load_routes } from '../app'
 import request from 'supertest'
 
 describe('Ticket Instance API', _ => {
-  let ticket_id: string, ticket_instance_id: string
+  let batch_id: string, ticket_instance_id: string
 
   beforeAll(async _ => {
     await load_routes()
@@ -18,20 +18,21 @@ describe('Ticket Instance API', _ => {
       date: new Date(Number(new Date()) + 1e3)
     })).body.id
 
-    ticket_id = (await request(app.server).post(`/ticket/${event_id}`).set('Authorization', 'Bearer test').send({
+    const ticket_id = (await request(app.server).post(`/ticket/${event_id}`).set('Authorization', 'Bearer test').send({
       name: 'Pista',
       allow_half: 0,
       batches: [
-        { price_in_cents: 20000, amount: 200 },
-        { price_in_cents: 30000, amount: 100 }
+        { price_in_cents: 20000, amount: 1 },
       ]
     })).body.id
+
+    batch_id = (await request(app.server).get(`/ticket-batches/${ticket_id}`)).body.batches[0].id
   })
   afterAll(async  _ => await app.close())
 
   describe('POST /ticket-instance/:id', _ => {
     it('should be able to create a ticket instance', async _ => {
-      const res = await request(app.server).post(`/ticket-instance/${ticket_id}`).send({
+      const res = await request(app.server).post(`/ticket-instance/${batch_id}`).send({
         price_in_cents: 15e3,
         is_half: true
       })

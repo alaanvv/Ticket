@@ -12,7 +12,8 @@ export default async function(app: FastifyInstance) {
     if (!ticket_instance)
       throw new NotFoundError('Ticket instance not found.')
 
-    const ticket = await prisma.ticket.findUnique({ where: { id: ticket_instance.ticket_id } })
+    const batch  = await prisma.batch.findUnique({  where: { id: ticket_instance.batch_id } })
+    const ticket = await prisma.ticket.findUnique({ where: { id: batch?.ticket_id } })
     const event  = await prisma.event.findUnique({  where: { id: ticket?.event_id } })
 
     return res.status(200).send({ ticket_instance, ticket, event })

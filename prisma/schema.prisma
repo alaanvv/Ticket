@@ -34,7 +34,6 @@ model Ticket {
 
   event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
   batches    Batch[]
-  instances  TicketInstance[]
   @@map("tickets")
 }
 
@@ -48,6 +47,7 @@ model Batch {
   created_at          DateTime @default(now())
 
   ticket              Ticket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  instances           TicketInstance[]
   @@map("batches")
 }
 
@@ -74,12 +74,13 @@ model Session {
 
 model TicketInstance {
   id             String   @id @default(cuid())
-  ticket_id      String
+  batch_id       String
   price_in_cents Decimal
   is_half        Boolean
+  is_test        Boolean?
   validated_at   DateTime?
   created_at     DateTime @default(now())
 
-  ticket         Ticket   @relation(fields: [ticket_id], references: [id])
+  batch          Batch    @relation(fields: [batch_id], references: [id])
   @@map("ticket_instances")
 }
