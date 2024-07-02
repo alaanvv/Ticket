@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify'
-import { BadRequestError, NotFoundError, ForbiddenError } from '../errors'
-import { prisma } from '../../lib/prisma'
-import { get_auth } from '../utils/auth'
+import { BadRequestError, NotFoundError, ForbiddenError } from '../../errors'
+import { prisma } from '../../../lib/prisma'
+import { get_auth } from '../../utils/auth'
 import { z } from 'zod'
 
-export async function sessionLogin(app: FastifyInstance) {
+export default async function(app: FastifyInstance) {
   app.post('/session-login', async (req, res) => {
     if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
 

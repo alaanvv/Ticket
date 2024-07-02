@@ -1,10 +1,10 @@
-import { deleteTicket } from '../utils/recursive-deletion'
-import { BadRequestError, ForbiddenError } from '../errors'
+import { deleteTicket } from '../../utils/recursive-deletion'
+import { BadRequestError, ForbiddenError } from '../../errors'
 import { FastifyInstance } from 'fastify'
-import { get_auth } from '../utils/auth'
+import { get_auth } from '../../utils/auth'
 import { z } from 'zod'
 
-export async function removeTicket(app: FastifyInstance) {
+export default async function(app: FastifyInstance) {
   app.delete('/ticket/:id', async (req, res) => {
     if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
 

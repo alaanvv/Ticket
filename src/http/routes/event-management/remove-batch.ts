@@ -1,10 +1,10 @@
-import { deleteBatch } from '../utils/recursive-deletion'
-import { BadRequestError, ForbiddenError } from '../errors'
+import { deleteBatch } from '../../utils/recursive-deletion'
+import { BadRequestError, ForbiddenError } from '../../errors'
 import { FastifyInstance } from 'fastify'
-import { get_auth } from '../utils/auth'
+import { get_auth } from '../../utils/auth'
 import { z } from 'zod'
 
-export async function removeBatch(app: FastifyInstance) {
+export default async function(app: FastifyInstance) {
   app.delete('/batch/:id', async (req, res) => {
     if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
 

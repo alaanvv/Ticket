@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify'
-import { BadRequestError } from '../errors'
-import { prisma } from '../../lib/prisma'
+import { BadRequestError } from '../../errors'
+import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 
-export async function login(app: FastifyInstance) {
+export default async function(app: FastifyInstance) {
   app.post('/login', async (req, res) => {
     const bodySchema = z.object({
       name:     z.string(),

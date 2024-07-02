@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify'
-import { NotFoundError } from '../errors'
-import { prisma } from '../../lib/prisma'
+import { NotFoundError } from '../../errors'
+import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 
-export async function getBatch(app: FastifyInstance) {
+export default async function(app: FastifyInstance) {
   app.get('/batch/:id', async (req, res) => {
     const paramSchema = z.object({ id: z.string().cuid()  })
     const { id } = paramSchema.parse(req.params)

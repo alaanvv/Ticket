@@ -234,7 +234,7 @@ model User {
 
 > Backend ticket instance
 - [ ] Ticket instance
-    - [ ] Create database table (status, price_paid, validated_at)
+    - [x] Create database table (price_paid, validated_at)
     - [ ] Create route to create it
         - [ ] Decrease amount on stock
     - [ ] Write tests here

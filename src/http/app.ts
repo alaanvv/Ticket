@@ -1,59 +1,19 @@
-import { createEvent } from './routes/create-event'
-import { createTicket } from './routes/create-ticket'
-import { createBatches } from './routes/create-batches'
-import { editEvent } from './routes/edit-event'
-import { editTicket } from './routes/edit-ticket'
-import { editBatch } from './routes/edit-batch'
-import { getEvent } from './routes/get-event'
-import { getAllEvents } from './routes/get-all-events'
-import { getEventTickets } from './routes/get-event-tickets'
-import { getTicket } from './routes/get-ticket'
-import { getTicketBatches } from './routes/get-ticket-batches'
-import { activeBatch } from './routes/active-batch'
-import { getBatch } from './routes/get-batch'
-import { removeEvent } from './routes/remove-event'
-import { removeTicket } from './routes/remove-ticket'
-import { removeBatch } from './routes/remove-batch'
-
-import { createUser } from './routes/create-user'
-import { editUser } from './routes/edit-user'
-import { getAllUsers } from './routes/get-all-users'
-import { removeUser } from './routes/remove-user'
-import { login } from './routes/login'
-import { sessionLogin } from './routes/session-login'
-
 import { BadRequestError, NotFoundError, ForbiddenError } from './errors'
 import { ZodError } from 'zod'
 import { env } from '../env'
 import fastify from 'fastify'
+import {glob} from 'glob'
+import path from 'path'
 
 export const app = fastify()
 
 import cors from '@fastify/cors'
 app.register(cors, { origin: '*' })
 
-app.register(createEvent)
-app.register(createTicket)
-app.register(createBatches)
-app.register(editEvent)
-app.register(editTicket)
-app.register(editBatch)
-app.register(getEvent)
-app.register(getAllEvents)
-app.register(getEventTickets)
-app.register(getTicket)
-app.register(getTicketBatches)
-app.register(activeBatch)
-app.register(getBatch)
-app.register(removeEvent)
-app.register(removeTicket)
-app.register(removeBatch)
-app.register(createUser)
-app.register(editUser)
-app.register(getAllUsers)
-app.register(removeUser)
-app.register(login)
-app.register(sessionLogin)
+export async function load_routes() {
+  const routes = glob.sync(path.join(__dirname, './routes/*/*.ts'))
+  await Promise.all(routes.map(async path => app.register((await import(path)).default)))
+}
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError)

@@ -1,11 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import request from 'supertest'
-import { app } from '../app'
+import { app, load_routes } from '../app'
 
 describe('Event and Ticket API', _ => {
   let event_id: string, ticket_id: string, batch_id: string
 
-  beforeAll(async _ => await app.ready())
+  beforeAll(async _ => {
+    await load_routes()
+    await app.ready()
+  })
   afterAll(async  _ => await app.close())
 
   describe('POST /events', _ => {

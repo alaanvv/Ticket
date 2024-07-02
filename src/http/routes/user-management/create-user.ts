@@ -1,10 +1,10 @@
-import { ForbiddenError } from '../errors'
+import { ForbiddenError } from '../../errors'
 import { FastifyInstance } from 'fastify'
-import { prisma } from '../../lib/prisma'
-import { get_auth } from '../utils/auth'
+import { prisma } from '../../../lib/prisma'
+import { get_auth } from '../../utils/auth'
 import { z } from 'zod'
 
-export async function createUser(app: FastifyInstance) {
+export default async function(app: FastifyInstance) {
   app.post('/user', async (req, res) => {
     if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
 
