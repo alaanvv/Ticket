@@ -28,15 +28,15 @@
     const session_id = localStorage.getItem('session_id')
     if (!session_id) return
 
-    const _res = await fetch(`http://localhost:3333/session-login`, {
+    const res = await fetch(`http://localhost:3333/session-login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: session_id })
     })
-    const res = await _res.json()
+    const data = await res.json()
 
-    if (_res.ok)
-      logged_user.set({ ...res, session_id })
+    if (res.ok)
+      logged_user.set({ ...data, session_id })
   })
 
   let showPassword = false
@@ -48,21 +48,19 @@
     e.preventDefault()
     error = ''
 
-    const _res = await fetch(`http://localhost:3333/login`, {
+    const res = await fetch(`http://localhost:3333/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(user)
     })
-    const res = await _res.json()
+    const data = await res.json()
 
-    if (_res.ok) {
-      localStorage.setItem('session_id', res.session_id)
-      return logged_user.set(res)
+    if (res.ok) {
+      localStorage.setItem('session_id', data.session_id)
+      return logged_user.set(data)
     }
 
     error = 'Credenciais inválidas'
-    console.log(res)
-
     user.name = ''
     user.password = ''
   }

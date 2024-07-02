@@ -17,38 +17,33 @@
   import EventDetails  from './routes/EventDetails.svelte'
   import TicketDetails from './routes/TicketDetails.svelte'
   import Login         from './routes/Login.svelte'
+  import Test          from './routes/Test.svelte'
 
   import { curr_path, logged_user } from './store.js'
 
   let curr_route
   const routes = {
-    '':        ['Login',     Login,         'any'  ],
-    dashboard: ['Dashboard', Dashboard,     'admin'],
-    usuarios:  ['Usuários',  Users,         'admin'],
-    eventos:   ['Eventos',   Events,        'admin'],
-    evento:    ['Evento',    EventDetails,  'admin'],
-    ingresso:  ['Ingresso',  TicketDetails, 'admin'],
-    not_found: ['404',       undefined,     'any'  ]
+    '':        ['Login',     Login,         0],
+    dashboard: ['Dashboard', Dashboard,     2],
+    usuarios:  ['Usuários',  Users,         2],
+    eventos:   ['Eventos',   Events,        2],
+    evento:    ['Evento',    EventDetails,  2],
+    ingresso:  ['Ingresso',  TicketDetails, 2],
+    teste:     ['Teste',     Test,          1],
+    not_found: ['404',       undefined,     1]
   }
 
   $: {
     curr_route = $curr_path.split('/')[1]
     if (!routes[curr_route]) curr_route = 'not_found'
 
-    if (curr_route != '' && !$logged_user)
-      curr_route = ''
+    const user_level = { 'admin': 2, 'portaria': 1, 'undefined': 0 }[$logged_user?.role]
 
-    let allowed_role = routes[curr_route][2]
+    if (!user_level)                        curr_route = ''
+    if (user_level == 2 && curr_route == '') curr_route = 'dashboard'
+    if (user_level == 1 && curr_route == '') curr_route = 'verificacao'
 
-    if (allowed_role == 'admin' && $logged_user.role != 'admin')
-      curr_route = 'not_found'
-
-    if ($logged_user?.role == 'admin' && curr_route == '')
-      curr_route = 'dashboard'
-    if ($logged_user?.role == 'portaria' && curr_route == '')
-      curr_route = 'verificacao'
-
-    if (!routes[curr_route]) curr_route = 'not_found'
+    if (user_level < routes[curr_route][2] || !routes[curr_route]) curr_route = 'not_found'
   }
 </script>
 

@@ -62,8 +62,9 @@ input:focus, textarea:focus {
   border-color: var(--gray);
 }
 
-input:disabled, textarea:disabled {
+input:disabled, textarea:disabled, select:disabled {
 	color: #ccc;
+  cursor: not-allowed !important;
 }
 
 label {
