@@ -1,23 +1,73 @@
-<p class='desktop-only'> Essa página deve ser usada no celular </p>
-
 <div hidden={cam_loaded}> {loading_message} </div>
 <canvas {width} {height} class:reading={reading} hidden={!cam_loaded} />
 
 <input class:reading={reading} on:input={update_code} placeholder='Leia o QR ou digite' />
-<button disabled={!code} on:click={validate}> Validar </button>
+<button disabled={!code} on:click={get_ticket_instance}> Validar </button>
+
+{#if validated_data}
+  <Modal on:close={_ => validated_data = undefined}>
+    <div class:alert={validated_data.ticket_instance.validated_at}>
+      <h2> {validated_data.event.name} </h2>
+      <h3> {validated_data.ticket.name} - {validated_data.ticket_instance.is_half ? 'Meia' : 'Inteira'} </h3>
+      {#if validated_data.ticket_instance.is_test} <p class='alert'> INGRESSO TESTE </p> {/if}
+        {#if validated_data.ticket_instance.validated_at}
+          <p class='alert'> JÁ USADO: {format_date(validated_data.ticket_instance.validated_at)} </p>
+        {/if}
+
+        {#if !validated_data.ticket_instance.validated_at}
+          <button on:click={validate}> Confirmar </button>
+        {/if}
+        <button class='cancel' on:click={_ => validated_data = undefined}> Cancelar </button>
+    </div>
+  </Modal>
+{/if}
 
 <script>
+  import Modal from '../components/Modal.svelte'
+
   import { draw_square } from '../utils/misc'
   import { onMount } from 'svelte'
   import jsQR from 'jsqr'
 
   let canvas, cam_loaded, width, height, reading
   let code = ''
+  let validated_data
   let video = document.createElement('video')
   let loading_message = '🎥 Câmera inacessível, tente recarregar a página'
 
   function update_code() {
     code = document.querySelector('input').value
+  }
+
+  function format_date(date_string) {
+    const date = new Date(date_string)
+    const now  = new Date()
+
+    const secs_diff = (now - date) / 1e3
+    const mins_diff = secs_diff / 60
+
+    if      (secs_diff < 60) return `${parseInt(secs_diff)} segundos atrás`
+    else if (mins_diff < 60) return `${parseInt(mins_diff)} minuto${mins_diff > 1 ? 's' : ''} atrás`
+
+    const is_today = date.getDate() == now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()
+
+    const formatter = new Intl.DateTimeFormat('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        day:    '2-digit',
+        month:  '2-digit',
+        hour:   '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    })
+    const parts = formatter.formatToParts(date)
+
+    const day    = parts.find(part => part.type == 'day').value
+    const month  = parts.find(part => part.type == 'month').value
+    const hour   = parts.find(part => part.type == 'hour').value
+    const minute = parts.find(part => part.type == 'minute').value
+
+    return `${!is_today ? `${day}/${month} ` : ''}${hour}:${minute}`
   }
 
   function tick() {
@@ -39,33 +89,35 @@
       draw_square(canvas, read_code.location.topLeftCorner, read_code.location.topRightCorner, read_code.location.bottomRightCorner, read_code.location.bottomLeftCorner, '#00FF00')
     }
 
-    requestAnimationFrame(tick)
+    setTimeout(_ => requestAnimationFrame(tick), 50)
+  }
+
+  async function get_ticket_instance() {
+    const res = await fetch(`http://192.168.1.106:3333/ticket-instance/${code}`)
+    validated_data = await res.json()
   }
 
   async function validate() {
-    // TODO
+    await fetch(`http://192.168.1.106:3333/validate-ticket-instance/${code}`, { method: 'PUT' })
+    validated_data = undefined
   }
 
-  onMount(_ => {
+  onMount(async _ => {
     canvas = document.querySelector('canvas').getContext('2d')
 
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(function(stream) {
-      video.srcObject = stream
-      video.setAttribute('playsinline', true)
-      video.play()
-      requestAnimationFrame(tick)
-      loading_message = '⌛ Loading video...'
-    })
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+    video.srcObject = stream
+    video.setAttribute('playsinline', true)
+    video.play()
+    requestAnimationFrame(tick)
+    loading_message = '⌛ Loading video...'
   })
 </script>
 
 <style>
-  .desktop-only {
-    color: var(--bg1);
-  }
-
   canvas {
     border: 4px solid var(--gray);
+    max-width: 100%;
   }
 
   input, button {
@@ -88,5 +140,24 @@
   button {
     background: var(--green);
     color: var(--fg1)
+  }
+
+  .cancel {
+    background: var(--red);
+  }
+
+  h3 {
+    display: inline-block;
+    width: fit-content;
+    margin: 0 auto;
+    background: var(--bg0_h);
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 20px;
+  }
+
+  .alert {
+    font-weight: bold;
+    color: var(--red);
   }
 </style>

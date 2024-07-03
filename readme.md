@@ -262,11 +262,10 @@ model TicketInstance {
 
 > Frontend ticket validation
 
-- [ ] Be able to validate through text
-- [ ] Validate through QR
-- [ ] Download to validate offline
-     - [ ] Be able to sync it
-         - [ ] Create action list
+- [x] Be able to validate through text
+- [x] Validate through QR
+- [ ] Validation history
+    - [ ] Reactivate a ticket
 - [ ] Rewatch Death Note (I'll forward this)
 
 ---
