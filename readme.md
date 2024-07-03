@@ -1,4 +1,10 @@
-# Event-management
+# Summary
+- [Event Management](#event-management)
+- [User Management](#user-management)
+- [Ticket Instance](#ticket-instance)
+- [Todo](#todo)
+
+# Event Management
 ```prisma
 model Event {
   id          String   @id @default(cuid())
@@ -126,7 +132,7 @@ model Batch {
 
 - `/ticket/:id` **DELETE**
 
-# User-management
+# User Management
 ```prisma
 model User {
   id         String   @id @default(cuid())
@@ -189,7 +195,7 @@ model Session {
 
 - `/user/:id` **DELETE**
 
-# Ticket instance
+# Ticket Instance
 ```prisma
 model TicketInstance {
   id             String   @id @default(cuid())
@@ -209,9 +215,9 @@ model TicketInstance {
 - `/ticket-instance/:id` **POST**
 ```json
 {
-  price_in_cents: 0,
-  is_half: true,
-  is_test: true
+  "price_in_cents": 0,
+  "is_half": true,
+  "is_test": true
 }
 ```
 
@@ -221,6 +227,7 @@ model TicketInstance {
 
 # Todo
 > Event management
+
 `Back-end`
 - [x] Setup database
 - [x] Create routes
@@ -233,6 +240,7 @@ model TicketInstance {
 - [x] Modifying batches
 
 > User management
+
 `Back-end`
 - [x] User table
 - [x] Session system
@@ -245,6 +253,7 @@ model TicketInstance {
 - [x] Delete
 
 > Ticket instance
+
 `Back-end`
 - [x] Ticket instance
 - [x] Route to create
@@ -252,6 +261,7 @@ model TicketInstance {
 - [x] Write tests here
 
 > Frontend ticket validation
+
 - [ ] Be able to validate through text
 - [ ] Validate through QR
 - [ ] Download to validate offline
