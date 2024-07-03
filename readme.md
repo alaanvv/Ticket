@@ -1,4 +1,4 @@
-# Database
+# Event-management
 ```prisma
 model Event {
   id          String   @id @default(cuid())
@@ -27,7 +27,6 @@ model Ticket {
 
   event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
   batches    Batch[]
-  instances  TicketInstance[]
   @@map("tickets")
 }
 
@@ -41,48 +40,12 @@ model Batch {
   created_at          DateTime @default(now())
 
   ticket              Ticket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  instances           TicketInstance[]
   @@map("batches")
-}
-
-model User {
-  id         String   @id @default(cuid())
-  name       String
-  password   String
-  role       String
-  editable   Boolean  @default(true)
-  created_at DateTime @default(now())
-
-  sessions Session[]
-  @@map("users")
-}
-
-model Session {
-  id         String   @id @default(cuid())
-  user_id    String
-  created_at DateTime @default(now())
-
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  @@map("sessions")
-}
-
-model TicketInstance {
-  id             String   @id @default(cuid())
-  ticket_id      String
-  price_in_cents Decimal
-  is_half        Boolean
-  is_test        Boolean?
-  validated_at   DateTime?
-  created_at     DateTime @default(now())
-
-  ticket         Ticket   @relation(fields: [ticket_id], references: [id])
-  @@map("ticket_instances")
 }
 ```
 
-# Routes
-
-> Event-related
-
+### Routes
 - `/events` **POST**
 ```json
 {
@@ -163,8 +126,31 @@ model TicketInstance {
 
 - `/ticket/:id` **DELETE**
 
-> User management
+# User-management
+```prisma
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  password   String
+  role       String
+  editable   Boolean  @default(true)
+  created_at DateTime @default(now())
 
+  sessions Session[]
+  @@map("users")
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  user_id    String
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@map("sessions")
+}
+```
+
+### Routes
 - `/user` **POST**
 ```json
 {
@@ -203,68 +189,67 @@ model TicketInstance {
 
 - `/user/:id` **DELETE**
 
+# Ticket instance
+```prisma
+model TicketInstance {
+  id             String   @id @default(cuid())
+  batch_id       String
+  price_in_cents Decimal
+  is_half        Boolean
+  is_test        Boolean?
+  validated_at   DateTime?
+  created_at     DateTime @default(now())
+
+  batch          Batch    @relation(fields: [batch_id], references: [id])
+  @@map("ticket_instances")
+}
+```
+
+### Routes
+- `/ticket-instance/:id` **POST**
+```json
+{
+  price_in_cents: 0,
+  is_half: true,
+  is_test: true
+}
+```
+
+- `/ticket-instance/:id` **GET**
+
+- `/validate-ticket-instance/:id` **PUT**
+
 # Todo
-> Backend event management
+> Event management
+`Back-end`
 - [x] Setup database
-    - [x] Create relation in between an **event** and a **ticket**
-    - [x] Add **active** for all tables so data isn't deleted
-- [x] Finish routes
-    - [x] Add *edit* and *remove* routes for **event**
-    - [x] Create routes to read
-    - [x] Use the **active** from database tables
-    - [x] Non-dashboard operations shouldn't see unactive stuff `where { id, active: true}`
-    - [x] Routes to fetch stuff that belongs to other stuff
-        - [x] All tickets within an event
-        - [x] All batches within a ticket
-        - [x] Active batch of a ticket
-- [x] Create tests for every possibility on each route (so future fixes and features don't break)
-- [x] Add a starting date field for events
+- [x] Create routes
+- [x] Write tests
 
-> Frontend event management
+`Front-end`
 - [x] Visualize events
-    - [x] Have them visually
-    - [x] Have the true events from the database
-    - [x] Be able to search
-    - [x] Be able to open them in a separated page for more
 - [x] Modifying events
-    - [x] Create button (it's already there)
-    - [x] Delete button (easy as fuck)
-    - [x] Edit it's data
-    - [x] Refactor and stylize all this shit
-    - [x] Add tickets to it (I regret borning)
-    - [x] Add icons do everything I can
 - [x] Modifying tickets
-    - [x] Create a page to view a ticket details
-    - [x] Edit button
-    - [x] Delete button
-    - [x] Add batches to it (holy fuck)
 - [x] Modifying batches
-    - [x] Create button
-    - [x] Edit button
-    - [x] Delete button
 
-> Getting back to back
+> User management
+`Back-end`
 - [x] User table
-    - [x] GET
-    - [x] POST
-    - [x] PUT
-    - [x] DELETE
 - [x] Session system
-    - [x] Require session for modification requests
+- [x] Require authorization for some requests
 
-> Frontend user management
+`Front-end`
 - [x] Display users
 - [x] Create new ones
 - [x] Edit (not the main)
 - [x] Delete
 
-> Backend ticket instance
+> Ticket instance
+`Back-end`
 - [x] Ticket instance
-    - [x] Create database table (price_paid, validated_at)
-    - [x] Create route to create it
-        - [x] Decrease amount on stock
-    - [x] Write tests here
-    - [x] Route to validate it
+- [x] Route to create
+- [x] Route to validate
+- [x] Write tests here
 
 > Frontend ticket validation
 - [ ] Be able to validate through text
@@ -272,14 +257,9 @@ model TicketInstance {
 - [ ] Download to validate offline
      - [ ] Be able to sync it
          - [ ] Create action list
+- [ ] Rewatch Death Note (I'll forward this)
 
-> C L8R
-- [ ] Create dashboard
-    - [ ] Routes to see **events** and **ticket**
-    - [ ] Filters for date
-    - [ ] Sorting options (amount remaining, amount sold, date)
-    - [ ] Tests here also
-    - [ ] Rewatch Death Note (I'll forward this)
+---
 
 > https://www.uniticket.com.br/
 
