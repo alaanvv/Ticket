@@ -25,12 +25,13 @@
 {#if ticket_instance.id}
   <div class='hr' />
   <img src={ticket_instance.qr} alt='QR Code' />
-  <p class='code t-w-icon'> {ticket_instance.id} <Icon on:click={copy_to_clipboard} i='content_copy' /> </p>
+  <p class='code t-w-icon'> {ticket_instance.id} <Icon on:click={_ => copy_to_clipboard(ticket_instance.id)} i='content_copy' /> </p>
 {/if}
 
 <script>
   import Icon from '../components/Icon.svelte'
   import { logged_user } from '../store.js'
+  import { copy_to_clipboard } from '../utils/misc.js'
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
 
@@ -75,10 +76,6 @@
 
     ticket_instance.qr = await QRCode.toDataURL(id)
     ticket_instance.id = id
-  }
-
-  function copy_to_clipboard() {
-    navigator.clipboard.writeText(ticket_instance.id)
   }
 </script>
 
@@ -136,7 +133,9 @@
     display: block;
 
     width: 50%;
+    max-width: 400px;
     margin: 0 auto;
+    image-rendering: pixelated;
   }
 
   .code {
