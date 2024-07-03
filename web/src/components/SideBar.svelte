@@ -5,7 +5,7 @@
 
       <ul>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li> <p class:active={$curr_path == '/dashboard'} on:click={_ => navigate('/dashboard')}>         <Icon i='dashboard' /> Dashboard </p> </li>
+        <li> <p class:active={$curr_path == '/dashboard'} on:click={_ => navigate('/dashboard')}> <Icon i='dashboard' /> Dashboard </p> </li>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li> <p class:active={$curr_path == '/usuarios'}  on:click={_ => navigate('/usuarios')}>  <Icon i='group' />     Usuários  </p> </li>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
