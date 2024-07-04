@@ -1,67 +1,63 @@
 <div class='panel'>
-  <button class='back' on:click={_ => navigate(`/evento/${ticket.event_id}`)}> <Icon i='arrow_back' /> Voltar  </button>
-  <button class='edit' on:click={_ => edit_modal = true}>               <Icon i='edit' />       Editar  </button>
-  <button class='del'  on:click={delete_ticket}>                         <Icon i='delete' />     Excluir </button>
+  <Button             action={back}          i='arrow_back' t='Voltar'  />
+  <Button class='blu' action={edit_ticket}   i='edit'       t='Editar'  />
+  <Button class='red' action={delete_ticket} i='delete'     t='Excluir' />
 </div>
 
-{#if ticket}
-  <div class='info'>
-    <h2 class='t-w-icon'>
-      {ticket.name}
-      {#if event_name} <span class='detail'> {event_name} </span> {/if}
-    </h2>
+<div class='tas'>
+  <h2> {ticket?.name} <span class='detail'> {event_name || ''} </span> </h2> <br>
 
-    <p> <span class='active-indicator' class:active={ticket.allow_half}> {ticket.allow_half ? 'Permite' : 'Não permite'} </span> meia <p>
-    <p> Este ingresso está <span class='active-indicator' class:active={is_active}> {is_active ? 'ativo' : 'inativo'} </span> <p>
-  </div>
+  <span class={ticket?.allow_half ? 'grn' : 'red'}> {ticket?.allow_half ? 'Permite' : 'Não permite'} </span> meia <br>
+  Ingresso <span class={is_active ? 'grn' : 'red'}> {is_active ? 'ativo' : 'inativo'} </span>
+</div>
 
-  <div class='hr' />
-  <div class='panel'>
-    <button class='new' on:click={_ => batch_modal = true}> <Icon i='add' /> Criar Lote {batches.length + 1} </button>
-  </div>
+<div class='hr' />
 
-  <div class='batches'>
-    {#each batches as batch, i}
-      <BatchCard {batch} {i} allow_half={ticket.allow_half} on:update={load_ticket} />
-    {/each}
-  </div>
+<div class='panel'>
+  <Button class='grn' action={create_batch} i='add' t='Criar Lote {batches.length + 1}' />
+</div>
+
+<div class='flex-list'>
+  {#each batches as batch, i}
+    <BatchCard {batch} {i} allow_half={ticket.allow_half} on:update={load_batches} />
+  {/each}
+</div>
+
+{#if m_ticket}
+  <TicketModal bind:show={m_ticket} on:update={load_ticket} data={ticket}  />
 {/if}
 
-{#if edit_modal}
-  <TicketModal data={ticket} on:close={_ => edit_modal = false} on:update={finish_editing} />
-{/if}
-
-{#if batch_modal}
-  <BatchModal on:close={_ => batch_modal = false} on:update={finish_batch_creation} ticket_id={ticket.id} allow_half={ticket.allow_half} />
+{#if m_batch}
+  <BatchModal bind:show={m_batch} on:update={load_batches} ticket_id={ticket.id} allow_half={ticket.allow_half} />
 {/if}
 
 <script>
-  import Icon        from '../components/Icon.svelte'
+  import Button      from '../components/Button.svelte'
   import TicketModal from '../components/TicketModal.svelte'
   import BatchModal  from '../components/BatchModal.svelte'
-  import BatchCard  from '../components/BatchCard.svelte'
+  import BatchCard   from '../components/BatchCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
   import { curr_path } from '../store.js'
   import { onMount } from 'svelte'
 
-  let ticket, event_name, is_active
+  let ticket, event_name, is_active, m_ticket, m_batch
+  let batches = []
+
   const id = $curr_path.split('/').pop()
 
-  let edit_modal = false
-  let batch_modal = false
-
-  let batches = []
+  function edit_ticket()  { m_ticket = true }
+  function create_batch() { m_batch = true }
+  function back() { navigate(`/evento/${ticket.event_id}`) }
 
   async function load_ticket() {
     let res = await fetch(`http://192.168.1.106:3333/ticket/${id}`)
     ticket = (await res.json()).ticket
+  }
 
-    res = await fetch(`http://192.168.1.106:3333/ticket-batches/${id}`)
+  async function load_batches() {
+    const res = await fetch(`http://192.168.1.106:3333/ticket-batches/${id}`)
     batches = (await res.json()).batches
-
-    res = await fetch(`http://192.168.1.106:3333/events/${ticket.event_id}`)
-    event_name = (await res.json()).event.name
 
     is_active = false
     for (let i in batches) {
@@ -76,94 +72,14 @@
     if (!confirm('Certeza que deseja excluir?')) return
 
     await fetch(`http://192.168.1.106:3333/ticket/${id}`, { method: 'DELETE' })
-    navigate(`/evento/${ticket.event_id}`)
+    back()
   }
 
-  function finish_editing() {
-    edit_modal = false
-    load_ticket()
-  }
+  onMount(async _ => {
+    await load_ticket()
+    await load_batches()
 
-  function finish_batch_creation() {
-    batch_modal = false
-    load_ticket()
-  }
-
-  onMount(load_ticket)
+    const res = await fetch(`http://192.168.1.106:3333/events/${ticket.event_id}`)
+    event_name = (await res.json()).event.name
+  })
 </script>
-
-<style>
-  .batches {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-
-    margin-top: 20px;
-
-    overflow: scroll;
-  }
-
-  .detail {
-    padding: 5px 10px;
-    border-radius: 20px;
-
-    background: var(--bg0_h);
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
-
-    font-size: 0.7em;
-  }
-
-  .panel {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .panel button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .edit {
-    background: var(--blue);
-    color: white;
-  }
-
-  .del {
-    background: var(--red);
-    color: white;
-  }
-
-  .new {
-    background: var(--green);
-    color: white;
-  }
-
-  .info {
-    margin-top: 20px;
-
-    text-align: start;
-  }
-
-  .info h2 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    margin-bottom: 20px;
-  }
-
-  .active-indicator {
-    font-weight: bold;
-    color: var(--red);
-  }
-
-  .active-indicator.active {
-    color: var(--green);
-  }
-</style>

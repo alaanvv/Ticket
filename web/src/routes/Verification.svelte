@@ -1,46 +1,46 @@
 <div hidden={cam_loaded}> {loading_message} </div>
 <canvas {width} {height} class:reading={reading} hidden={!cam_loaded} />
 
-<input class:reading={reading} on:input={update_code} placeholder='Leia o QR ou digite' />
-<button disabled={!code} on:click={get_ticket_instance}> Validar </button>
+<input class:grn={reading} on:input={update_code} placeholder='Leia o QR ou digite' />
+<button class='grn' disabled={!code} on:click={get_ticket_instance}> Validar </button>
 
 {#if validated_data}
-  <Modal on:close={_ => validated_data = undefined}>
-    <div class:alert={validated_data.ticket_instance.validated_at}>
-      <h2> {validated_data.event.name} </h2>
-      <h3> {validated_data.ticket.name} - {validated_data.ticket_instance.is_half ? 'Meia' : 'Inteira'} </h3>
-      {#if validated_data.ticket_instance.is_test} <p class='alert'> INGRESSO TESTE </p> {/if}
-        {#if validated_data.ticket_instance.validated_at}
-          <p class='alert'> JÁ USADO: {format_date(validated_data.ticket_instance.validated_at)} </p>
-        {/if}
+  <Modal bind:show={validated_data}>
+    <div class:red={validated_data.ticket_instance.validated_at} class='tac'>
+      <h2> {validated_data.event.name} </h2> <br>
+      <span class='detail b'> {validated_data.ticket.name} - {validated_data.ticket_instance.is_half ? 'Meia' : 'Inteira'} </span> <br>
 
-        {#if !validated_data.ticket_instance.validated_at}
-          <button on:click={validate}> Confirmar </button>
-        {/if}
-        <button class='cancel' on:click={_ => validated_data = undefined}> Cancelar </button>
+      {#if validated_data.ticket_instance.is_test} <p class='red'> INGRESSO TESTE </p> {/if}
+
+      {#if validated_data.ticket_instance.validated_at}
+        <p class='red'> JÁ USADO: {format_date(validated_data.ticket_instance.validated_at)} </p>
+      {/if}
+
+      {#if !validated_data.ticket_instance.validated_at}
+        <button class='grn' on:click={validate}> Confirmar </button>
+      {/if}
+      <button class='red' on:click={_ => validated_data = undefined}> Cancelar </button>
     </div>
   </Modal>
 {/if}
 
 {#if error}
-  <Modal on:close={_ => error = ''}>
-    <p class='alert'> {error} </p>
+  <Modal bind:show={error}>
+    <p class='red'> {error} </p>
   </Modal>
 {/if}
 
 <script>
-  import Modal from '../components/Modal.svelte'
+  import Modal from  '../components/Modal.svelte'
 
   import { draw_square, format_date } from '../utils/misc'
   import { history } from '../store.js'
   import { onMount } from 'svelte'
   import jsQR from 'jsqr'
 
-  let canvas, cam_loaded, width, height, reading, error
-  let code = ''
-  let validated_data
-  let video = document.createElement('video')
+  let canvas, cam_loaded, width, height, reading, error, code, validated_data
   let loading_message = '🎥 Câmera inacessível, tente recarregar a página'
+  let video = document.createElement('video')
 
   function update_code() {
     code = document.querySelector('input').value
@@ -103,8 +103,11 @@
 
 <style>
   canvas {
-    border: 4px solid var(--gray);
+    border: 3px solid var(--gray);
     width: 100%;
+  }
+  canvas.reading {
+    border-color: var(--green);
   }
 
   input, button {
@@ -116,35 +119,8 @@
     text-align: center;
   }
 
-  canvas.reading {
-    border-color: #00FF00;
-  }
-
-  input.reading {
-    color: #00FF00;
-  }
-
-  button {
-    background: var(--green);
-    color: var(--fg1)
-  }
-
-  .cancel {
-    background: var(--red);
-  }
-
-  h3 {
-    display: inline-block;
-    width: fit-content;
-    margin: 0 auto;
-    background: var(--bg0_h);
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 20px;
-  }
-
-  .alert {
-    font-weight: bold;
-    color: var(--red);
+  .detail {
+    font-size: 1.2em;
+    margin-top: 10px;
   }
 </style>

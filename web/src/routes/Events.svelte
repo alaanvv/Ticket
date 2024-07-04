@@ -1,69 +1,35 @@
 <div class='panel'>
   <input placeholder='Pesquisar' bind:value={query}>
-  <button on:click={_ => edit_modal = true}> <span class='material-symbols-outlined'> add </span> Novo Evento </button>
+  <Button class='grn' action={create_event} i='add' t='Novo Evento'  />
 </div>
 
-<div class='cards'>
-  {#each filtered_events as event}
+<div class='flex-list'>
+  {#each events as event}
     <EventCard {event} />
   {/each}
 </div>
 
-{#if edit_modal}
-  <EventModal on:close={_ => edit_modal = false} />
+{#if m_event}
+  <EventModal bind:show={m_event} />
 {/if}
 
 <script>
   import EventCard  from '../components/EventCard.svelte'
   import EventModal from '../components/EventModal.svelte'
+  import Button     from '../components/Button.svelte'
 
   import { onMount } from 'svelte'
 
-  let query = ''
-  let events = []
-  let filtered_events, edit_modal
+  let raw_events, events, query, m_event
 
   $: {
-    filtered_events = events?.filter(e => e.name.toLowerCase().includes(query.toLowerCase()))
+    events = raw_events?.filter(e => e.name.toLowerCase().includes((query || '').toLowerCase())) || []
   }
+
+  function create_event() { m_event = true }
 
   onMount(async _ => {
     let res = await fetch('http://192.168.1.106:3333/all-events')
-    events = (await res.json()).events
+    raw_events = (await res.json()).events
   })
 </script>
-
-<style>
-  .panel {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    width: 100%;
-    margin-top: 10px;
-  }
-
-
-  button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-
-    color: var(--fg1);
-    font-weight: bold;
-
-    background: var(--green);
-  }
-
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-
-    margin-top: 30px;
-
-    overflow: scroll;
-  }
-</style>

@@ -7,13 +7,15 @@
   import { onMount, createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
 
+  export let show
+
   function background_click(e) {
-    if (e.target.classList.contains('modal'))
-      dispatch('close')
+    if (e.target.classList.contains('modal')){
+      show = false;dispatch('close')}
   }
 
   onMount(_ => {
-    function on_keydown(e) { if (e.key == 'Escape') dispatch('close') }
+    function on_keydown(e) { if (e.key == 'Escape') {show = false;dispatch('close')} }
     window.addEventListener('keydown', on_keydown)
     return _ => { window.removeEventListener('keydown', on_keydown) }
   })

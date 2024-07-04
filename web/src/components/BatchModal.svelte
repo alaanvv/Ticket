@@ -1,4 +1,4 @@
-<Modal on:close={_ => dispatch('close')}>
+<Modal on:close={_ => show = false}>
   <h2> {data ? 'Editando' : 'Criando'} um Lote </h2> <!-- Show batch num and also set required | Make amount field not send if equal -->
 
   <form on:submit={submitForm}>
@@ -26,7 +26,7 @@
   const dispatch = createEventDispatcher()
 
   export let data = undefined
-  export let ticket_id, allow_half
+  export let ticket_id, allow_half, show
 
   const started_with_amount = data?.amount
 
@@ -58,6 +58,7 @@
       })
 
       dispatch('update')
+      show = false
     }
     else {
       if (batch.amount == started_with_amount)
@@ -70,6 +71,7 @@
       })
 
       dispatch('update')
+      show = false
     }
   }
 

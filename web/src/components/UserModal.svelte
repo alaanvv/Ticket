@@ -1,4 +1,4 @@
-<Modal on:close={_ => dispatch('close')}>
+<Modal on:close={_ => show=false}>
   <h2> {data ? 'Editando' : 'Criando'} um Usuário </h2>
 
   <form on:submit={submitForm}>
@@ -8,9 +8,9 @@
 
     <label> <p> Senha: </p>
       <div class='password-container'>
-        <input type='password' bind:value={user.password} style='display: {showPassword ? 'none' : 'block'};' />
-        <input type='text' bind:value={user.password} style='display: {showPassword ? 'block' : 'none'};' />
-        <Icon on:click={togglePasswordVisibility} i={showPassword ? 'visibility_off' : 'visibility'}  />
+        <input type='password' bind:value={user.password} style='display: {show_password ? 'none' : 'block'};' />
+        <input type='text' bind:value={user.password} style='display: {show_password ? 'block' : 'none'};' />
+        <Icon on:click={togglePasswordVisibility} i={show_password ? 'visibility_off' : 'visibility'}  />
       </div>
     </label>
     <label> <p> Cargo: </p>
@@ -33,6 +33,7 @@
   const dispatch = createEventDispatcher()
 
   export let data = undefined
+  export let show
 
   let user = {
     name:     data?.name,
@@ -40,10 +41,8 @@
     role:     data?.role
   }
 
-  let showPassword = false
-  function togglePasswordVisibility() {
-    showPassword = !showPassword
-  }
+  let show_password = false
+  function togglePasswordVisibility() { show_password = !show_password }
 
   async function submitForm(e) {
     e.preventDefault()
@@ -56,6 +55,7 @@
       })
 
       dispatch('update')
+      show=false
     }
     else {
       await fetch(`http://192.168.1.106:3333/edit-user/${data.id}`, {
@@ -65,6 +65,7 @@
       })
 
       dispatch('update')
+      show=false
     }
   }
 </script>

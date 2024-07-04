@@ -1,4 +1,4 @@
-<Modal on:close={_ => dispatch('close')}>
+<Modal on:close={_ => show=false}>
     <h2> {data ? 'Editando' : 'Criando'} um Evento </h2>
 
     <form on:submit={submitForm}>
@@ -61,6 +61,7 @@
   const dispatch = createEventDispatcher()
 
   export let data = undefined
+  export let show
 
   let event = {
     name: data?.name,
@@ -118,6 +119,7 @@
       })
 
       dispatch('update')
+      show = false
     }
   }
 </script>

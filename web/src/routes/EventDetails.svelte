@@ -1,61 +1,54 @@
 <div class='panel'>
-  <button class='back' on:click={_ => navigate('/eventos')}> <Icon i='arrow_back' /> Voltar  </button>
-  <button class='edit' on:click={_ => edit_modal = true}>    <Icon i='edit' />       Editar  </button>
-  <button class='del'  on:click={delete_event}>              <Icon i='delete' />     Excluir </button>
+  <Button             action={back}         i='arrow_back' t='Voltar'  />
+  <Button class='blu' action={edit_event}   i='edit'       t='Editar'  />
+  <Button class='red' action={delete_event} i='delete'     t='Excluir' />
 </div>
 
-{#if event}
-  <div class='info'>
-    <img src={event.image} alt='Sem imagem'>
+<div class='info'>
+  <img src={event?.image} alt='Sem imagem'>
 
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class='cachorro fucking-hate-naming-stuff' on:click={_ => details_modal = true}>
-      <h2 class='t-w-icon'>
-        {event.name}
-        <span class='date'> <Icon i='calendar_month' /> {formatted_date} </span>
-      </h2>
-      <p> {event.description || 'Sem descrição.'} </p>
-    </div>
-
-    <div class='local'>
-      <p> <b class='t-w-icon'> <Icon i='map' /> Local: </b> </p>
-      <p> {event.local} </p>
-
-      <p> <b class='t-w-icon'> <Icon i='location_on' /> Endereço: </b> </p>
-      <p> {event.address} </p>
-
-      <p class='t-w-icon'> <Icon i='public' /> <a href={maps_link}> Localização no maps </a> </p>
-    </div>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div class='data' on:click={open_details}>
+    <h2 class='t-w-icon'> {event?.name} <span class='detail'> <Icon i='calendar_month' /> {formatted_date} </span> </h2> <br>
+    {event?.description || 'Sem descrição.'}
   </div>
 
-  <div class='hr' />
-  <div class='panel'>
-    <button class='new' on:click={_ => ticket_modal = true}> <Icon i='add' /> Criar Ingresso </button>
+  <div class='local'>
+    <b class='t-w-icon'> <Icon i='map' />         Local:    </b> <br> {event?.local}
+    <b class='t-w-icon'> <Icon i='location_on' /> Endereço: </b> <br> {event?.address}
+    <b class='t-w-icon'> <Icon i='public' /> <a href={maps_link}> Localização no maps </a> </b>
   </div>
+</div>
 
-  <div class='tickets'>
-    {#each tickets as ticket}
-      <TicketCard {ticket} />
-    {/each}
-  </div>
+<div class='hr' />
+
+<div class='panel'>
+  <Button class='grn' action={create_ticket} i='add' t='Criar Ingresso' />
+</div>
+
+<div class='flex-list'>
+  {#each tickets || [] as ticket}
+    <TicketCard {ticket} />
+  {/each}
+</div>
+
+{#if m_event}
+  <EventModal bind:show={m_event} on:update={load_event} data={event} />
 {/if}
 
-{#if edit_modal}
-  <EventModal data={event} on:close={_ => edit_modal = false} on:update={finish_editing} />
+{#if m_ticket}
+  <TicketModal bind:show={m_ticket} event_id={event.id} />
 {/if}
 
-{#if ticket_modal}
-  <TicketModal on:close={_ => ticket_modal = false} event_id={event.id} />
-{/if}
-
-{#if details_modal}
-  <Modal on:close={_ => details_modal = false}>
+{#if m_details}
+  <Modal bind:show={m_details}>
     <h2> {event.name} </h2>
     <p class='wrappable'> {event.description} </p>
   </Modal>
 {/if}
 
 <script>
+  import Button      from '../components/Button.svelte'
   import Icon        from '../components/Icon.svelte'
   import Modal       from '../components/Modal.svelte'
   import EventModal  from '../components/EventModal.svelte'
@@ -66,14 +59,9 @@
   import { curr_path, logged_user } from '../store.js'
   import { onMount } from 'svelte'
 
-  let event, formatted_date, maps_link
+  let event, tickets, formatted_date, maps_link, m_event, m_ticket, m_details
+
   const id = $curr_path.split('/').pop()
-
-  let edit_modal = false
-  let ticket_modal = false
-  let details_modal = false
-
-  let tickets = []
 
   $: {
     if (event) {
@@ -81,6 +69,11 @@
       maps_link = `https://www.google.com/maps?q=${event.latitude},${event.longitude}`
     }
   }
+
+  function back() { navigate('/eventos') }
+  function edit_event()    { m_event   = true }
+  function create_ticket() { m_ticket  = true }
+  function open_details()  { m_details = true }
 
   async function load_event() {
     let res = await fetch(`http://192.168.1.106:3333/events/${id}`)
@@ -97,70 +90,18 @@
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
     })
-    navigate('/eventos')
-  }
-
-  function finish_editing() {
-    edit_modal = false
-    load_event()
+    back()
   }
 
   onMount(load_event)
 </script>
 
 <style>
-  .tickets {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 20px;
-
-    margin-top: 20px;
-
-    overflow: scroll;
-  }
-
-  .panel {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .panel button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .edit {
-    background: var(--blue);
-    color: white;
-  }
-
-  .del {
-    background: var(--red);
-    color: white;
-  }
-
-  .new {
-    background: var(--green);
-    color: white;
-  }
-
-  .cachorro {
+  .data {
     padding: 5px;
     overflow: hidden;
 
     cursor: pointer;
-  }
-
-  .cachorro h2 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
   }
 
   .info {
@@ -177,20 +118,6 @@
     max-width: 33%;
   }
 
-  .date {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-
-    padding: 5px 10px;
-    border-radius: 20px;
-
-    background: var(--bg0_h);
-    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
-
-    font-size: 0.7em;
-  }
-
   .local {
     display: flex;
     flex-direction: column;
@@ -200,15 +127,9 @@
     padding: 30px;
     margin-left: auto;
 
-    text-align: start;
-
     background: var(--bg0_h);
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
     overflow: auto;
-  }
-
-  .local p {
-    margin: 0;
   }
 
   img {

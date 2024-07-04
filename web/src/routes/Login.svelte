@@ -1,18 +1,19 @@
-<form on:submit={submitForm}>
-  {#if error} <p class='error'> {error} </p> {/if}
-  <label> <p> Nome: </p>
+<form on:submit={submit}>
+  {#if error} <p class='red'> {error} </p> {/if}
+
+  <label> Nome:
     <input type='text' bind:value={user.name} required />
   </label>
 
-  <label> <p> Senha: </p>
+  <label> Senha:
     <div class='password-container'>
-      <input type='password' bind:value={user.password} style='display: {showPassword ? 'none' : 'block'};' />
-      <input type='text' bind:value={user.password} style='display: {showPassword ? 'block' : 'none'};' />
-      <Icon on:click={togglePasswordVisibility} i={showPassword ? 'visibility_off' : 'visibility'}  />
+      <input type='password' bind:value={user.password} style='display: {show_password ? 'none' : 'block'};' />
+      <input type='text'     bind:value={user.password} style='display: {show_password ? 'block' : 'none'};' />
+      <Icon on:click={toggle_show_password} i={show_password ? 'visibility_off' : 'visibility'}  />
     </div>
   </label>
 
-  <button type="submit"> Entrar </button>
+  <button type='submit'> Entrar </button>
 </form>
 
 <script>
@@ -22,29 +23,11 @@
   import { onMount } from 'svelte'
 
   let user = { name: '', password: '' }
-  let error
+  let error, show_password
 
-  onMount(async _ => {
-    const session_id = localStorage.getItem('session_id')
-    if (!session_id) return
+  function toggle_show_password() { show_password = !show_password }
 
-    const res = await fetch(`http://192.168.1.106:3333/session-login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: session_id })
-    })
-    const data = await res.json()
-
-    if (res.ok)
-      logged_user.set({ ...data, session_id })
-  })
-
-  let showPassword = false
-  function togglePasswordVisibility() {
-    showPassword = !showPassword
-  }
-
-  async function submitForm(e) {
+  async function submit(e) {
     e.preventDefault()
     error = ''
 
@@ -64,6 +47,21 @@
     user.name = ''
     user.password = ''
   }
+
+  onMount(async _ => {
+    const session_id = localStorage.getItem('session_id')
+    if (!session_id) return
+
+    const res = await fetch(`http://192.168.1.106:3333/session-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: session_id })
+    })
+    const data = await res.json()
+
+    if (res.ok)
+      logged_user.set({ ...data, session_id })
+  })
 </script>
 
 <style>
@@ -71,51 +69,24 @@
     position: relative;
   }
 
-  :global(.password-container span) {
+  .password-container :global(span) {
     position: absolute;
     right: 10px;
     top: 50%;
+
     transform: translateY(-50%);
     cursor: pointer;
   }
 
   form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
     max-width: 300px;
     margin: 0 auto;
   }
 
-  input {
+  input, button {
     width: 100% !important;
     margin: 10px 0;
 
     resize: none;
-  }
-
-  label {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label p {
-    float: left;
-
-    width: 50%;
-    margin: 0;
-
-    text-align: start;
-  }
-
-  label input {
-    float: left;
-
-    width: 75%;
-  }
-
-  .error {
-    color: var(--red)
   }
 </style>
