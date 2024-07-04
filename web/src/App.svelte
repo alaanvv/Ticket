@@ -11,7 +11,6 @@
 <script>
   import TopBar        from './components/TopBar.svelte'
   import SideBar       from './components/SideBar.svelte'
-  import Dashboard     from './routes/Dashboard.svelte'
   import Users         from './routes/Users.svelte'
   import Events        from './routes/Events.svelte'
   import EventDetails  from './routes/EventDetails.svelte'
@@ -26,7 +25,6 @@
   let curr_route
   const routes = {
     '':          ['Login',       Login,         0],
-    dashboard:   ['Dashboard',   Dashboard,     2],
     usuarios:    ['Usuários',    Users,         2],
     eventos:     ['Eventos',     Events,        2],
     evento:      ['Evento',      EventDetails,  2],
@@ -44,7 +42,7 @@
     const user_level = { 'admin': 2, 'portaria': 1, 'undefined': 0 }[$logged_user?.role]
 
     if (!user_level)                        curr_route = ''
-    if (user_level == 2 && curr_route == '') curr_route = 'dashboard'
+    if (user_level == 2 && curr_route == '') curr_route = 'eventos'
     if (user_level == 1 && curr_route == '') curr_route = 'verificacao'
 
     if (user_level < routes[curr_route][2] || !routes[curr_route]) curr_route = 'not_found'
