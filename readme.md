@@ -262,12 +262,11 @@ model TicketInstance {
 - [x] Route to validate
 - [x] Write tests here
 
-> Frontend ticket validation
+`Front-end`
 
 - [x] Be able to validate through text
 - [x] Validate through QR
-- [x] Validation history
-    - [x] Reactivate a ticket
+- [x] Reactivate a ticket
 - [ ] Rewatch Death Note (I'll forward this)
 
 ---
