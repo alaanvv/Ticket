@@ -79,7 +79,8 @@
     main {
       width: auto;
       margin: 0;
-      padding: 1em 0.5em 50px 0.5em;
+      padding: 1em 0.7em 50px 0.7em;
+      border-radius: 0;
     }
   }
 </style>

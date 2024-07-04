@@ -1,49 +1,41 @@
-<Modal on:close={_ => show=false}>
+<Modal on:close={close}>
     <h2> {data ? 'Editando' : 'Criando'} um Evento </h2>
 
-    <form on:submit={submitForm}>
-      <label> <p> Nome: </p>
+    <form on:submit={submit}>
+      <label> Nome:
         <input placeholder= 'Nome do evento' bind:value={event.name} required />
       </label>
 
-      <label> <p> Descrição: </p>
+      <label> Descrição:
         <textarea placeholder='Detalhes do evento' rows=5 bind:value={event.description} />
       </label>
 
-      <label> <p> Local: </p>
+      <label> Local:
         <input bind:value={event.local} required />
       </label>
 
-      <label> <p> Endereço: </p>
+      <label> Endereço:
         <input bind:value={event.address} required />
       </label>
 
-      <label> <p> Imagem: </p>
+      <label> Imagem:
         <input bind:value={event.image} />
-        {#if errors.image}
-          <p class='error'> {errors.image} </p>
-        {/if}
+        {#if errors.image} <p class='error red'> {errors.image} </p> {/if}
       </label>
 
-      <label> <p> Latitude: </p>
+      <label> Latitude:
         <input step="1e-20" class='hide-arrows' type="number" bind:value={event.latitude} required />
-        {#if errors.latitude}
-          <p class='error'> {errors.latitude} </p>
-        {/if}
+        {#if errors.latitude} <p class='error red'> {errors.latitude} </p> {/if}
       </label>
 
-      <label> <p> Longitude: </p>
+      <label> Longitude:
         <input step="1e-20" class='hide-arrows' type="number" bind:value={event.longitude} required />
-        {#if errors.longitude}
-          <p class='error'> {errors.longitude} </p>
-        {/if}
+        {#if errors.longitude} <p class='error red'> {errors.longitude} </p> {/if}
       </label>
 
-      <label> <p> Data: </p>
+      <label> Data:
         <input type="date" bind:value={event.date} required />
-        {#if errors.date}
-          <p class='error'> {errors.date} </p>
-        {/if}
+        {#if errors.date} <p class='error red'> {errors.date} </p> {/if}
       </label>
 
       <button type="submit"> Enviar </button>
@@ -60,18 +52,17 @@
 
   const dispatch = createEventDispatcher()
 
-  export let data = undefined
-  export let show
+  export let data, show
 
   let event = {
-    name: data?.name,
+    name:        data?.name,
     description: data?.description,
-    local: data?.local,
-    address: data?.address,
-    image: data?.image,
-    latitude: Number(data?.latitude),
-    longitude: Number(data?.longitude),
-    date: (data?.date ? new Date(data.date) : new Date()).toISOString().split('T')[0]
+    local:       data?.local,
+    address:     data?.address,
+    image:       data?.image,
+    latitude:    Number(data?.latitude),
+    longitude:   Number(data?.longitude),
+    date:        (data?.date ? new Date(data.date) : new Date()).toISOString().split('T')[0]
   }
 
   const schema = z.object({
@@ -87,7 +78,9 @@
 
   let errors = {}
 
-  async function submitForm(e) {
+  function close() { show = false }
+
+  async function submit(e) {
     e.preventDefault()
 
     let validated_data
@@ -108,62 +101,41 @@
         body: JSON.stringify(validated_data)
       })
 
-      navigate(`/evento/${(await res.json()).id}`)
+      return navigate(`/evento/${(await res.json()).id}`)
     }
-    else {
-      const id = data.id
-      await fetch(`http://192.168.1.106:3333/edit-event/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
-        body: JSON.stringify(validated_data)
-      })
 
-      dispatch('update')
-      show = false
-    }
+    const id = data.id
+    await fetch(`http://192.168.1.106:3333/edit-event/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
+      body: JSON.stringify(validated_data)
+    })
+
+    dispatch('update')
+    close()
   }
 </script>
 
 <style>
-  form {
+  input:not([type=checkbox]), input[type=number], textarea, button {
+    width: 100% !important;
+    resize: none;
+  }
+
+  label {
+    margin: 20px 0;
+
+    text-align: start;
+  }
+  label:not(.row) {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  input, input[type=number], textarea {
-    width: 100% !important;
-
-    resize: none;
-  }
-
-  label {
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 10px;
-  }
-
-  label p {
-    float: left;
-
-    width: 25%;
-    margin: 0;
-
-    text-align: start;
-  }
-
-  label input {
-    float: left;
-
-    width: 75%;
-    margin-top: 6px;
-  }
-
   .error {
     float: none;
     width: 90%;
-
-    color: var(--bg1);
+    margin: 0;
   }
 </style>

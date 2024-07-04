@@ -1,6 +1,6 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="modal" on:click={background_click}>
-  <div class="modal-content"> <slot /> </div>
+<div class='modal' on:click={background_click}>
+  <div class='modal-content'> <slot /> </div>
 </div>
 
 <script>
@@ -9,13 +9,18 @@
 
   export let show
 
+  function close() {
+    dispatch('close')
+    show = false
+  }
+
   function background_click(e) {
-    if (e.target.classList.contains('modal')){
-      show = false;dispatch('close')}
+    if (e.target.classList.contains('modal'))
+      close()
   }
 
   onMount(_ => {
-    function on_keydown(e) { if (e.key == 'Escape') {show = false;dispatch('close')} }
+    function on_keydown(e) { if (e.key == 'Escape') close() }
     window.addEventListener('keydown', on_keydown)
     return _ => { window.removeEventListener('keydown', on_keydown) }
   })

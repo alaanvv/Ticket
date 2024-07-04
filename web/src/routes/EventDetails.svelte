@@ -9,14 +9,14 @@
 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class='data' on:click={open_details}>
-    <h2 class='t-w-icon'> {event?.name} <span class='detail'> <Icon i='calendar_month' /> {formatted_date} </span> </h2> <br>
+    <h2 class='row'> {event?.name} <span class='detail'> <Icon i='calendar_month' /> {formatted_date} </span> </h2> <br>
     {event?.description || 'Sem descrição.'}
   </div>
 
   <div class='local'>
-    <b class='t-w-icon'> <Icon i='map' />         Local:    </b> <br> {event?.local}
-    <b class='t-w-icon'> <Icon i='location_on' /> Endereço: </b> <br> {event?.address}
-    <b class='t-w-icon'> <Icon i='public' /> <a href={maps_link}> Localização no maps </a> </b>
+    <b class='row'> <Icon i='map' />         Local:    </b> <br> {event?.local}
+    <b class='row'> <Icon i='location_on' /> Endereço: </b> <br> {event?.address}
+    <b class='row'> <Icon i='public' /> <a href={maps_link}> Localização no maps </a> </b>
   </div>
 </div>
 

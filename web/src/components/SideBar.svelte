@@ -1,91 +1,65 @@
 {#if $logged_user}
-  <div class='col sidebar'>
+  <div class='usn tac sidebar'>
     {#if $logged_user.role == 'admin'}
       <h2> Admin </h2>
 
       <ul>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li> <p class:active={$curr_path == '/usuarios'}  on:click={_ => navigate('/usuarios')}>  <Icon i='group' />     Usuários  </p> </li>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li> <p class:active={$curr_path == '/eventos'}   on:click={_ => navigate('/eventos')}>   <Icon i='event' />     Eventos   </p> </li>
+        <SidebarItem path='/usuarios' name='Usuários' i='group' />
+        <SidebarItem path='/eventos'  name='Eventos'  i='event' />
       </ul>
     {/if}
 
     {#if ['admin', 'portaria'].includes($logged_user.role)}
       <h2> Portaria </h2>
       <ul>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li> <p class:active={$curr_path == '/verificacao'} on:click={_ => navigate('/verificacao')}> <Icon i='qr_code' /> Verificação </p> </li>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li> <p class:active={$curr_path == '/historico'}   on:click={_ => navigate('/historico')}>   <Icon i='history' /> Histórico   </p> </li>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li> <p class:active={$curr_path == '/teste'}       on:click={_ => navigate('/teste')}>       <Icon i='build' />   Teste       </p> </li>
+        <SidebarItem path='/verificacao' name='Verificação' i='qr_code' />
+        <SidebarItem path='/historico'   name='Histórico'   i='history' />
+        <SidebarItem path='/teste'       name='Teste'       i='build' />
       </ul>
     {/if}
   </div>
 {/if}
 
 <script>
-  import Icon from '../components/Icon.svelte'
+  import SidebarItem from '../components/SidebarItem.svelte'
 
-  import { curr_path, logged_user } from '../store.js'
-  import { navigate } from '../utils/navigation.js'
+  import { logged_user } from '../store.js'
 </script>
 
 <style>
-  .col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    padding: 10px 30px;
-
-    user-select: none;
+  .sidebar {
+    padding: 20px 30px;
   }
 
   ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     padding: 0;
+    margin: 0;
     list-style: none;
   }
 
-  li {
-    width: 100%;
-  }
-
-  p {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    box-sizing: border-box;
+  ul :global(li) {
     padding: 10px 20px;
     border-radius: 5px;
-    margin: 3px 0;
+    margin: 10px 0;
 
     cursor: pointer;
   }
-
-  p:hover {
+  ul :global(li:hover) {
     background: var(--bg0);
   }
-
-  p.active {
+  ul :global(li.active) {
     background: var(--bg1);
     color: var(--fg1) !important;
   }
 
   @media screen and (max-width: 768px) {
     .sidebar {
+      display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
 
       width: 100%;
-      padding: 0;
       margin-bottom: 10px;
 
       overflow-x: scroll;
@@ -98,13 +72,11 @@
     .sidebar ul {
       display: flex;
       flex-direction: row;
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
+      gap: 10px
     }
 
-    .sidebar li {
-      margin-right: 10px;
+    .sidebar :global(li) {
+      margin: 0;
     }
   }
 </style>

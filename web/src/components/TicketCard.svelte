@@ -1,7 +1,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class='card' on:click={_ => navigate(`/ingresso/${ticket.id}`)} >
-  <div class='led' class:active={is_active} />
-  <h3 class='no-overflow'> {ticket.name} </h3>
+<div class='row card cp' on:click={enter} >
+  <div class='led' class:active />
+  <h3> {ticket.name} </h3>
 </div>
 
 <script>
@@ -9,27 +9,19 @@
   import { onMount } from 'svelte'
 
   export let ticket
-  let is_active
+  let active
+
+  function enter() { navigate(`/ingresso/${ticket.id}`) }
 
   onMount(async _ => {
-    let res = await fetch(`http://192.168.1.106:3333/active-batch/${ticket.id}`)
-    is_active = Boolean((await res.json()).batch)
+    const res = await fetch(`http://192.168.1.106:3333/active-batch/${ticket.id}`)
+    active = (await res.json()).batch
   })
 </script>
 
 <style>
   .card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    width: 150px;
-    border: 5px solid var(--bg0_h);
     padding: 10px;
-    border-radius: 10px;
-
-    overflow:hidden;
-    cursor: pointer;
   }
 
   .led {
@@ -39,7 +31,6 @@
 
     background-color: var(--red);
   }
-
   .led.active {
     background-color: var(--green);
   }

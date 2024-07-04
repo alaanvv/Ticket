@@ -1,16 +1,16 @@
-<Modal on:close={_ => show = false}>
+<Modal on:close={close}>
   <h2> {data ? 'Editando' : 'Criando'} um Ingresso </h2>
 
-  <form on:submit={submitForm}>
-    <label> <p> Nome: </p>
+  <form on:submit={submit}>
+    <label> Nome:
       <input placeholder= 'Nome do ingresso' bind:value={ticket.name} required />
     </label>
 
-    <label class='inline cp'> <p> Permitir meia: </p>
+    <label class='row'> Permitir meia:
       <input type='checkbox' bind:checked={ticket.allow_half} />
     </label>
 
-    <button type="submit"> Enviar </button>
+    <button type='submit'> Enviar </button>
   </form>
 </Modal>
 
@@ -23,15 +23,16 @@
 
   const dispatch = createEventDispatcher()
 
-  export let data = undefined
-  export let event_id,show
+  export let data, event_id, show
 
   let ticket = {
-    name:      data?.name,
+    name:       data?.name,
     allow_half: data?.allow_half
   }
 
-  async function submitForm(e) {
+  function close() { show = false }
+
+  async function submit(e) {
     e.preventDefault()
 
     if (!data) {
@@ -44,66 +45,31 @@
       navigate(`/ingresso/${(await res.json()).id}`)
     }
     else {
-      const id = data.id
-      await fetch(`http://192.168.1.106:3333/edit-ticket/${id}`, {
+      await fetch(`http://192.168.1.106:3333/edit-ticket/${data.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(ticket)
       })
 
       dispatch('update')
-      show = false
+      close()
     }
   }
 </script>
 
 <style>
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  input {
+  input:not([type='checkbox']), button {
     width: 100% !important;
-
-    resize: none;
   }
 
   label {
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 10px;
-  }
-
-  label p {
-    float: left;
-
-    width: 50%;
-    margin: 0;
+    margin: 20px 0;
 
     text-align: start;
   }
-
-  label input {
-    float: left;
-
-    width: 75%;
-    margin-top: 6px;
-  }
-
-  .inline {
+  label:not(.row) {
     display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .inline p, .inline input {
-    display: block;
-    width: auto !important;
-    text-wrap: nowrap;
+    flex-direction: column;
+    gap: 10px;
   }
 </style>

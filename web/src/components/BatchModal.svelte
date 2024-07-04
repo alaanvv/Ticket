@@ -1,19 +1,20 @@
-<Modal on:close={_ => show = false}>
-  <h2> {data ? 'Editando' : 'Criando'} um Lote </h2> <!-- Show batch num and also set required | Make amount field not send if equal -->
+<Modal on:close={close}>
+  <h2> {data ? 'Editando' : 'Criando'} um Lote </h2>
 
-  <form on:submit={submitForm}>
-    <label> <p> Preço: </p>
+  <form on:submit={submit}>
+    <label> Preço:
       <input type='text' placeholder='R$' bind:value={batch.price} required />
     </label>
 
-    <label> <p> Preço de meia: </p>
+    <label> Preço de meia:
       <input type='text' placeholder='R$' bind:value={batch.half_price} required='{allow_half}' />
     </label>
-    <label> <p> Quantidade: </p>
+
+    <label> Quantidade:
       <input type='number' bind:value={batch.amount} required />
     </label>
 
-    <button type="submit"> Enviar </button>
+    <button type='submit'> Enviar </button>
   </form>
 </Modal>
 
@@ -25,27 +26,33 @@
 
   const dispatch = createEventDispatcher()
 
-  export let data = undefined
-  export let ticket_id, allow_half, show
-
+  export let data, ticket_id, allow_half, show
   const started_with_amount = data?.amount
 
   let batch = {
-    price:      data ? (data.price_in_cents     / 100) : undefined,
-    half_price: data ? (data.half_price_in_cents / 100) : undefined,
+    price:      (data?.price_in_cents      / 100) || undefined,
+    half_price: (data?.half_price_in_cents / 100) || undefined,
     amount:     data?.amount,
   }
 
   $: {
-    if (batch.price)
-      batch.price = format_price(batch.price)
-    if (batch.half_price)
-      batch.half_price = format_price(batch.half_price)
+    if (batch.price)      batch.price      = format_price(batch.price)
+    if (batch.half_price) batch.half_price = format_price(batch.half_price)
   }
 
-  async function submitForm(e) {
+  function close() { show = false }
+
+  function format_price(price) {
+    price = String(price).replaceAll(',', '.').replaceAll(/[^\d\.]/g, '')
+    const parts = price.split('.')
+    if (parts.length > 1)
+      price = `${parts[0]}.${parts.slice(1).join('').slice(0, 2)}`
+    return price
+  }
+
+  async function submit(e) {
     e.preventDefault()
-    batch.price_in_cents     = batch.price      * 100
+    batch.price_in_cents      = batch.price      * 100
     batch.half_price_in_cents = batch.half_price * 100
     if (isNaN(batch.half_price_in_cents))
       delete batch.half_price_in_cents
@@ -56,9 +63,6 @@
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify({ batches: [batch] })
       })
-
-      dispatch('update')
-      show = false
     }
     else {
       if (batch.amount == started_with_amount)
@@ -69,55 +73,25 @@
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
         body: JSON.stringify(batch)
       })
-
-      dispatch('update')
-      show = false
     }
-  }
 
-  function format_price(price) {
-    price = String(price)
-    price = price.replaceAll(',', '.').replaceAll(/[^\d\.]/g, '')
-    const parts = price.split('.')
-    if (parts.length > 1)
-      price = `${parts[0]}.${parts.slice(1).join('').slice(0, 2)}`
-    return price
+    dispatch('update')
+    close()
   }
 </script>
 
 <style>
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  input {
+  input, button {
     width: 100% !important;
-
-    resize: none;
   }
 
   label {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 
-    margin-top: 10px;
-  }
-
-  label p {
-    float: left;
-
-    width: 50%;
-    margin: 0;
+    margin: 20px 0;
 
     text-align: start;
-  }
-
-  label input {
-    float: left;
-
-    width: 75%;
-    margin-top: 6px;
   }
 </style>

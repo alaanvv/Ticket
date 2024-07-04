@@ -1,25 +1,25 @@
-<div class='info' class:active={batch.is_active}>
-  <h3 class='no-overflow' class:active={batch.is_active}> Lote {i + 1} </h3>
+<div class='card' class:active={batch.is_active}>
+  <h3 class='oe red'> Lote {i + 1} </h3>
 
   <p> Quantidade: <b> {batch.amount} </b> </p>
-  <p> Preço: <b> R${format_price(batch.price_in_cents / 100)} </b> </p>
+  <p> Preço: <b> R${format_price(batch.price_in_cents)} </b> </p>
   {#if allow_half}
-    <p> Preço meia: <b> R${format_price(batch.half_price_in_cents / 100)} </b> </p>
+    <p> Preço meia: <b> R${format_price(batch.half_price_in_cents)} </b> </p>
   {/if}
 
   <div class='row'>
-    <button class='edit' on:click={_ => batch_modal = true}> <Icon i='edit' /> </button>
-    <button class='del'  on:click={delete_batch}> <Icon i='delete' /> </button>
+    <Button class='blu' action={edit_batch} i='edit' />
+    <Button class='red' action={delete_batch} i='delete' />
   </div>
 </div>
 
-{#if batch_modal}
-  <BatchModal on:close={_ => batch_modal = false} on:update={on_update} ticket_id={batch.ticket_id} allow_half={allow_half} data={batch} />
+{#if m_batch}
+  <BatchModal bind:show={m_batch} on:update={update} ticket_id={batch.ticket_id} allow_half={allow_half} data={batch} />
 {/if}
 
 <script>
-  import Icon from '../components/Icon.svelte'
-  import BatchModal  from '../components/BatchModal.svelte'
+  import Button     from '../components/Button.svelte'
+  import BatchModal from '../components/BatchModal.svelte'
 
   import { createEventDispatcher } from 'svelte'
   import { logged_user } from '../store.js'
@@ -27,10 +27,13 @@
   const dispatch = createEventDispatcher()
 
   export let batch, i, allow_half
-  let batch_modal = false
+  let m_batch
+
+  function edit_batch() { m_batch = true }
+  function update() { dispatch('update') }
 
   function format_price(price) {
-    return String(price).replace('.', ',')
+    return String(price / 100).replace('.', ',')
   }
 
   async function delete_batch() {
@@ -42,55 +45,21 @@
     })
     dispatch('update')
   }
-
-  function on_update() {
-    batch_modal = false
-    dispatch('update')
-  }
 </script>
 
 <style>
-  h3 {
-    color: var(--red);
-  }
-
-  h3.active {
+  .active h3 {
     color: var(--green);
   }
 
-  .info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-
-    width: 200px;
-    padding: 10px;
-    border: 5px solid var(--bg0_h);
-    border-radius: 10px;
+  .card {
+    width: 180px;
   }
-
-  .info.active {
+  .card.active {
     border-color: var(--green);
   }
 
-  .info p {
-    margin: 0;
-  }
-
   .row {
-    display: flex;
-    gap: 10px;
-  }
-
-  .edit {
-    background: var(--blue);
-    color: white;
-  }
-
-  .del {
-    background: var(--red);
-    color: white;
+    justify-content: center;
   }
 </style>

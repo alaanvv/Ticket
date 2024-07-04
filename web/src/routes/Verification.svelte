@@ -10,7 +10,7 @@
       <h2> {validated_data.event.name} </h2> <br>
       <span class='detail b'> {validated_data.ticket.name} - {validated_data.ticket_instance.is_half ? 'Meia' : 'Inteira'} </span> <br>
 
-      {#if validated_data.ticket_instance.is_test} <p class='red'> INGRESSO TESTE </p> {/if}
+      {#if validated_data.ticket_instance.is_test} <p class='blu'> INGRESSO TESTE </p> {/if}
 
       {#if validated_data.ticket_instance.validated_at}
         <p class='red'> JÁ USADO: {format_date(validated_data.ticket_instance.validated_at)} </p>

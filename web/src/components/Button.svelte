@@ -1,6 +1,6 @@
-<button on:click={action} class='{clazz} t-w-icon' {disabled}>
+<button on:click={action} class={clazz} class:row={i && t} {disabled}>
   {#if i} <Icon {i} /> {/if}
-  {t}
+  {#if t} {t}          {/if}
 </button>
 
 <script>
@@ -8,6 +8,5 @@
 
   export let i, t, action, disabled
   export {clazz as class}
-
   let clazz = ''
 </script>
