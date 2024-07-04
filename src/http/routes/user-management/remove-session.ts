@@ -1,15 +1,16 @@
 import { NotFoundError, ForbiddenError } from '../../errors'
-import { get_auth, is_user } from '../../utils/auth'
+import { get_auth } from '../../utils/auth'
 import { FastifyInstance } from 'fastify'
 import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 
 export default async function(app: FastifyInstance) {
   app.delete('/session/:id', async (req, res) => {
-    if (await get_auth(req) != 'admin' && !(await is_user(req))) throw new ForbiddenError('No privileges.')
-
     const paramSchema = z.object({ id: z.string().cuid() })
     const { id } = paramSchema.parse(req.params)
+
+    if (await get_auth(req) != 'admin' && id != req.headers['authorization']?.split(' ')[1])
+      throw new ForbiddenError('No privileges.')
 
     const session = await prisma.session.findUnique({ where: { id } })
     if (!session)

@@ -15,9 +15,8 @@ async function get_auth(req: FastifyRequest) {
 }
 
 // please god forgive me i dont want to change all the files
-async function is_user(req: FastifyRequest) {
+async function get_user(req: FastifyRequest) {
   const id = req.headers['authorization']?.split(' ')[1]
-  if (id == 'test') return 'admin'
 
   const session = await prisma.session.findFirst({ where: { id } })
   if (!session) return
@@ -25,7 +24,7 @@ async function is_user(req: FastifyRequest) {
  const user = await prisma.user.findUnique({ where: { id: session.user_id } })
   if (!user) return
 
-  return user.id == id
+  return user
 }
 
-export { get_auth, is_user }
+export { get_auth, get_user }
