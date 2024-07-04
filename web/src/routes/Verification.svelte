@@ -22,14 +22,21 @@
   </Modal>
 {/if}
 
+{#if error}
+  <Modal on:close={_ => error = ''}>
+    <p class='alert'> {error} </p>
+  </Modal>
+{/if}
+
 <script>
   import Modal from '../components/Modal.svelte'
 
-  import { draw_square } from '../utils/misc'
+  import { draw_square, format_date } from '../utils/misc'
+  import { history } from '../store.js'
   import { onMount } from 'svelte'
   import jsQR from 'jsqr'
 
-  let canvas, cam_loaded, width, height, reading
+  let canvas, cam_loaded, width, height, reading, error
   let code = ''
   let validated_data
   let video = document.createElement('video')
@@ -37,37 +44,6 @@
 
   function update_code() {
     code = document.querySelector('input').value
-  }
-
-  function format_date(date_string) {
-    const date = new Date(date_string)
-    const now  = new Date()
-
-    const secs_diff = (now - date) / 1e3
-    const mins_diff = secs_diff / 60
-
-    if      (secs_diff < 60) return `${parseInt(secs_diff)} segundos atrás`
-    else if (mins_diff < 60) return `${parseInt(mins_diff)} minuto${mins_diff > 1 ? 's' : ''} atrás`
-
-    const is_today = date.getDate() == now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()
-
-    const formatter = new Intl.DateTimeFormat('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-        day:    '2-digit',
-        month:  '2-digit',
-        hour:   '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-    })
-    const parts = formatter.formatToParts(date)
-
-    const day    = parts.find(part => part.type == 'day').value
-    const month  = parts.find(part => part.type == 'month').value
-    const hour   = parts.find(part => part.type == 'hour').value
-    const minute = parts.find(part => part.type == 'minute').value
-
-    return `${!is_today ? `${day}/${month} ` : ''}${hour}:${minute}`
   }
 
   function tick() {
@@ -94,11 +70,22 @@
 
   async function get_ticket_instance() {
     const res = await fetch(`http://192.168.1.106:3333/ticket-instance/${code}`)
+    if (!res.ok)
+      return error = 'Ingresso não encontrado'
     validated_data = await res.json()
   }
 
   async function validate() {
     await fetch(`http://192.168.1.106:3333/validate-ticket-instance/${code}`, { method: 'PUT' })
+
+    history.update(curr => [...curr, {
+      id:           validated_data.ticket_instance.id,
+      event:        validated_data.event.name,
+      ticket:       validated_data.ticket.name,
+      is_half:      validated_data.ticket_instance.is_half,
+      validated_at: new Date().toISOString()
+    }])
+
     validated_data = undefined
   }
 

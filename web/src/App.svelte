@@ -18,6 +18,7 @@
   import TicketDetails from './routes/TicketDetails.svelte'
   import Login         from './routes/Login.svelte'
   import Verification  from './routes/Verification.svelte'
+  import History       from './routes/History.svelte'
   import Test          from './routes/Test.svelte'
 
   import { curr_path, logged_user } from './store.js'
@@ -31,6 +32,7 @@
     evento:      ['Evento',      EventDetails,  2],
     ingresso:    ['Ingresso',    TicketDetails, 2],
     verificacao: ['Verificação', Verification,  1],
+    historico:   ['Histórico',   History,       1],
     teste:       ['Teste',       Test,          1],
     not_found:   ['404',         undefined,     1]
   }

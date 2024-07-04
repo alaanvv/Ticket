@@ -19,6 +19,8 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li> <p class:active={$curr_path == '/verificacao'} on:click={_ => navigate('/verificacao')}> <Icon i='qr_code' /> Verificação </p> </li>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li> <p class:active={$curr_path == '/historico'}   on:click={_ => navigate('/historico')}>   <Icon i='history' /> Histórico   </p> </li>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li> <p class:active={$curr_path == '/teste'}       on:click={_ => navigate('/teste')}>       <Icon i='build' />   Teste       </p> </li>
       </ul>
     {/if}

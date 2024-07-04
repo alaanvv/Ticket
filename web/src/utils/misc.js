@@ -28,3 +28,35 @@ export function draw_square(canvas, p1, p2, p3, p4, color) {
   draw_line(p3, p4)
   draw_line(p4, p1)
 }
+
+export function format_date(date_string) {
+  const date = new Date(date_string)
+  const now  = new Date()
+
+  const secs_diff = (now - date) / 1e3
+  const mins_diff = secs_diff / 60
+
+  if      (secs_diff < 60) return `${parseInt(secs_diff)} segs atrás`
+  else if (mins_diff < 60) return `${parseInt(mins_diff)} min${mins_diff > 1 ? 's' : ''} atrás`
+
+  const is_today = date.getDate() == now.getDate() && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()
+
+  const formatter = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day:    '2-digit',
+    month:  '2-digit',
+    hour:   '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  })
+  const parts = formatter.formatToParts(date)
+
+  const day    = parts.find(part => part.type == 'day').value
+  const month  = parts.find(part => part.type == 'month').value
+  const hour   = parts.find(part => part.type == 'hour').value
+  const minute = parts.find(part => part.type == 'minute').value
+
+  return `${!is_today ? `${day}/${month} ` : ''}${hour}:${minute}`
+}
+
