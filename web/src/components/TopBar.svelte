@@ -14,8 +14,12 @@
 
   import { logged_user } from '../store.js'
 
-  function logout() {
-    // TODO Delete the session itself
+  async function logout() {
+    await fetch(`http://192.168.1.106:3333/session/${localStorage.getItem('session_id')}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
+    })
+
     localStorage.removeItem('session_id')
     logged_user.set(undefined)
   }

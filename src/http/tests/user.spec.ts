@@ -3,7 +3,7 @@ import request from 'supertest'
 import { app, load_routes } from '../app'
 
 describe('Event and Ticket API', _ => {
-  let user_id: string
+  let user_id: string, session_id: string
 
   beforeAll(async _ => {
     await load_routes()
@@ -34,6 +34,7 @@ describe('Event and Ticket API', _ => {
 
       expect(res.statusCode).toEqual(200)
       expect(res.body).toEqual(expect.objectContaining({ role: expect.any(String) }))
+      session_id = res.body.session_id
     })
 
     it('shouldn\'t be able to login with invalid password', async _ => {
@@ -64,6 +65,14 @@ describe('Event and Ticket API', _ => {
 
       expect(res.statusCode).toEqual(200)
       expect(res.body.users).toEqual(expect.any(Array))
+    })
+  })
+
+  describe('DELETE /session/:id', _ => {
+    it('should delete a session by id', async _ => {
+      const res = await request(app.server).delete(`/session/${session_id}`).set('Authorization', 'Bearer test')
+
+      expect(res.statusCode).toEqual(204)
     })
   })
 

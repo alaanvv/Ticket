@@ -195,6 +195,8 @@ model Session {
 
 - `/user/:id` **DELETE**
 
+- `/session/:id` **DELETE**
+
 # Ticket Instance
 ```prisma
 model TicketInstance {
