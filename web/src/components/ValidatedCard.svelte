@@ -13,13 +13,20 @@
   import Icon from './Icon.svelte'
 
   import { format_date } from '../utils/misc'
+  import { logged_user, history } from '../store.js'
 
   export let data
 
   async function undo() {
     if (!confirm('Certeza que quer reativar esse ingresso?'))
       return
-    // TODO
+
+    await fetch(`http://192.168.1.106:3333/undo-validation/${data.id}`, {
+      method: 'PUT',
+      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` },
+      body: JSON.stringify({})
+    })
+    history.update(curr => curr.filter(v => v.id != data.id))
   }
 </script>
 

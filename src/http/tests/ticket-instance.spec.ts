@@ -69,4 +69,12 @@ describe('Ticket Instance API', _ => {
       expect(res.statusCode).toEqual(400)
     })
   })
+
+  describe('PUT /undo-validation/:id', _ => {
+    it('should be able to undo a validation', async _ => {
+      const res = await request(app.server).put(`/undo-validation/${ticket_instance_id}`).set('Authorization', 'Bearer test').send()
+
+      expect(res.statusCode).toEqual(204)
+    })
+  })
 })

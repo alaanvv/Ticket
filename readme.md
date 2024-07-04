@@ -225,6 +225,8 @@ model TicketInstance {
 
 - `/validate-ticket-instance/:id` **PUT**
 
+- `/undo-validation/:id` **PUT**
+
 # Todo
 > Event management
 
@@ -264,8 +266,8 @@ model TicketInstance {
 
 - [x] Be able to validate through text
 - [x] Validate through QR
-- [ ] Validation history
-    - [ ] Reactivate a ticket
+- [x] Validation history
+    - [x] Reactivate a ticket
 - [ ] Rewatch Death Note (I'll forward this)
 
 ---
