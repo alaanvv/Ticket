@@ -70,6 +70,9 @@
 
   async function get_ticket_instance() {
     const res = await fetch(`http://192.168.1.106:3333/ticket-instance/${code}`)
+    document.querySelector('input').value = ''
+    update_code()
+
     if (!res.ok)
       return error = 'Ingresso não encontrado'
     validated_data = await res.json()
