@@ -104,7 +104,7 @@
 <style>
   canvas {
     border: 4px solid var(--gray);
-    max-width: 100%;
+    width: 100%;
   }
 
   input, button {
