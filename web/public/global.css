@@ -71,11 +71,6 @@ label {
 	display: block;
 }
 
-button:disabled {
-	background-color: #ccc !important;
-  cursor: not-allowed !important;
-}
-
 /* Number input */
 
 input[type='number'].hide-arrows {
@@ -100,6 +95,14 @@ button {
 
 button:active {
 	background-color: #ddd !important;
+}
+
+button:disabled {
+	background-color: #ccc !important;
+}
+
+button:disabled, button:disabled span {
+  cursor: not-allowed !important;
 }
 
 /* Utils */
