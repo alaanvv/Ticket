@@ -1,6 +1,6 @@
 <div class='row container'>
   <div>
-    <div class='row'>
+    <div class='row gap'>
       <p> <b>{data.event}</b> | <b>{data.ticket}</b> - <b>{data.is_half ? 'Meia' : 'Inteira'}</b> </p>
       <p> ({format_date(data.validated_at)}) </p>
     </div>
@@ -43,10 +43,13 @@
   .row {
     box-sizing: border-box;
     display: flex;
-    gap: 5px;
     align-items: center;
 
     width: 100%;
+  }
+
+  .gap {
+    gap: 5px;
   }
 
   .row p {
@@ -61,5 +64,12 @@
 
     color: white;
     background: var(--blue);
+  }
+
+
+  @media screen and (max-width: 768px) {
+    .container {
+      font-size: 0.8em;
+    }
   }
 </style>

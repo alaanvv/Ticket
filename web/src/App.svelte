@@ -81,7 +81,7 @@
     main {
       width: auto;
       margin: 0;
-      padding-bottom: 50px;
+      padding: 1em 0.5em 50px 0.5em;
     }
   }
 </style>
