@@ -1,4 +1,4 @@
-<form on:submit={submit}>
+<form class='tas' on:submit={submit}>
   {#if error} <p class='red'> {error} </p> {/if}
 
   <label> Nome:

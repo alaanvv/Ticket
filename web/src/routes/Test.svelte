@@ -1,4 +1,4 @@
-<form on:submit={submit}>
+<form class='tas' on:submit={submit}>
   <label> Evento:
     <select bind:value={event_id} on:change={load_tickets}>
       {#each events || [] as event}

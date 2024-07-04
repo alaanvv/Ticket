@@ -72,7 +72,8 @@
     .sidebar ul {
       display: flex;
       flex-direction: row;
-      gap: 10px
+      gap: 10px;
+      padding: 0 100px;
     }
 
     .sidebar :global(li) {
