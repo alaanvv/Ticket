@@ -4,4 +4,3 @@ if [ ! -f ./.env.example ]; then
 fi
 
 cp .env.example .env
-npm i
