@@ -13,12 +13,10 @@
   import Icon from '../components/Icon.svelte'
 
   import { logged_user } from '../store.js'
+  import { api } from '../utils/api.js'
 
   async function logout() {
-    await fetch(`http://192.168.1.106:3333/session/${localStorage.getItem('session_id')}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
-    })
+    await api(`session/${localStorage.getItem('session_id')}`, 'DELETE')
 
     localStorage.removeItem('session_id')
     logged_user.set(undefined)

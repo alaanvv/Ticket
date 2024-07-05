@@ -20,6 +20,7 @@
   import Icon from  '../components/Icon.svelte'
 
   import { logged_user } from '../store.js'
+  import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
   let user = { name: '', password: '' }
@@ -31,12 +32,7 @@
     e.preventDefault()
     error = ''
 
-    const res = await fetch(`http://192.168.1.106:3333/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user)
-    })
-    const data = await res.json()
+    const { res, data } = await api('login', 'POST', user)
 
     if (res.ok) {
       localStorage.setItem('session_id', data.session_id)
@@ -52,12 +48,7 @@
     const session_id = localStorage.getItem('session_id')
     if (!session_id) return
 
-    const res = await fetch(`http://192.168.1.106:3333/session-login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: session_id })
-    })
-    const data = await res.json()
+    const { res, data } = await api('session-login', 'POST', { id: session_id })
 
     if (res.ok)
       logged_user.set({ ...data, session_id })

@@ -14,7 +14,8 @@
   import Button from './Button.svelte'
 
   import { format_date } from '../utils/misc'
-  import { logged_user, history } from '../store.js'
+  import { history } from '../store.js'
+  import { api } from '../utils/api.js'
 
   export let data
 
@@ -22,10 +23,7 @@
     if (!confirm('Certeza que quer reativar esse ingresso?'))
       return
 
-    await fetch(`http://192.168.1.106:3333/undo-validation/${data.id}`, {
-      method: 'PUT',
-      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
-    })
+    await api(`undo-validation/${data.id}`, 'PUT')
     history.update(curr => curr.filter(v => v.id != data.id))
   }
 </script>

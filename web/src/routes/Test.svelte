@@ -33,8 +33,8 @@
 <script>
   import Icon from '../components/Icon.svelte'
 
-  import { logged_user } from '../store.js'
   import { copy_to_clipboard } from '../utils/misc.js'
+  import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
 
@@ -44,13 +44,12 @@
   function copy() { copy_to_clipboard(ticket_instance.id) }
 
   async function load_tickets() {
-    let res = await fetch(`http://192.168.1.106:3333/event-tickets/${event_id}`)
-    let all_tickets = (await res.json()).tickets
+    let { data } = await api(`event-tickets/${event_id}`)
+    let all_tickets = data.tickets
 
     tickets = (await Promise.all(
       all_tickets.map(async t => {
-        const res = await fetch(`http://192.168.1.106:3333/ticket-batches/${t.id}`)
-        const data  = await res.json()
+        const { data } = await api(`ticket-batches/${t.id}`)
         return { ...t, has_batch: data.batches.length }
       })
     )).filter(t => t.has_batch)
@@ -62,22 +61,18 @@
   async function submit(e) {
     e.preventDefault()
 
-    let res = await fetch(`http://192.168.1.106:3333/ticket-batches/${ticket_id}`)
-    const batch_id = (await res.json()).batches[0].id
+    let { data } = await api(`ticket-batches/${ticket_id}`)
+    const batch_id = data.batches[0].id
 
-    res = await fetch(`http://192.168.1.106:3333/ticket-instance/${batch_id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${logged_user.session_id}` },
-      body: JSON.stringify({ price_in_cents: 0, is_half, is_test: true })
-    })
-    const { id } = await res.json()
+    data = (await api(`ticket-instance/${batch_id}`, 'POST', { price_in_cents: 0, is_half, is_test: true })).data
+    const { id } = data
 
     ticket_instance.qr = await QRCode.toDataURL(id)
     ticket_instance.id = id
   }
   onMount(async _ => {
-    const res = await fetch('http://192.168.1.106:3333/all-events')
-    events = (await res.json()).events
+    const { data } = await api('all-events')
+    events = data.events
   })
 </script>
 

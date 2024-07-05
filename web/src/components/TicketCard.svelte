@@ -6,6 +6,7 @@
 
 <script>
   import { navigate } from '../utils/navigation.js'
+  import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
   export let ticket
@@ -14,8 +15,8 @@
   function enter() { navigate(`/ingresso/${ticket.id}`) }
 
   onMount(async _ => {
-    const res = await fetch(`http://192.168.1.106:3333/active-batch/${ticket.id}`)
-    active = (await res.json()).batch
+    const { data } = await api(`active-batch/${ticket.id}`)
+    active = data.batch
   })
 </script>
 

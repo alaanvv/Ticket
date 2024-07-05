@@ -56,7 +56,8 @@
   import TicketCard  from '../components/TicketCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
-  import { curr_path, logged_user } from '../store.js'
+  import { api } from '../utils/api.js'
+  import { curr_path } from '../store.js'
   import { onMount } from 'svelte'
 
   let event, tickets, formatted_date, maps_link, m_event, m_ticket, m_details
@@ -76,20 +77,17 @@
   function open_details()  { m_details = true }
 
   async function load_event() {
-    let res = await fetch(`http://192.168.1.106:3333/events/${id}`)
-    event = (await res.json()).event
+    let { data } = await api(`events/${id}`)
+    event = data.event
 
-    res = await fetch(`http://192.168.1.106:3333/event-tickets/${id}`)
-    tickets = (await res.json()).tickets
+    data = (await api(`event-tickets/${id}`)).data
+    tickets = data.tickets
   }
 
   async function delete_event() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://192.168.1.106:3333/event/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
-    })
+    await api(`event/${id}`, 'DELETE')
     back()
   }
 

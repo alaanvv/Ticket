@@ -18,14 +18,15 @@
   import Button    from '../components/Button.svelte'
 
   import { onMount } from 'svelte'
+  import { api } from '../utils/api.js'
 
   let users, m_user
 
   function create_user() { m_user = true }
 
   async function load_users() {
-    let res = await fetch('http://192.168.1.106:3333/all-users')
-    users = (await res.json()).users
+    const { data } = await api(`all-users`)
+    users = data.users
   }
 
   onMount(load_users)

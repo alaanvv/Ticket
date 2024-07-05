@@ -38,6 +38,7 @@
   import BatchCard   from '../components/BatchCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
+  import { api } from '../utils/api.js'
   import { curr_path } from '../store.js'
   import { onMount } from 'svelte'
 
@@ -51,13 +52,13 @@
   function back() { navigate(`/evento/${ticket.event_id}`) }
 
   async function load_ticket() {
-    let res = await fetch(`http://192.168.1.106:3333/ticket/${id}`)
-    ticket = (await res.json()).ticket
+    const { data } = await api(`ticket/${id}`)
+    ticket = data.ticket
   }
 
   async function load_batches() {
-    const res = await fetch(`http://192.168.1.106:3333/ticket-batches/${id}`)
-    batches = (await res.json()).batches
+    const { data } = await api(`ticket-batches/${id}`)
+    batches = data.batches
 
     is_active = false
     for (let i in batches) {
@@ -71,7 +72,7 @@
   async function delete_ticket() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://192.168.1.106:3333/ticket/${id}`, { method: 'DELETE' })
+    await api(`ticket/${id}`, 'DELETE')
     back()
   }
 
@@ -79,7 +80,7 @@
     await load_ticket()
     await load_batches()
 
-    const res = await fetch(`http://192.168.1.106:3333/events/${ticket.event_id}`)
-    event_name = (await res.json()).event.name
+    const { data } = await api(`events/${ticket.event_id}`)
+    event_name = data.event.name
   })
 </script>

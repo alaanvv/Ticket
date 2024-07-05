@@ -1,8 +1,10 @@
-<div hidden={cam_loaded}> {loading_message} </div>
-<canvas {width} {height} class:reading={reading} hidden={!cam_loaded} />
+<div class='content'>
+  <div hidden={cam_loaded}> {loading_message} </div>
+  <canvas {width} {height} class:reading={reading} hidden={!cam_loaded} />
 
-<input class:grn={reading} on:input={update_code} placeholder='Leia o QR ou digite' />
-<button class='grn' disabled={!code} on:click={get_ticket_instance}> Validar </button>
+  <input class:grn={reading} on:input={update_code} placeholder='Leia o QR ou digite' />
+  <button class='grn' disabled={!code} on:click={get_ticket_instance}> Validar </button>
+</div>
 
 {#if validated_data}
   <Modal bind:show={validated_data}>
@@ -35,6 +37,7 @@
 
   import { draw_square, format_date } from '../utils/misc'
   import { history } from '../store.js'
+  import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
   import jsQR from 'jsqr'
 
@@ -69,17 +72,15 @@
   }
 
   async function get_ticket_instance() {
-    const res = await fetch(`http://192.168.1.106:3333/ticket-instance/${code}`)
-    document.querySelector('input').value = ''
-    update_code()
+    const { res, data } = await api(`ticket-instance/${code}`)
 
     if (!res.ok)
       return error = 'Ingresso não encontrado'
-    validated_data = await res.json()
+    validated_data = data
   }
 
   async function validate() {
-    await fetch(`http://192.168.1.106:3333/validate-ticket-instance/${code}`, { method: 'PUT' })
+    await api(`validate-ticket-instance/${code}`, 'PUT')
 
     history.update(curr => [...curr, {
       id:           validated_data.ticket_instance.id,
@@ -90,6 +91,9 @@
     }])
 
     validated_data = undefined
+
+    document.querySelector('input').value = ''
+    update_code()
   }
 
   onMount(async _ => {
@@ -105,9 +109,15 @@
 </script>
 
 <style>
-  canvas {
-    border: 3px solid var(--gray);
+  .content {
     width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  canvas {
+    width: 100%;
+    border: 3px solid var(--gray);
   }
   canvas.reading {
     border-color: var(--green);

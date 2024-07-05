@@ -19,7 +19,7 @@
 
   import { createEventDispatcher } from 'svelte'
   import { navigate } from '../utils/navigation.js'
-  import { logged_user } from '../store.js'
+  import { api } from '../utils/api.js'
 
   const dispatch = createEventDispatcher()
 
@@ -36,20 +36,12 @@
     e.preventDefault()
 
     if (!data) {
-      const res = await fetch(`http://192.168.1.106:3333/ticket/${event_id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
-        body: JSON.stringify(ticket)
-      })
+      const { data } = await api(`ticket/${event_id}`, 'POST', ticket)
 
-      navigate(`/ingresso/${(await res.json()).id}`)
+      navigate(`/ingresso/${data.id}`)
     }
     else {
-      await fetch(`http://192.168.1.106:3333/edit-ticket/${data.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
-        body: JSON.stringify(ticket)
-      })
+      await api(`edit-ticket/${data.id}`, 'PUT', ticket)
 
       dispatch('update')
       close()

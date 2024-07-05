@@ -29,8 +29,8 @@
   import Modal from './Modal.svelte'
   import Icon  from './Icon.svelte'
 
-  import { logged_user } from '../store.js'
   import { createEventDispatcher } from 'svelte'
+  import { api } from '../utils/api.js'
 
   const dispatch = createEventDispatcher()
 
@@ -50,19 +50,8 @@
   async function submit(e) {
     e.preventDefault()
 
-    if (!data)
-      await fetch(`http://192.168.1.106:3333/user`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
-        body: JSON.stringify(user)
-      })
-
-    else
-      await fetch(`http://192.168.1.106:3333/edit-user/${data.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${$logged_user.session_id}` },
-        body: JSON.stringify(user)
-      })
+    if (!data) await api('user', 'POST', user)
+    else       await api(`edit-user/${data.id}`, 'PUT', user)
 
     dispatch('update')
     close()

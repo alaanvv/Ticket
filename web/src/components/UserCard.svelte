@@ -9,7 +9,7 @@
 </div>
 
 {#if m_user}
-  <UserModal bind:show={m_user} data={user} />
+  <UserModal bind:show={m_user} on:update={update} data={user} />
 {/if}
 
 {#if password}
@@ -24,7 +24,7 @@
   import Modal     from '../components/Modal.svelte'
 
   import { createEventDispatcher } from 'svelte'
-  import { logged_user } from '../store.js'
+  import { api } from '../utils/api.js'
 
   const dispatch = createEventDispatcher()
 
@@ -38,16 +38,13 @@
 
   function edit_user() { m_user = true }
   function show_password() { password = user.password }
+  function update() { dispatch('update') }
 
   async function delete_user() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await fetch(`http://192.168.1.106:3333/user/${user.id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${$logged_user.session_id}` }
-    })
-
-    dispatch('update')
+    await api(`user/${user.id}`, 'DELETE')
+    update()
   }
 </script>
 
