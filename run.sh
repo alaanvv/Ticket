@@ -1,7 +1,2 @@
-if [ ! -f ./.env.example ]; then
-  echo "\".env.example\" not found"
-  exit 1
-fi
-
-cp .env.example .env
-$(docker compose up) & $(npm run studio) & clear & npm run dev
+npm run build
+$(npm run studio) & clear & npm run dev

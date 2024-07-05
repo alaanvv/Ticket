@@ -3,15 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "bash ./build.sh",
+    "start": "docker compose up && tsx ./src/http/server.ts",
     "dev": "tsx watch ./src/http/server.ts",
-    "test": "vitest run --dir ./src/http",
-    "test:e2e:watch": "vitest --dir ./src/http",
     "migrate": "prisma migrate dev",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "test": "vitest run --dir ./src/http"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@fastify/cors": "^9.0.1",
     "@prisma/client": "^5.14.0",
