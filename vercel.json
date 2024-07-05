@@ -1,5 +1,10 @@
 {
-  "outputDirectory": "build",
+  "builds": [
+    {
+      "src": "./api/serverless.js",
+      "use": "@vercel/node"
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
