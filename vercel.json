@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "src": "run.sh",
+      "use": "@vercel/node",
+      "config": {
+        "outputDirectory": "public"
+      }
+    },
+    {
+      "src": "web/run.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "outputDirectory": "public/build"
+      }
+    }
+  ]
+}
