@@ -4,5 +4,9 @@
       "src": "./dist/main.js",
       "use": "@vercel/node"
     }
-  ]
+  ],
+  "rewrites": [{
+    "source": "/(.*)",
+    "destination": "/dist/main.ts"
+  }]
 }
