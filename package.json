@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "clear && echo tsc && npx tsc && clear && echo webpack && npx webpack",
+    "build": "clear && bash ./build.sh clear && echo tsc && npx tsc && clear && echo webpack && npx webpack",
     "start": "clear && echo docker && docker compose up -d && clear && node ./dist/main.js",
-    "dev":   "clear && tsx watch ./src/http/server.ts",
-
+    "dev": "clear && tsx watch ./src/http/server.ts",
     "migrate": "prisma migrate dev",
     "studio": "prisma studio",
     "test": "vitest run --dir ./src/http"
@@ -34,6 +33,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/node": "^20.14.0",
     "@types/supertest": "^6.0.2",
+    "@types/webpack-env": "^1.18.5",
     "babel-core": "^6.26.3",
     "babel-loader": "^9.1.3",
     "babel-preset-es2015": "^6.24.1",

@@ -1,18 +1,24 @@
 import { BadRequestError, NotFoundError, ForbiddenError } from './errors'
+import cors from '@fastify/cors'
 import { ZodError } from 'zod'
-import { env } from '../env'
 import fastify from 'fastify'
-import {glob} from 'glob'
+import { env } from '../env'
+import { glob } from 'glob'
 import path from 'path'
 
 export const app = fastify()
-
-import cors from '@fastify/cors'
 app.register(cors, { origin: '*' })
 
 export async function load_routes() {
-  const routes = glob.sync(path.join(__dirname, './routes/*/*'))
-  await Promise.all(routes.map(async path => app.register((await import(`${path}`)).default)))
+  try {
+    const context = require.context('./routes', true, /\.js$/)
+    const routes = context.keys().map(context)
+    await Promise.all(routes.map(async (route: any) => { await app.register(route.default || route) }))
+  }
+  catch {
+    const routes = glob.sync(path.join(__dirname, './routes/*/*'))
+    await Promise.all(routes.map(async path => app.register((await import(`${path}`)).default)))
+  }
 }
 
 app.setErrorHandler((error, _, reply) => {
