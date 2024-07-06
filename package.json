@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "vercel-build": "clear && bash ./build.sh clear && echo tsc && npx tsc && clear && echo webpack && npx webpack",
     "build": "clear && bash ./build.sh clear && echo tsc && npx tsc && clear && echo webpack && npx webpack",
     "start": "clear && echo docker && docker compose up -d && clear && node ./dist/main.js",
     "dev": "clear && tsx watch ./src/http/server.ts",
