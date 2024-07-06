@@ -1,9 +1,10 @@
 const nodeExternals = require('webpack-node-externals')
 const path = require('path')
+const fs = require('fs')
 
 module.exports = {
   mode: 'development',
-  entry: './dist/src/http/server.js',
+  entry: fs.readdirSync('./dist').filter(f => f.endsWith('.js')).map(f => `./dist/${f}`),
   target: 'node',
   output: {
     filename: 'main.js',
