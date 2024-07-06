@@ -8,9 +8,5 @@
   "rewrites": [{
     "source": "(.*)",
     "destination": "./dist/main.ts"
-  }],
-  "routes": [{
-    "src": "(.*)",
-    "dest": "./dist/main.ts"
   }]
 }
