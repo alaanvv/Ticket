@@ -11,8 +11,8 @@ import cors from '@fastify/cors'
 app.register(cors, { origin: '*' })
 
 export async function load_routes() {
-  const routes = glob.sync(path.join(__dirname, './routes/*/*.ts'))
-  await Promise.all(routes.map(async path => app.register((await import(path)).default)))
+  const routes = glob.sync(path.join(__dirname, './routes/*/*'))
+  await Promise.all(routes.map(async path => app.register((await import(`${path}`)).default)))
 }
 
 app.setErrorHandler((error, _, reply) => {
