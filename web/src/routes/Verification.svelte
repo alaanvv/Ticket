@@ -19,11 +19,13 @@
       {/if}
 
       {#if !validated_data.ticket_instance.validated_at}
-        <button class='grn' on:click={validate}> Confirmar </button>
+        <button class='grn' on:click={validate} disabled={l_validating}> {l_validating ? '...' : 'Confirmar'} </button>
       {/if}
-      <button class='red' on:click={_ => validated_data = undefined}> Cancelar </button>
+      <button class='red' on:click={_ => validated_data = undefined} disabled={l_validating}> Cancelar </button>
     </div>
   </Modal>
+{:else if l_validated_data}
+  <Modal> Validando... </Modal>
 {/if}
 
 {#if error}
@@ -41,7 +43,7 @@
   import { onMount } from 'svelte'
   import jsQR from 'jsqr'
 
-  let canvas, cam_loaded, width, height, reading, error, code, validated_data
+  let canvas, cam_loaded, width, height, reading, error, code, validated_data, l_validated_data, l_validating
   let loading_message = '🎥 Câmera inacessível, tente recarregar a página'
   let video = document.createElement('video')
 
@@ -72,14 +74,16 @@
   }
 
   async function get_ticket_instance() {
+    l_validated_data = true
     const { res, data } = await api(`ticket-instance/${code}`)
 
-    if (!res.ok)
-      return error = 'Ingresso não encontrado'
+    if (!res.ok) return error = 'Ingresso não encontrado'
     validated_data = data
+    l_validated_data = false
   }
 
   async function validate() {
+    l_validating = true
     await api(`validate-ticket-instance/${code}`, 'PUT')
 
     history.update(curr => [...curr, {
@@ -94,6 +98,7 @@
 
     document.querySelector('input').value = ''
     update_code()
+    l_validating = false
   }
 
   onMount(async _ => {

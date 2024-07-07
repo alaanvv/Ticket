@@ -21,7 +21,7 @@
       </select>
     </label>
 
-    <button type='submit'> Enviar </button>
+    <button type='submit' disabled={l_submitting}> Enviar </button>
   </form>
 </Modal>
 
@@ -29,31 +29,32 @@
   import Modal from './Modal.svelte'
   import Icon  from './Icon.svelte'
 
-  import { createEventDispatcher } from 'svelte'
   import { api } from '../utils/api.js'
 
-  const dispatch = createEventDispatcher()
-
-  export let data, show
-  let show_password
-
+  export let data, show, users
+  let show_password, l_submitting
   let user = {
     name:     data?.name,
     password: data?.password,
     role:     data?.role
   }
 
-  function close() { show = false }
-
+  function close()                { show = false }
   function toggle_show_password() { show_password = !show_password }
 
   async function submit(e) {
     e.preventDefault()
 
-    if (!data) await api('user', 'POST', user)
-    else       await api(`edit-user/${data.id}`, 'PUT', user)
+    l_submitting = true
+    if (!data) {
+      const { id } = (await api('user', 'POST', user)).data
+      users = [...users, { id, editable: true, ...user }]
+    }
+    else {
+      await api(`edit-user/${data.id}`, 'PUT', user)
+      users = users.map(u => u.id == data.id ? { ...u, ...user } : u)
+    }
 
-    dispatch('update')
     close()
   }
 </script>

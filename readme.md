@@ -269,6 +269,12 @@ model TicketInstance {
 - [x] Be able to validate through text
 - [x] Validate through QR
 - [x] Reactivate a ticket
+
+> Finishing
+
+- [x] Add loading stuff to front-end
+- [x] Use less API calls
+- [ ] Make API return more info
 - [ ] Rewatch Death Note (I'll forward this)
 
 ---

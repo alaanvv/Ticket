@@ -174,9 +174,8 @@ button.grn {
   word-wrap: break-word;
 }
 
-.cp {
-  cursor: pointer;
-}
+.cp { cursor: pointer; }
+.cw { cursor: wait;    }
 
 .tac {
   text-align: center;

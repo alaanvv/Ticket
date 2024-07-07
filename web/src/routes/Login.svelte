@@ -1,20 +1,23 @@
-<form class='tas' on:submit={submit}>
-  {#if error} <p class='red'> {error} </p> {/if}
+{#if not_logged}
+  <form class='tas' on:submit={submit}>
+    {#if error} <p class='red'> {error} </p> {/if}
 
-  <label> Nome:
-    <input type='text' bind:value={user.name} required />
-  </label>
+    <label> Nome:
+      <input type='text' bind:value={user.name} required />
+    </label>
 
-  <label> Senha:
-    <div class='password-container'>
-      <input type='password' bind:value={user.password} style='display: {show_password ? 'none' : 'block'};' />
-      <input type='text'     bind:value={user.password} style='display: {show_password ? 'block' : 'none'};' />
-      <Icon on:click={toggle_show_password} i={show_password ? 'visibility_off' : 'visibility'}  />
-    </div>
-  </label>
+    <label> Senha:
+      <div class='password-container'>
+        <input type='password' bind:value={user.password} style='display: {show_password ? 'none' : 'block'};' />
+        <input type='text'     bind:value={user.password} style='display: {show_password ? 'block' : 'none'};' />
+        <Icon on:click={toggle_show_password} i={show_password ? 'visibility_off' : 'visibility'}  />
+      </div>
+    </label>
 
-  <button type='submit'> Entrar </button>
-</form>
+    <button type='submit'> Entrar </button>
+  </form>
+{:else} Logando...
+{/if}
 
 <script>
   import Icon from  '../components/Icon.svelte'
@@ -24,7 +27,7 @@
   import { onMount } from 'svelte'
 
   let user = { name: '', password: '' }
-  let error, show_password
+  let error, show_password, not_logged
 
   function toggle_show_password() { show_password = !show_password }
 
@@ -46,12 +49,11 @@
 
   onMount(async _ => {
     const session_id = localStorage.getItem('session_id')
-    if (!session_id) return
+    if (!session_id) return not_logged = true
 
     const { res, data } = await api('session-login', 'POST', { id: session_id })
-
-    if (res.ok)
-      logged_user.set({ ...data, session_id })
+    if (res.ok) logged_user.set({ ...data, session_id })
+    else not_logged = true
   })
 </script>
 

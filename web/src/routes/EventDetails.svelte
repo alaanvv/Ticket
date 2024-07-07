@@ -4,19 +4,20 @@
   <Button class='red' action={delete_event} i='delete'     t='Excluir' />
 </div>
 
+{#if event}
 <div class='info'>
   <img src={event?.image} alt='Sem imagem'>
 
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class='data' on:click={open_details}>
-    <h2 class='row'> {event?.name} <span class='detail'> <Icon i='calendar_month' /> {formatted_date} </span> </h2> <br>
+    <h2 class='row'> {event?.name} <span class='detail'> <Icon i='calendar_month' /> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span> </h2> <br>
     {event?.description || 'Sem descrição.'}
   </div>
 
   <div class='local'>
     <b class='row'> <Icon i='map' />         Local:    </b> <br> {event?.local}
     <b class='row'> <Icon i='location_on' /> Endereço: </b> <br> {event?.address}
-    <b class='row'> <Icon i='public' /> <a href={maps_link}> Localização no maps </a> </b>
+    <b class='row'> <Icon i='public' /> <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b>
   </div>
 </div>
 
@@ -31,9 +32,11 @@
     <TicketCard {ticket} />
   {/each}
 </div>
+{:else} Carregando...
+{/if}
 
 {#if m_event}
-  <EventModal bind:show={m_event} on:update={load_event} data={event} />
+  <EventModal bind:rendered_event={event} bind:show={m_event} data={event} />
 {/if}
 
 {#if m_ticket}
@@ -47,6 +50,10 @@
   </Modal>
 {/if}
 
+{#if l_deleting}
+  <Modal> Excluindo... </Modal>
+{/if}
+
 <script>
   import Button      from '../components/Button.svelte'
   import Icon        from '../components/Icon.svelte'
@@ -56,20 +63,13 @@
   import TicketCard  from '../components/TicketCard.svelte'
 
   import { navigate } from '../utils/navigation.js'
-  import { api } from '../utils/api.js'
   import { curr_path } from '../store.js'
+  import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
-  let event, tickets, formatted_date, maps_link, m_event, m_ticket, m_details
+  let event, tickets, m_event, m_ticket, m_details, l_deleting
 
   const id = $curr_path.split('/').pop()
-
-  $: {
-    if (event) {
-      formatted_date = (new Date(event.date)).toLocaleDateString('pt-BR')
-      maps_link = `https://www.google.com/maps?q=${event.latitude},${event.longitude}`
-    }
-  }
 
   function back() { navigate('/eventos') }
   function edit_event()    { m_event   = true }
@@ -77,16 +77,14 @@
   function open_details()  { m_details = true }
 
   async function load_event() {
-    let { data } = await api(`events/${id}`)
-    event = data.event
-
-    data = (await api(`event-tickets/${id}`)).data
-    tickets = data.tickets
+    tickets = (await api(`event-tickets/${id}`)).data.tickets
+    event   = (await api(`events/${id}`)).data.event
   }
 
   async function delete_event() {
     if (!confirm('Certeza que deseja excluir?')) return
 
+    l_deleting = true
     await api(`event/${id}`, 'DELETE')
     back()
   }

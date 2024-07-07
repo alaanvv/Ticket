@@ -14,19 +14,16 @@
       <input type='number' bind:value={batch.amount} required />
     </label>
 
-    <button type='submit'> Enviar </button>
+    <button type='submit' disabled={l_submitting}> {l_submitting ? '...' : 'Enviar'} </button>
   </form>
 </Modal>
 
 <script>
   import Modal from './Modal.svelte'
 
-  import { createEventDispatcher } from 'svelte'
   import { api } from '../utils/api.js'
 
-  const dispatch = createEventDispatcher()
-
-  export let data, ticket_id, allow_half, show
+  export let data, ticket_id, allow_half, show, rendered_batch, batches, l_submitting
   const started_with_amount = data?.amount
 
   let batch = {
@@ -52,21 +49,25 @@
 
   async function submit(e) {
     e.preventDefault()
+    l_submitting = true
     batch.price_in_cents      = batch.price      * 100
     batch.half_price_in_cents = batch.half_price * 100
     if (isNaN(batch.half_price_in_cents))
       delete batch.half_price_in_cents
 
-    if (!data)
-      await api(`create-batches/${ticket_id}`, 'POST', { batches: [batch] })
+    if (!data) {
+      const { id } = (await api(`create-batches/${ticket_id}`, 'POST', { batches: [batch] })).data
+      batches = [...batches, { id, ...batch }]
+    }
     else {
       if (batch.amount == started_with_amount)
         delete batch.amount
 
       await api(`edit-batch/${data.id}`, 'PUT', batch)
+      rendered_batch = { ...rendered_batch, ...batch }
     }
 
-    dispatch('update')
+    l_submitting = false
     close()
   }
 </script>

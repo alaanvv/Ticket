@@ -14,33 +14,26 @@
 </div>
 
 {#if m_batch}
-  <BatchModal bind:show={m_batch} on:update={update} ticket_id={batch.ticket_id} allow_half={allow_half} data={batch} />
+  <BatchModal bind:rendered_batch={batch} bind:show={m_batch} ticket_id={batch.ticket_id} allow_half={allow_half} data={batch} />
 {/if}
 
 <script>
   import Button     from '../components/Button.svelte'
   import BatchModal from '../components/BatchModal.svelte'
 
-  import { createEventDispatcher } from 'svelte'
   import { api } from '../utils/api.js'
 
-  const dispatch = createEventDispatcher()
-
-  export let batch, i, allow_half
+  export let batch, i, allow_half, batches
   let m_batch
 
   function edit_batch() { m_batch = true }
-  function update() { dispatch('update') }
+  function format_price(price) { return String(price / 100).replace('.', ',') }
 
-  function format_price(price) {
-    return String(price / 100).replace('.', ',')
-  }
-
-  async function delete_batch() {
+  function delete_batch() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await api(`batch/${batch.id}`, 'DELETE')
-    dispatch('update')
+    batches = batches.filter(b => b.id != batch.id)
+    api(`batch/${batch.id}`, 'DELETE')
   }
 </script>
 

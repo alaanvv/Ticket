@@ -1,6 +1,6 @@
 <form class='tas' on:submit={submit}>
   <label> Evento:
-    <select bind:value={event_id} on:change={load_tickets}>
+    <select bind:value={event_id} on:change={load_tickets} class:cw={l_events}>
       {#each events || [] as event}
         <option value={event.id}> {event.name} </option>
       {/each}
@@ -8,7 +8,7 @@
   </label>
 
   <label> Ingresso:
-    <select bind:value={ticket_id} disabled={!event_id}>
+    <select bind:value={ticket_id} class:cw={l_tickets} disabled={!event_id}>
       {#each tickets || [] as ticket}
         <option value={ticket.id}> {ticket.name} </option>
       {/each}
@@ -22,9 +22,11 @@
   <button class='grn' type='submit' disabled={!ticket_id}> Criar Ingresso Teste </button>
 </form>
 
-{#if ticket_instance.id}
-  <div class='hr' />
+<div class='hr' />
 
+{#if l_ticket_instance} Carregando... {/if}
+
+{#if ticket_instance.id}
   <img src={ticket_instance.qr} alt='QR Code' />
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <p on:click={copy} class='code t-w-icon'> {ticket_instance.id} <Icon i='content_copy' /> </p>
@@ -38,12 +40,14 @@
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
 
-  let events, tickets, event_id, ticket_id, is_half
+  let events, tickets, event_id, ticket_id, is_half, l_events = true, l_tickets, l_ticket_instance
   let ticket_instance = {}
 
   function copy() { copy_to_clipboard(ticket_instance.id) }
 
   async function load_tickets() {
+    l_tickets = true
+
     let { data } = await api(`event-tickets/${event_id}`)
     let all_tickets = data.tickets
 
@@ -56,23 +60,29 @@
 
     if (tickets.length == 1)
       ticket_id = tickets[0].id
+
+    l_tickets = false
   }
 
   async function submit(e) {
     e.preventDefault()
+    l_ticket_instance = true
 
     let { data } = await api(`ticket-batches/${ticket_id}`)
     const batch_id = data.batches[0].id
 
-    data = (await api(`ticket-instance/${batch_id}`, 'POST', { price_in_cents: 0, is_half, is_test: true })).data
-    const { id } = data
+    const { id } = (await api(`ticket-instance/${batch_id}`, 'POST', { price_in_cents: 0, is_half, is_test: true })).data
 
     ticket_instance.qr = await QRCode.toDataURL(id)
     ticket_instance.id = id
+
+    l_ticket_instance = false
   }
+
   onMount(async _ => {
     const { data } = await api('all-events')
     events = data.events
+    l_events = false
   })
 </script>
 

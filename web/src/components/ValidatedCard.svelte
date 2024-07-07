@@ -19,12 +19,11 @@
 
   export let data
 
-  async function undo() {
-    if (!confirm('Certeza que quer reativar esse ingresso?'))
-      return
+  function undo() {
+    if (!confirm('Certeza que quer reativar esse ingresso?')) return
 
-    await api(`undo-validation/${data.id}`, 'PUT')
     history.update(curr => curr.filter(v => v.id != data.id))
+    api(`undo-validation/${data.id}`, 'PUT')
   }
 </script>
 

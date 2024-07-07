@@ -38,21 +38,19 @@
         {#if errors.date} <p class='error red'> {errors.date} </p> {/if}
       </label>
 
-      <button type="submit"> Enviar </button>
+      <button type="submit" disabled={l_submitting}> {l_submitting ? '...' : 'Enviar'} </button>
     </form>
 </Modal>
 
 <script>
   import Modal from './Modal.svelte'
 
-  import { createEventDispatcher } from 'svelte'
   import { navigate } from '../utils/navigation.js'
   import { api } from '../utils/api.js'
   import z from 'zod'
 
-  const dispatch = createEventDispatcher()
-
-  export let data, show
+  export let data, show, rendered_event
+  let l_submitting
 
   let event = {
     name:        data?.name,
@@ -93,14 +91,14 @@
       return
     }
 
+    l_submitting = true
     if (!data) {
       const { data } = await api('events', 'POST', validated_data)
       return navigate(`/evento/${data.id}`)
     }
 
     await api(`edit-event/${data.id}`, 'PUT', validated_data)
-
-    dispatch('update')
+    rendered_event = { ...rendered_event, ...validated_data }
     close()
   }
 </script>

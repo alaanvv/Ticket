@@ -2,19 +2,19 @@
   <h3 class='oe'> {user.name} ({role_name[user.role]}) </h3>
 
   <div class='row'>
-    <Button                                       action={show_password} i='visibility' />
-    <Button class='blu' disabled={!user.editable} action={edit_user}     i='edit' />
-    <Button class='red' disabled={!user.editable} action={delete_user}   i='delete' />
+    <Button action={show_password} i='visibility' />
+    <Button action={edit_user}     i='edit'   class='blu' disabled={!user.editable} />
+    <Button action={delete_user}   i='delete' class='red' disabled={!user.editable} />
   </div>
 </div>
 
 {#if m_user}
-  <UserModal bind:show={m_user} on:update={update} data={user} />
+  <UserModal bind:users bind:show={m_user} data={user} />
 {/if}
 
 {#if password}
   <Modal bind:show={password}>
-    Senha: <b> {password}   </b> <br>
+    Senha: <b> {password} </b>
   </Modal>
 {/if}
 
@@ -23,12 +23,9 @@
   import Button    from '../components/Button.svelte'
   import Modal     from '../components/Modal.svelte'
 
-  import { createEventDispatcher } from 'svelte'
   import { api } from '../utils/api.js'
 
-  const dispatch = createEventDispatcher()
-
-  export let user
+  export let user, users
   let m_user, password
 
   const role_name = {
@@ -36,15 +33,14 @@
     portaria: 'Portaria'
   }
 
-  function edit_user() { m_user = true }
+  function edit_user()     { m_user = true }
   function show_password() { password = user.password }
-  function update() { dispatch('update') }
 
-  async function delete_user() {
+  function delete_user() {
     if (!confirm('Certeza que deseja excluir?')) return
 
-    await api(`user/${user.id}`, 'DELETE')
-    update()
+    users = users.filter(u => u.id != user.id)
+    api(`user/${user.id}`, 'DELETE')
   }
 </script>
 

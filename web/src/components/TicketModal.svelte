@@ -10,20 +10,18 @@
       <input type='checkbox' bind:checked={ticket.allow_half} />
     </label>
 
-    <button type='submit'> Enviar </button>
+    <button type='submit' disabled={l_submitting}> {l_submitting ? '...' : 'Enviar'} </button>
   </form>
 </Modal>
 
 <script>
   import Modal from './Modal.svelte'
 
-  import { createEventDispatcher } from 'svelte'
   import { navigate } from '../utils/navigation.js'
   import { api } from '../utils/api.js'
 
-  const dispatch = createEventDispatcher()
-
-  export let data, event_id, show
+  export let data, event_id, show, rendered_ticket
+  let l_submitting
 
   let ticket = {
     name:       data?.name,
@@ -35,17 +33,16 @@
   async function submit(e) {
     e.preventDefault()
 
+    l_submitting = true
     if (!data) {
       const { data } = await api(`ticket/${event_id}`, 'POST', ticket)
 
-      navigate(`/ingresso/${data.id}`)
+      return navigate(`/ingresso/${data.id}`)
     }
-    else {
-      await api(`edit-ticket/${data.id}`, 'PUT', ticket)
+    await api(`edit-ticket/${data.id}`, 'PUT', ticket)
+    rendered_ticket = { ...rendered_ticket, ...ticket }
 
-      dispatch('update')
-      close()
-    }
+    close()
   }
 </script>
 
