@@ -9899,29 +9899,29 @@ function create_if_block_4$1(ctx) {
 			attr_dev(img, "alt", "Sem imagem");
 			attr_dev(img, "class", "svelte-wrj9cp");
 			add_location(img, file$8, 8, 4, 302);
-			attr_dev(span, "class", "detail");
+			attr_dev(span, "class", "row detail");
 			add_location(span, file$8, 12, 36, 488);
 			attr_dev(h2, "class", "row");
 			add_location(h2, file$8, 12, 6, 458);
-			add_location(br, file$8, 12, 153, 605);
+			add_location(br, file$8, 12, 157, 609);
 			attr_dev(div0, "class", "data svelte-wrj9cp");
 			add_location(div0, file$8, 11, 4, 409);
 			attr_dev(b0, "class", "row");
-			add_location(b0, file$8, 17, 6, 698);
+			add_location(b0, file$8, 17, 6, 702);
 			attr_dev(b1, "class", "row");
-			add_location(b1, file$8, 18, 6, 774);
+			add_location(b1, file$8, 18, 6, 778);
 			attr_dev(a, "href", a_href_value = `https://www.google.com/maps?q=${/*event*/ ctx[0].latitude},${/*event*/ ctx[0].longitude}`);
-			add_location(a, file$8, 19, 44, 890);
+			add_location(a, file$8, 19, 47, 897);
 			attr_dev(b2, "class", "row");
-			add_location(b2, file$8, 19, 8, 854);
+			add_location(b2, file$8, 19, 6, 856);
 			attr_dev(div1, "class", "local svelte-wrj9cp");
-			add_location(div1, file$8, 16, 4, 672);
+			add_location(div1, file$8, 16, 4, 676);
 			attr_dev(div2, "class", "info svelte-wrj9cp");
 			add_location(div2, file$8, 7, 2, 279);
 			attr_dev(div3, "class", "hr");
-			add_location(div3, file$8, 23, 2, 1023);
+			add_location(div3, file$8, 23, 2, 1030);
 			attr_dev(div4, "class", "flex-list");
-			add_location(div4, file$8, 26, 2, 1120);
+			add_location(div4, file$8, 26, 2, 1127);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div2, anchor);
@@ -10430,9 +10430,9 @@ function create_default_slot$3(ctx) {
 			t1 = space();
 			p = element("p");
 			t2 = text(t2_value);
-			add_location(h2, file$8, 48, 4, 1548);
+			add_location(h2, file$8, 48, 4, 1555);
 			attr_dev(p, "class", "wrappable");
-			add_location(p, file$8, 49, 4, 1576);
+			add_location(p, file$8, 49, 4, 1583);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, h2, anchor);
@@ -11953,20 +11953,21 @@ function create_if_block_3$1(ctx) {
 			}
 
 			attr_dev(span0, "class", "detail");
-			add_location(span0, file$5, 8, 23, 313);
+			add_location(span0, file$5, 8, 35, 325);
+			attr_dev(h2, "class", "row");
 			add_location(h2, file$5, 8, 4, 294);
-			add_location(br0, file$5, 8, 78, 368);
+			add_location(br0, file$5, 8, 90, 380);
 			attr_dev(span1, "class", span1_class_value = /*ticket*/ ctx[0].allow_half ? 'grn' : 'red');
-			add_location(span1, file$5, 10, 4, 378);
-			add_location(br1, file$5, 10, 115, 489);
+			add_location(span1, file$5, 10, 4, 390);
+			add_location(br1, file$5, 10, 115, 501);
 			attr_dev(span2, "class", span2_class_value = /*is_active*/ ctx[2] ? 'grn' : 'red');
-			add_location(span2, file$5, 11, 4, 498);
+			add_location(span2, file$5, 11, 4, 510);
 			attr_dev(div0, "class", "tas");
 			add_location(div0, file$5, 7, 2, 272);
 			attr_dev(div1, "class", "hr");
-			add_location(div1, file$5, 14, 2, 621);
+			add_location(div1, file$5, 14, 2, 633);
 			attr_dev(div2, "class", "flex-list");
-			add_location(div2, file$5, 18, 2, 735);
+			add_location(div2, file$5, 18, 2, 747);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div0, anchor);

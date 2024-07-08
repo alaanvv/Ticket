@@ -6,7 +6,7 @@
 
 {#if event_name}
   <div class='tas'>
-    <h2> {ticket.name} <span class='detail'> {event_name || ''} </span> </h2> <br>
+    <h2 class='row'> {ticket.name} <span class='detail'> {event_name || ''} </span> </h2> <br>
 
     <span class={ticket.allow_half  ? 'grn' : 'red'}> {ticket.allow_half ? 'Permite' : 'Não permite'} meia </span> <br>
     <span class={is_active          ? 'grn' : 'red'}> Ingresso  {is_active ? 'ativo' : 'inativo'}          </span>

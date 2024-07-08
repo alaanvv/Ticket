@@ -10,14 +10,14 @@
 
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class='data' on:click={open_details}>
-      <h2 class='row'> {event.name} <span class='detail'> <Icon i='calendar_month' /> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span> </h2> <br>
+      <h2 class='row'> {event.name} <span class='row detail'> <Icon i='calendar_month' /> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span> </h2> <br>
       {event.description || 'Sem descrição.'}
     </div>
 
     <div class='local'>
       <b class='row'> <Icon i='map' />         Local:    </b> {event.local}
       <b class='row'> <Icon i='location_on' /> Endereço: </b> {event.address}
-        <b class='row'> <Icon i='public' /> <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b>
+      <b class='row'> <Icon i='public' />      <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b>
     </div>
   </div>
 
