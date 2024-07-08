@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "build-web": "bash ./build.sh && rollup -c",
-    "start-web": "npx sirv public --no-clear --single",
     "dev-web": "rollup -c -w",
     "build-api": "echo tsc && npx tsc && echo webpack && npx webpack",
     "start-api": "docker compose up -d & node ./dist/main.js",

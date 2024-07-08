@@ -14,7 +14,7 @@ export async function api(route, method, body) {
     options.headers['Content-Type'] = 'application/json'
   }
 
-  const res = await fetch(`${process.env.API_URL}/${route}`, options)
+  const res = await fetch(`${window.location.origin}/${route}`, options)
   let data
 
   if (res.headers?.get('content-type')?.includes('application/json'))

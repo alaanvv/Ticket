@@ -36,7 +36,7 @@
   }
 
   $: {
-    curr_route = $curr_path.split('/')[1]
+    curr_route = $curr_path.split('/')[2]
     if (!routes[curr_route]) curr_route = 'not_found'
 
     const user_level = { 'admin': 2, 'portaria': 1, 'undefined': 0 }[$logged_user?.role]
