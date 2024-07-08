@@ -5,7 +5,6 @@ import replace from '@rollup/plugin-replace'
 import terser from '@rollup/plugin-terser'
 import svelte from 'rollup-plugin-svelte'
 import css from 'rollup-plugin-css-only'
-import { spawn } from 'child_process'
 import { config } from 'dotenv'
 
 const to_replace = {}
@@ -14,35 +13,17 @@ for (let [k, v] of Object.entries(config().parsed))
 
 const production = !process.env.ROLLUP_WATCH
 
-function serve() {
-  let server
-
-  return {
-    writeBundle() {
-      if (server) return
-      server = spawn('npm', ['run', 'start', '--', '--dev', '--host', '0.0.0.0'], {
-        stdio: ['ignore', 'inherit', 'inherit'],
-        shell: true
-      })
-
-      const to_exit = _ => { if (server) server.kill(0) }
-      process.on('SIGTERM', to_exit)
-      process.on('exit', to_exit)
-    }
-  }
-}
-
 export default {
-  input: 'src/main.js',
+  input: 'web/src/main.js',
   output: {
     sourcemap: true,
     format: 'esm',
-    dir: 'public/build'
+    dir: 'web/public/build'
   },
 
   plugins: [
     replace({
-      include: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.svelte'],
+      include: ['web/src/**/*.js', 'web/src/**/*.ts', 'web/src/**/*.svelte'],
       preventAssignment: true,
       values: to_replace
     }),
@@ -58,8 +39,7 @@ export default {
       exportConditions: ['svelte']
     }),
     commonjs(),
-    !production && serve(),
-    !production && livereload('public'),
+    !production && livereload('web/public'),
     production && terser()
   ],
 
