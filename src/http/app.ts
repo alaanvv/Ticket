@@ -13,6 +13,8 @@ app.register(cors, { origin: '*' })
 app.register(fastifyStatic, { root: path.join(process.cwd(), 'public') })
 
 app.get('/s/*', (_, res) => res.sendFile('index.html'))
+app.get('/s',   (_, res) => res.redirect(302, '/s/'))
+app.get('/',    (_, res) => res.redirect(302, '/s/'))
 
 export async function load_routes() {
   try {
