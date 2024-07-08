@@ -979,9 +979,10 @@ function writable(value, start = noop) {
     return { set, update, subscribe };
 }
 
-const curr_path = writable(window.location.pathname);
-const logged_user = writable();
-const history = writable([]);
+const curr_path    = writable(window.location.pathname);
+const history      = writable([]);
+const logged_user  = writable();
+const opened_event = writable();
 
 async function api(route, method, body) {
   const options = { headers: {}, method: method || 'GET' };
@@ -996,7 +997,7 @@ async function api(route, method, body) {
     options.headers['Content-Type'] = 'application/json';
   }
 
-  const res = await fetch(`${'https://ticket-sf4d.onrender.com'}/${route}`, options);
+  const res = await fetch(`${'http://0.0.0.0:3333'}/${route}`, options);
   let data;
 
   if (res.headers?.get('content-type')?.includes('application/json'))
@@ -10773,8 +10774,10 @@ function instance$9($$self, $$props, $$invalidate) {
 	}
 
 	onMount(async _ => {
-		$$invalidate(0, event = (await api(`events/${$curr_path.split('/').pop()}`)).data.event);
-		$$invalidate(1, tickets = (await api(`event-tickets/${event.id}`)).data.tickets);
+		const { data } = await api(`events/${$curr_path.split('/').pop()}`);
+		$$invalidate(0, event = data.event);
+		$$invalidate(1, tickets = data.tickets);
+		opened_event.set({ ...event, tickets });
 	});
 
 	const writable_props = [];
@@ -10810,8 +10813,9 @@ function instance$9($$self, $$props, $$invalidate) {
 		Button,
 		Modal,
 		Icon,
-		navigate,
 		curr_path,
+		opened_event,
+		navigate,
 		api,
 		onMount,
 		event,
@@ -11830,8 +11834,8 @@ const file$5 = "src/routes/TicketDetails.svelte";
 
 function get_each_context$2(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[17] = list[i];
-	child_ctx[19] = i;
+	child_ctx[18] = list[i];
+	child_ctx[20] = i;
 	return child_ctx;
 }
 
@@ -12104,8 +12108,8 @@ function create_each_block$2(ctx) {
 	}
 
 	let batchcard_props = {
-		batch: /*batch*/ ctx[17],
-		i: /*i*/ ctx[19],
+		batch: /*batch*/ ctx[18],
+		i: /*i*/ ctx[20],
 		allow_half: /*ticket*/ ctx[0].allow_half
 	};
 
@@ -12126,7 +12130,7 @@ function create_each_block$2(ctx) {
 		},
 		p: function update(ctx, dirty) {
 			const batchcard_changes = {};
-			if (dirty & /*batches*/ 64) batchcard_changes.batch = /*batch*/ ctx[17];
+			if (dirty & /*batches*/ 64) batchcard_changes.batch = /*batch*/ ctx[18];
 			if (dirty & /*ticket*/ 1) batchcard_changes.allow_half = /*ticket*/ ctx[0].allow_half;
 
 			if (!updating_batches && dirty & /*batches*/ 64) {
@@ -12644,8 +12648,11 @@ function create_fragment$6(ctx) {
 
 function instance$6($$self, $$props, $$invalidate) {
 	let $curr_path;
+	let $opened_event;
 	validate_store(curr_path, 'curr_path');
 	component_subscribe($$self, curr_path, $$value => $$invalidate(16, $curr_path = $$value));
+	validate_store(opened_event, 'opened_event');
+	component_subscribe($$self, opened_event, $$value => $$invalidate(17, $opened_event = $$value));
 	let { $$slots: slots = {}, $$scope } = $$props;
 	validate_slots('TicketDetails', slots, []);
 	let ticket, event_name, is_active;
@@ -12673,9 +12680,17 @@ function instance$6($$self, $$props, $$invalidate) {
 	}
 
 	onMount(async _ => {
-		$$invalidate(0, ticket = (await api(`ticket/${$curr_path.split('/').pop()}`)).data.ticket);
-		$$invalidate(6, batches = (await api(`ticket-batches/${ticket.id}`)).data.batches);
-		$$invalidate(1, event_name = (await api(`events/${ticket.event_id}`)).data.event.name);
+		if ($opened_event) $$invalidate(0, ticket = $opened_event.tickets.find(t => t.id == $curr_path.split('/').pop()));
+
+		if (ticket) {
+			$$invalidate(6, batches = ticket.batches);
+			$$invalidate(1, event_name = $opened_event.name);
+		} else {
+			$$invalidate(0, ticket = (await api(`ticket/${$curr_path.split('/').pop()}`)).data.ticket);
+			$$invalidate(6, batches = (await api(`ticket-batches/${ticket.id}`)).data.batches);
+			$$invalidate(1, event_name = (await api(`events/${ticket.event_id}`)).data.event.name);
+		}
+
 		$$invalidate(2, is_active = false);
 
 		for (let i in batches) {
@@ -12723,8 +12738,9 @@ function instance$6($$self, $$props, $$invalidate) {
 		BatchCard,
 		Button,
 		Modal,
-		navigate,
 		curr_path,
+		opened_event,
+		navigate,
 		api,
 		onMount,
 		ticket,
@@ -12738,7 +12754,8 @@ function instance$6($$self, $$props, $$invalidate) {
 		create_batch,
 		back,
 		delete_ticket,
-		$curr_path
+		$curr_path,
+		$opened_event
 	});
 
 	$$self.$inject_state = $$props => {

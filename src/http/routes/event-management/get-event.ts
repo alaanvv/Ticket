@@ -12,6 +12,13 @@ export default async function(app: FastifyInstance) {
     if (!event)
       throw new NotFoundError('Event not found.')
 
-    return res.status(200).send({ event })
+    const tickets = await prisma.ticket.findMany({ where: { event_id: id, active: true } })
+
+    for (let i in tickets) {
+      const batches = await prisma.batch.findMany({ where: { ticket_id: tickets[i].id, active: true } })
+      ;(tickets[i] as any).batches = batches
+    }
+
+    return res.status(200).send({ event, tickets })
   })
 }

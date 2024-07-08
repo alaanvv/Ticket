@@ -59,8 +59,8 @@
   import Modal       from '../components/Modal.svelte'
   import Icon        from '../components/Icon.svelte'
 
+  import { curr_path, opened_event } from '../store.js'
   import { navigate } from '../utils/navigation.js'
-  import { curr_path } from '../store.js'
   import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
@@ -82,8 +82,10 @@
   }
 
   onMount(async _ => {
-    event   = (await api(`events/${$curr_path.split('/').pop()}`)).data.event
-    tickets = (await api(`event-tickets/${event.id}`)).data.tickets
+    const { data } = (await api(`events/${$curr_path.split('/').pop()}`))
+    event   = data.event
+    tickets = data.tickets
+    opened_event.set({ ...event, tickets })
   })
 </script>
 

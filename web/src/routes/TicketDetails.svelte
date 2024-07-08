@@ -43,8 +43,8 @@
   import Button      from '../components/Button.svelte'
   import Modal       from '../components/Modal.svelte'
 
+  import { curr_path, opened_event } from '../store.js'
   import { navigate } from '../utils/navigation.js'
-  import { curr_path } from '../store.js'
   import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
@@ -66,9 +66,18 @@
   }
 
   onMount(async _ => {
-    ticket     = (await api(`ticket/${$curr_path.split('/').pop()}`)).data.ticket
-    batches    = (await api(`ticket-batches/${ticket.id}`)).data.batches
-    event_name = (await api(`events/${ticket.event_id}`)).data.event.name
+    if ($opened_event)
+      ticket = $opened_event.tickets.find(t => t.id == $curr_path.split('/').pop())
+
+    if (ticket) {
+      batches = ticket.batches
+      event_name = $opened_event.name
+    }
+    else {
+      ticket     = (await api(`ticket/${$curr_path.split('/').pop()}`)).data.ticket
+      batches    = (await api(`ticket-batches/${ticket.id}`)).data.batches
+      event_name = (await api(`events/${ticket.event_id}`)).data.event.name
+    }
 
     is_active = false
     for (let i in batches) {
