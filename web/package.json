@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
+    "build": "bash ./build.sh && rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear --single"
   },

@@ -1,4 +1,5 @@
 import { BadRequestError, NotFoundError, ForbiddenError } from './errors'
+import fastifyStatic from '@fastify/static'
 import cors from '@fastify/cors'
 import { ZodError } from 'zod'
 import fastify from 'fastify'
@@ -8,6 +9,9 @@ import path from 'path'
 
 export const app = fastify()
 app.register(cors, { origin: '*' })
+
+app.register(fastifyStatic, { root: path.join(process.cwd(), '/web/public') })
+app.get('/', (_, res) => res.sendFile('index.html'))
 
 export async function load_routes() {
   try {

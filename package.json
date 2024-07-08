@@ -3,22 +3,32 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "vercel-build": "echo hello",
-    "build": "clear && bash ./build.sh && clear && echo tsc && npx tsc && clear && echo webpack && npx webpack",
-    "start": "clear && echo docker && docker compose up -d && clear && node ./dist/main.js",
-    "dev": "clear && tsx watch ./src/http/server.ts",
+    "build-web": "cd ./web && bash ./build.sh && rollup -c",
+    "start-web": "cd ./web && npx sirv public --no-clear --single",
+    "dev-web":   "cd ./web && rollup -c -w",
+
+    "build-api": "echo tsc && npx tsc && echo webpack && npx webpack",
+    "start-api": "docker compose up -d && node ./dist/main.js",
+    "dev-api":   "docker compose up -d && tsx watch ./src/http/server.ts",
+
+    "build": "npm run build-web && npm run build-api",
+    "start": "npm run start-api",
+    "dev":   "npm run dev-api",
+
+    "test":    "vitest run --dir ./src/http",
     "migrate": "prisma migrate dev",
-    "studio": "prisma studio",
-    "test": "vitest run --dir ./src/http"
+    "studio":  "prisma studio"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
+    "@fastify/static": "^7.0.4",
     "@prisma/client": "^5.14.0",
     "cors": "^2.8.5",
     "crypto-browserify": "^3.12.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.27.0",
     "fastify-cors": "^6.1.0",
+    "fastify-static": "^4.7.0",
     "glob": "^10.4.2",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
