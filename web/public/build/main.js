@@ -1,5 +1,5 @@
 
-(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 function noop() { }
 function assign(tar, src) {
     // @ts-ignore
@@ -997,7 +997,7 @@ async function api(route, method, body) {
     options.headers['Content-Type'] = 'application/json';
   }
 
-  const res = await fetch(`${'http://0.0.0.0:3333'}/${route}`, options);
+  const res = await fetch(`${'https://ticket-sf4d.onrender.com'}/${route}`, options);
   let data;
 
   if (res.headers?.get('content-type')?.includes('application/json'))
