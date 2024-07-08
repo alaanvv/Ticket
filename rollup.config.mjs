@@ -14,16 +14,16 @@ for (let [k, v] of Object.entries(config().parsed))
 const production = !process.env.ROLLUP_WATCH
 
 export default {
-  input: 'web/src/main.js',
+  input: 'web/main.js',
   output: {
     sourcemap: true,
     format: 'esm',
-    dir: 'web/public/build'
+    dir: 'public/build'
   },
 
   plugins: [
     replace({
-      include: ['web/src/**/*.js', 'web/src/**/*.ts', 'web/src/**/*.svelte'],
+      include: ['web/**/*.js', 'web/**/*.ts', 'web/**/*.svelte'],
       preventAssignment: true,
       values: to_replace
     }),
@@ -39,7 +39,7 @@ export default {
       exportConditions: ['svelte']
     }),
     commonjs(),
-    !production && livereload('web/public'),
+    !production && livereload('public'),
     production && terser()
   ],
 

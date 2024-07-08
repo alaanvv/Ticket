@@ -10,7 +10,7 @@ import path from 'path'
 export const app = fastify()
 app.register(cors, { origin: '*' })
 
-app.register(fastifyStatic, { root: path.join(process.cwd(), '/web/public') })
+app.register(fastifyStatic, { root: path.join(process.cwd(), 'public') })
 app.get('/', (_, res) => res.sendFile('index.html'))
 
 export async function load_routes() {
