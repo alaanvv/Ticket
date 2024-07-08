@@ -4,35 +4,36 @@
   <Button class='red' action={delete_event} i='delete'     t='Excluir' />
 </div>
 
-{#if event}
-<div class='info'>
-  <img src={event?.image} alt='Sem imagem'>
+{#if tickets != undefined}
+  <div class='info'>
+    <img src={event.image} alt='Sem imagem'>
 
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class='data' on:click={open_details}>
-    <h2 class='row'> {event?.name} <span class='detail'> <Icon i='calendar_month' /> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span> </h2> <br>
-    {event?.description || 'Sem descrição.'}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class='data' on:click={open_details}>
+      <h2 class='row'> {event.name} <span class='detail'> <Icon i='calendar_month' /> {(new Date(event.date)).toLocaleDateString('pt-BR')} </span> </h2> <br>
+      {event.description || 'Sem descrição.'}
+    </div>
+
+    <div class='local'>
+      <b class='row'> <Icon i='map' />         Local:    </b> {event.local}
+      <b class='row'> <Icon i='location_on' /> Endereço: </b> {event.address}
+        <b class='row'> <Icon i='public' /> <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b>
+    </div>
   </div>
 
-  <div class='local'>
-    <b class='row'> <Icon i='map' />         Local:    </b> <br> {event?.local}
-    <b class='row'> <Icon i='location_on' /> Endereço: </b> <br> {event?.address}
-    <b class='row'> <Icon i='public' /> <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b>
-  </div>
-</div>
-
-<div class='hr' />
-
-<div class='panel'>
+  <div class='hr' />
   <Button class='grn' action={create_ticket} i='add' t='Criar Ingresso' />
-</div>
 
-<div class='flex-list'>
-  {#each tickets || [] as ticket}
-    <TicketCard {ticket} />
-  {/each}
-</div>
+  <div class='flex-list'>
+    {#each tickets || [] as ticket}
+      <TicketCard {ticket} />
+    {/each}
+  </div>
 {:else} Carregando...
+{/if}
+
+{#if l_deleting}
+  <Modal> Excluindo... </Modal>
 {/if}
 
 {#if m_event}
@@ -50,46 +51,40 @@
   </Modal>
 {/if}
 
-{#if l_deleting}
-  <Modal> Excluindo... </Modal>
-{/if}
-
 <script>
-  import Button      from '../components/Button.svelte'
-  import Icon        from '../components/Icon.svelte'
-  import Modal       from '../components/Modal.svelte'
-  import EventModal  from '../components/EventModal.svelte'
   import TicketModal from '../components/TicketModal.svelte'
+  import EventModal  from '../components/EventModal.svelte'
   import TicketCard  from '../components/TicketCard.svelte'
+  import Button      from '../components/Button.svelte'
+  import Modal       from '../components/Modal.svelte'
+  import Icon        from '../components/Icon.svelte'
 
   import { navigate } from '../utils/navigation.js'
   import { curr_path } from '../store.js'
   import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
-  let event, tickets, m_event, m_ticket, m_details, l_deleting
-
-  const id = $curr_path.split('/').pop()
+  let event, tickets
+  let l_deleting
+  let m_event, m_ticket, m_details
 
   function back() { navigate('/eventos') }
   function edit_event()    { m_event   = true }
   function create_ticket() { m_ticket  = true }
   function open_details()  { m_details = true }
 
-  async function load_event() {
-    tickets = (await api(`event-tickets/${id}`)).data.tickets
-    event   = (await api(`events/${id}`)).data.event
-  }
-
   async function delete_event() {
     if (!confirm('Certeza que deseja excluir?')) return
 
     l_deleting = true
-    await api(`event/${id}`, 'DELETE')
+    await api(`event/${event.id}`, 'DELETE')
     back()
   }
 
-  onMount(load_event)
+  onMount(async _ => {
+    event   = (await api(`events/${$curr_path.split('/').pop()}`)).data.event
+    tickets = (await api(`event-tickets/${event.id}`)).data.tickets
+  })
 </script>
 
 <style>

@@ -43,13 +43,12 @@
   import { onMount } from 'svelte'
   import jsQR from 'jsqr'
 
-  let canvas, cam_loaded, width, height, reading, error, code, validated_data, l_validated_data, l_validating
+  let canvas, cam_loaded, width, height, reading, error, code, validated_data
+  let l_validated_data, l_validating
   let loading_message = '🎥 Câmera inacessível, tente recarregar a página'
   let video = document.createElement('video')
 
-  function update_code() {
-    code = document.querySelector('input').value
-  }
+  function update_code() { code = document.querySelector('input').value }
 
   function tick() {
     if (video.readyState != video.HAVE_ENOUGH_DATA)

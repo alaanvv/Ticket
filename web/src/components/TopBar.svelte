@@ -9,14 +9,25 @@
   {/if}
 </div>
 
+{#if l_exiting}
+  <Modal>
+    <p class='tac'> Saindo... </p>
+  </Modal>
+{/if}
+
 <script>
   import Icon from '../components/Icon.svelte'
+  import Modal from '../components/Modal.svelte'
 
   import { logged_user } from '../store.js'
   import { api } from '../utils/api.js'
 
+  let l_exiting
+
   async function logout() {
+    l_exiting = true
     await api(`session/${localStorage.getItem('session_id')}`, 'DELETE')
+    l_exiting = false
 
     localStorage.removeItem('session_id')
     logged_user.set(undefined)

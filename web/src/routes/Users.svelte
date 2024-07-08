@@ -20,11 +20,10 @@
   import { api } from '../utils/api.js'
   import { onMount } from 'svelte'
 
-  let users, m_user
+  let users
+  let m_user
 
   function create_user() { m_user = true }
 
-  onMount(async _ => {
-    users = (await api(`all-users`)).data.users
-  })
+  onMount(async _ => users = (await api(`all-users`)).data.users)
 </script>

@@ -1,4 +1,4 @@
-{#if $history?.length == 0} Você não validou nenhum ingresso nessa sessão {/if}
+{#if !$history?.length} Você não validou nenhum ingresso nessa sessão {/if}
 
 {#each $history as validated}
   <ValidatedCard data={validated} />

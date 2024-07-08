@@ -14,7 +14,7 @@
       </div>
     </label>
 
-    <button type='submit'> Entrar </button>
+    <button type='submit' disabled={l_submitting}> {l_submitting ? '...' : 'Entrar'} </button>
   </form>
 {:else} Logando...
 {/if}
@@ -28,23 +28,26 @@
 
   let user = { name: '', password: '' }
   let error, show_password, not_logged
+  let l_submitting
 
   function toggle_show_password() { show_password = !show_password }
 
   async function submit(e) {
     e.preventDefault()
-    error = ''
 
+    error = ''
+    l_submitting = true
     const { res, data } = await api('login', 'POST', user)
+    l_submitting = false
 
     if (res.ok) {
       localStorage.setItem('session_id', data.session_id)
       return logged_user.set(data)
     }
 
-    error = 'Credenciais inválidas'
     user.name = ''
     user.password = ''
+    error = 'Credenciais inválidas'
   }
 
   onMount(async _ => {
@@ -58,19 +61,6 @@
 </script>
 
 <style>
-  .password-container {
-    position: relative;
-  }
-
-  .password-container :global(span) {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-
   form {
     max-width: 300px;
     margin: 0 auto;

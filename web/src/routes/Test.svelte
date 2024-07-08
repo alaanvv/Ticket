@@ -1,6 +1,6 @@
 <form class='tas' on:submit={submit}>
   <label> Evento:
-    <select bind:value={event_id} on:change={load_tickets} class:cw={l_events}>
+    <select bind:value={event_id} on:change={load_tickets} class:cw={events == undefined}>
       {#each events || [] as event}
         <option value={event.id}> {event.name} </option>
       {/each}
@@ -8,7 +8,7 @@
   </label>
 
   <label> Ingresso:
-    <select bind:value={ticket_id} class:cw={l_tickets} disabled={!event_id}>
+    <select bind:value={ticket_id} class:cw={tickets == undefined} disabled={!event_id}>
       {#each tickets || [] as ticket}
         <option value={ticket.id}> {ticket.name} </option>
       {/each}
@@ -40,13 +40,14 @@
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
 
-  let events, tickets, event_id, ticket_id, is_half, l_events = true, l_tickets, l_ticket_instance
+  let events, tickets, event_id, ticket_id, is_half
+  let l_ticket_instance
   let ticket_instance = {}
 
   function copy() { copy_to_clipboard(ticket_instance.id) }
 
   async function load_tickets() {
-    l_tickets = true
+    tickets = undefined
 
     let { data } = await api(`event-tickets/${event_id}`)
     let all_tickets = data.tickets
@@ -58,10 +59,8 @@
       })
     )).filter(t => t.has_batch)
 
-    if (tickets.length == 1)
+    if (tickets.length)
       ticket_id = tickets[0].id
-
-    l_tickets = false
   }
 
   async function submit(e) {
@@ -79,11 +78,7 @@
     l_ticket_instance = false
   }
 
-  onMount(async _ => {
-    const { data } = await api('all-events')
-    events = data.events
-    l_events = false
-  })
+  onMount(async _ => events = (await api('all-events')).data.events)
 </script>
 
 <style>
