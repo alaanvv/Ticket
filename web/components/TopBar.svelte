@@ -41,4 +41,8 @@
     background: var(--bg0);
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
   }
+
+  @supports (-webkit-touch-callout: none) {
+    .bar { padding-top: 100px; }
+  }
 </style>

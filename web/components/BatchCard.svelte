@@ -52,4 +52,10 @@
   .row {
     justify-content: center;
   }
+
+  @media screen and (max-width: 768px) {
+    .card {
+      width: 35%;
+    }
+  }
 </style>

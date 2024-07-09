@@ -15,9 +15,9 @@
     </div>
 
     <div class='local'>
-      <b class='row'> <Icon i='map' />         Local:    </b> {event.local}
-      <b class='row'> <Icon i='location_on' /> Endereço: </b> {event.address}
-      <b class='row'> <Icon i='public' />      <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b>
+      <p class='row'> <b class='row'> <Icon i='map' /> Local:    </b> {event.local} </p>
+        <p class='row'> <b class='row'> <Icon i='location_on' /> Endereço: </b> {event.address} </p>
+          <p class='row'> <b class='row'> <Icon i='public' /> <a href={`https://www.google.com/maps?q=${event.latitude},${event.longitude}`}> Localização no maps </a> </b> </p>
     </div>
   </div>
 
@@ -133,5 +133,30 @@
     object-fit: cover;
 
     color: white;
+  }
+
+  .info p {
+    margin: 0 5px;
+  }
+
+  @media screen and (max-width: 768px) {
+    img {
+      max-height: none;
+    }
+
+    .info {
+      flex-direction: column;
+
+      max-height: none;
+    }
+
+    .info > * {
+      max-width: 100%;
+    }
+
+    .local {
+      margin: 0;
+      padding: 20px 10px;
+    }
   }
 </style>

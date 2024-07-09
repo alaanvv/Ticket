@@ -60,9 +60,12 @@
       justify-content: center;
 
       width: 100%;
+      min-height: 50px;
       margin-bottom: 10px;
+      padding: 0px 5px;
 
       overflow-x: scroll;
+      overflow-y: hidden;
     }
 
     .sidebar h2 {
@@ -73,7 +76,7 @@
       display: flex;
       flex-direction: row;
       gap: 10px;
-      padding: 0 100px;
+      padding: 0;
     }
 
     .sidebar :global(li) {

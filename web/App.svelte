@@ -6,18 +6,18 @@
     <div class='hr' />
     <svelte:component this={routes[curr_route][1]} />
   </main>
-    </div>
+</div>
 
 <script>
-  import TopBar        from './components/TopBar.svelte'
-  import SideBar       from './components/SideBar.svelte'
-  import Users         from './routes/Users.svelte'
-  import Events        from './routes/Events.svelte'
-  import EventDetails  from './routes/EventDetails.svelte'
   import TicketDetails from './routes/TicketDetails.svelte'
-  import Login         from './routes/Login.svelte'
+  import EventDetails  from './routes/EventDetails.svelte'
   import Verification  from './routes/Verification.svelte'
+  import SideBar       from './components/SideBar.svelte'
+  import TopBar        from './components/TopBar.svelte'
   import History       from './routes/History.svelte'
+  import Events        from './routes/Events.svelte'
+  import Users         from './routes/Users.svelte'
+  import Login         from './routes/Login.svelte'
   import Test          from './routes/Test.svelte'
 
   import { curr_path, logged_user } from './store.js'
@@ -67,7 +67,7 @@
     flex-direction: row;
     flex-grow: 2;
 
-    max-height: 88%;
+    height: 90%;
     margin: 15px 0;
   }
 
@@ -79,7 +79,7 @@
     main {
       width: auto;
       margin: 0;
-      padding: 1em 0.7em 50px 0.7em;
+      padding: 1em 0.7em 100px 0.7em;
       border-radius: 0;
     }
   }

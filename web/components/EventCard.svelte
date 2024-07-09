@@ -35,11 +35,16 @@
 
     background: black;
     color: white;
+    border-radius: 9px 9px 0 0;
   }
 
   img {
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .card { width: 100%; }
   }
 </style>
