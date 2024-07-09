@@ -6,13 +6,14 @@
     "build-web": "bash ./build.sh && rollup -c",
     "dev-web": "rollup -c -w",
     "build-api": "echo tsc && npx tsc && echo webpack && npx webpack",
-    "start-api": "docker compose up -d & node ./dist/main.js",
-    "dev-api": "docker compose up -d & tsx watch ./src/http/server.ts",
+    "start-api": "node ./dist/main.js",
+    "dev-api": "tsx watch ./src/http/server.ts",
     "build": "npm run build-web && npm run build-api",
     "start": "npm run start-api",
     "dev": "npm run dev-web & npm run dev-api",
     "test": "vitest run --dir ./src/http",
     "migrate": "prisma migrate dev",
+    "docker": "docker compose up -d",
     "studio": "prisma studio"
   },
   "dependencies": {
