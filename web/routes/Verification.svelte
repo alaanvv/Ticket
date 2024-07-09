@@ -1,6 +1,6 @@
 <div class='content'>
   <div hidden={cam_loaded}> {loading_message} </div>
-  <canvas {width} {height} class:reading={reading} hidden={!cam_loaded} />
+  <canvas {width} {height} on:click={get_ticket_instance} class:reading={reading} hidden={!cam_loaded} />
 
   <input class:grn={reading} on:input={update_code} placeholder='Leia o QR ou digite' />
   <button class='grn' disabled={!code} on:click={get_ticket_instance}> Validar </button>
@@ -55,8 +55,8 @@
       return requestAnimationFrame(tick)
 
     cam_loaded = true
-    height = video.videoHeight
     width  = video.videoWidth
+    height = video.videoHeight
     canvas.drawImage(video, 0, 0, width, height)
 
     const image_data = canvas.getImageData(0, 0, width, height)
@@ -73,12 +73,13 @@
   }
 
   async function get_ticket_instance() {
+    if (!code) return
     l_validated_data = true
     const { res, data } = await api(`ticket-instance/${code}`)
+    l_validated_data = false
 
     if (!res.ok) return error = 'Ingresso não encontrado'
     validated_data = data
-    l_validated_data = false
   }
 
   async function validate() {
