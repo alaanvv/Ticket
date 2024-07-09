@@ -6,10 +6,10 @@ import { z } from 'zod'
 
 export default async function(app: FastifyInstance) {
   app.post('/session-login', async (req, res) => {
-    if (await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
-
     const bodySchema = z.object({ id: z.string().cuid() })
     const { id } = bodySchema.parse(req.body)
+
+    if (req.headers['authorization']?.split(' ')[1] != id && await get_auth(req) != 'admin') throw new ForbiddenError('No privileges.')
 
     const session = await prisma.session.findUnique({ where: { id } })
     if (!session)
