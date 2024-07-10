@@ -58,6 +58,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      gap: 10px;
 
       width: 100%;
       min-height: 50px;

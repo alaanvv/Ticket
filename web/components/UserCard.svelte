@@ -50,4 +50,11 @@
 
     margin-top: 20px;
   }
+
+  @media screen and (max-width: 768px) {
+    .card {
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
 </style>

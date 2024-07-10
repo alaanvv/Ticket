@@ -51,6 +51,7 @@
     max-width: 80%;
     padding: 20px;
     border-radius: 5px;
+    max-height: 70%;
 
     background-color: var(--bg0);
     overflow: auto;
